@@ -38,15 +38,21 @@ namespace PhilipTheMechanic
         public void BootMod(IModLoaderContact contact)
         {
             Instance = this;
-            var harmony = new Harmony("PhilipTheMechanic");
+            var harmony = new Harmony(this.Name);
             harmony.PatchAll();
         }
 
         public void LoadManifest(ISpriteRegistry artRegistry)
         {
-            var filenames = new string[] { 
-                //"character/tucker_normal_0",
-                //"icons/blunt"
+            var filenames = new string[] {
+                "character/tucker_neutral_1",
+
+                "icons/Blunt_Attack",
+                "icons/Shield_Steal",
+
+                "cards/Psych_Out",
+                "cards/Mutual_Gain",
+                "cards/Direct_Hit",
             };
 
             foreach (var filename in filenames) {
