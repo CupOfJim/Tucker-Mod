@@ -85,7 +85,7 @@ namespace PhilipTheMechanic
 
         public void LoadManifest(IDeckRegistry registry)
         {
-            var philipColor = 0;
+            var philipColor = e9bd5c;
             unchecked { philipColor = (int)0xffc9f000; } // TODO: set the hex color you want for Tucker
 
             deck = new ExternalDeck(
