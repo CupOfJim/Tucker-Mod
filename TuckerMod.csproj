@@ -30,4 +30,13 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="sprites\icons\Blunt_Attack.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="sprites\icons\Shield_Steal.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

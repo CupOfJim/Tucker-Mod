@@ -11,7 +11,7 @@ using CobaltCoreModding.Definitions.ModManifests;
 using HarmonyLib;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
-
+using PhilipTheMechanic.cards;
 
 namespace PhilipTheMechanic
 {
@@ -71,9 +71,9 @@ namespace PhilipTheMechanic
             // 9 common, 7 uncommon, 5 rare
             var cardDefinitions = new ExternalCard[]
             {
-                //new ExternalCard("clay.PhilipTheMechanic.cards.Overdrive Mod", typeof(OverdriveMod), sprites["card_Overdrive_Mod"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Mutual Gain", typeof(MutualGain), sprites["cards/Mutual_Gain"], deck),
             };
-
+            
             foreach(var card in cardDefinitions)
             {
                 var name = card.GlobalName.Split('.').LastOrDefault() ?? "FAILED TO FIND NAME";
