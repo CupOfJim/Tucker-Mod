@@ -164,10 +164,15 @@ namespace TuckerTheSaboteur
 
         public void LoadManifest(IStatusRegistry statusRegistry)
         {
-            //var redraw = new ExternalStatus("clay.PhilipTheMechanic.Statuses.Redraw", true, System.Drawing.Color.Red, null, sprites["icon_redraw"], false);
-            //statusRegistry.RegisterStatus(redraw);
-            //redraw.AddLocalisation("Redraw", "Enables you to discard a card of your choice and draw a new one. You may do this up to {0} times.");
-            //statuses["redraw"] = redraw;
+            var fuelLeak = new ExternalStatus("SoggoruWaffle.Tucker.statuses.fuel_leak", true, System.Drawing.Color.Red, null, sprites["icons/Fuel_Leak"], false);
+            statusRegistry.RegisterStatus(fuelLeak);
+            fuelLeak.AddLocalisation("fuel_leak", "Deals {0} hull damage every time the ship moves any distance.");
+            statuses["fuel_leak"] = fuelLeak;
+
+            var buffer = new ExternalStatus("SoggoruWaffle.Tucker.statuses.buffer", true, System.Drawing.Color.Crimson, null, sprites["icons/Buffer"], false);
+            statusRegistry.RegisterStatus(buffer);
+            buffer.AddLocalisation("buffer", "Grants {0} temp shield and reduces by 1 at the end of every turn.");
+            statuses["buffer"] = buffer;
         }
 
         public void LoadManifest(IArtifactRegistry registry)
