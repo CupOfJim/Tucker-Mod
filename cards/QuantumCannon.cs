@@ -20,7 +20,6 @@ namespace TuckerTheSaboteur.cards
                         new AAttack
                         {
                             damage = GetDmg(s, 1),
-                            fast = true,
                             piercing = true,
                         }
                     };
@@ -30,7 +29,6 @@ namespace TuckerTheSaboteur.cards
                         new AAttack
                         {
                             damage = GetDmg(s, 2),
-                            fast = true,
                             piercing = true,
                         }
                     };
@@ -42,7 +40,6 @@ namespace TuckerTheSaboteur.cards
                             damage = GetDmg(s, 3),
                             status = Enum.Parse<Status>("shield"),
                             statusAmount = 2,
-                            fast = true,
                             piercing = true,
                         }
                     };

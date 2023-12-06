@@ -22,11 +22,10 @@ namespace TuckerTheSaboteur.cards
                             status = Enum.Parse<Status>("autododgeLeft"),
                             statusAmount = 1,
                             targetPlayer = false
-                        }
+                        },
                         new AAttack ()
                         {
                             damage = GetDmg(s, 1),
-                            fast = true,
                         }
                     };
                 case Upgrade.A:
@@ -37,11 +36,10 @@ namespace TuckerTheSaboteur.cards
                             status = Enum.Parse<Status>("autododgeLeft"),
                             statusAmount = 1,
                             targetPlayer = false
-                        }
+                        },
                         new AAttack ()
                         {
                             damage = GetDmg(s, 1),
-                            fast = true,
                         }
                     };
                 case Upgrade.B:
@@ -52,12 +50,12 @@ namespace TuckerTheSaboteur.cards
                             status = Enum.Parse<Status>("autododgeLeft"),
                             statusAmount = 2,
                             targetPlayer = false
-                        }
+                        },
                         new AAttack ()
                         {
                             damage = GetDmg(s, 1),
                             fast = true,
-                        }
+                        },
                         new AAttack ()
                         {
                             from = -2

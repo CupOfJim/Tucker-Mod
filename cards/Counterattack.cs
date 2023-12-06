@@ -20,7 +20,6 @@ namespace TuckerTheSaboteur.cards
                         new AAttack ()
                         {
                             damage = GetDmg(s, 2),
-                            fast = true,
                         }
                     };
                 case Upgrade.A:
@@ -29,7 +28,6 @@ namespace TuckerTheSaboteur.cards
                         new AAttack ()
                         {
                             damage = GetDmg(s, 3),
-                            fast = true,
                         }
                     };
                 case Upgrade.B:
@@ -38,7 +36,6 @@ namespace TuckerTheSaboteur.cards
                         new AAttack ()
                         {
                             damage = GetDmg(s, 2),
-                            fast = true,
                         }
                     };
             }
