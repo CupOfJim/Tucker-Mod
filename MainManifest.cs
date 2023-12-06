@@ -11,7 +11,7 @@ using CobaltCoreModding.Definitions.ModManifests;
 using HarmonyLib;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
-using PhilipTheMechanic.cards;
+using TuckerTheSaboteur.cards;
 
 namespace TuckerTheSaboteur
 {
@@ -85,8 +85,8 @@ namespace TuckerTheSaboteur
 
         public void LoadManifest(IDeckRegistry registry)
         {
-            var philipColor = e9bd5c;
-            unchecked { philipColor = (int)0xffc9f000; } // TODO: set the hex color you want for Tucker
+            var philipColor = 0;
+            unchecked { philipColor = (int)0xffe9bd5c; } // TODO: set the hex color you want for Tucker
 
             deck = new ExternalDeck(
                 "SoggoruWaffle.Tucker.TuckerDeck",
