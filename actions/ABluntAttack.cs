@@ -56,10 +56,10 @@ namespace TuckerMod.actions
         {
             if (DoWeHaveCannonsThough(s))
             {
-                return new Icon((Spr)MainManifest.sprites["icons/blunt_attack"].Id, damage, Colors.redd);
+                return new Icon((Spr)MainManifest.sprites["icons/Blunt_Attack"].Id, damage, Colors.redd);
             }
 
-            return new Icon((Spr)MainManifest.sprites["icons/blunt_attack_fail"].Id, damage, Colors.redd);
+            return new Icon((Spr)MainManifest.sprites["icons/Blunt_Attack_Fail"].Id, damage, Colors.redd);
         }
     }
 }

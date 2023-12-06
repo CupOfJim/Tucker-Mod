@@ -28,7 +28,7 @@ namespace TuckerMod.actions
 
         public override Icon? GetIcon(State s)
         {
-            return new Icon((Spr)MainManifest.sprites["icons/shield_steal"].Id, amount, Colors.redd);
+            return new Icon((Spr)MainManifest.sprites["icons/Shield_Steal"].Id, amount, Colors.redd);
         }
     }
 }
