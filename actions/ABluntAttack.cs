@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TuckerMod.actions
 {
-    public class BluntAttack : AAttack
+    public class ABluntAttack : AAttack
     {
         public override void Begin(G g, State s, Combat c)
         {
