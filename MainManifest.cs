@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
 using PhilipTheMechanic.cards;
 
-namespace PhilipTheMechanic
+namespace TuckerTheSaboteur
 {
     public class MainManifest : IModManifest, ISpriteManifest, ICardManifest, ICharacterManifest, IDeckManifest, IAnimationManifest, IGlossaryManifest, IStatusManifest, IArtifactManifest
     {
