@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TuckerTheSaboteur.cards
 {
     [CardMeta(rarity = Rarity.common, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class Hook : Card
+    public class PressureGun : Card
     {
         public override List<CardAction> GetActions(State s, Combat c)
         {
@@ -17,21 +17,19 @@ namespace TuckerTheSaboteur.cards
                 case Upgrade.None:
                     return new List<CardAction> ()
                     {
-                        new AAttack ()
+                        new ABluntAttack ()
                         {
-                            from = -3,
-                            damage = GetDmg(s, 2),
-                            moveEnemy = 2,
+                            damage = GetDmg(s, 0),
+                            moveEnemy = -3,
                         }
                     };
                 case Upgrade.A:
                     return new List<CardAction> ()
                     {
-                        new AAttack ()
+                        new ABluntAttack ()
                         {
-                            from = -3,
-                            damage = GetDmg(s, 2),
-                            moveEnemy = 2,
+                            damage = GetDmg(s, 0),
+                            moveEnemy = -3,
                         }
                     };
                 case Upgrade.B:
@@ -39,9 +37,8 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            from = -1,
-                            damage = GetDmg(s, 2),
-                            moveEnemy = 2,
+                            damage = GetDmg(s, 0),
+                            moveEnemy = -3,
                         }
                     };
             }
@@ -50,7 +47,7 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = 1,
+                cost = 0,
                 flippable = (upgrade == Upgrade.A ? true : false)
             };
         }

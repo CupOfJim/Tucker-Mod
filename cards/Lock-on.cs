@@ -22,7 +22,6 @@ namespace TuckerTheSaboteur.cards
                             damage = GetDmg(s, 2),
                             status = Enum.Parse<Status>("lockdown"),
                             statusAmount = 1,
-                            fast = true,
                         },
                         new AStatus ()
                         {
@@ -39,7 +38,6 @@ namespace TuckerTheSaboteur.cards
                             damage = GetDmg(s, 3),
                             status = Enum.Parse<Status>("lockdown"),
                             statusAmount = 1,
-                            fast = true,
                         },
                         new AStatus ()
                         {
@@ -56,7 +54,6 @@ namespace TuckerTheSaboteur.cards
                             damage = GetDmg(s, 2),
                             status = Enum.Parse<Status>("lockdown"),
                             statusAmount = 2,
-                            fast = true,
                         },
                         new AStatus ()
                         {

@@ -55,6 +55,7 @@ namespace TuckerTheSaboteur.cards
                             fast = true,
                             moveEnemy = -2,
                         },
+                        new AReplay(),
                         new AAttack ()
                         {
                             from = -1,
@@ -67,26 +68,23 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            from = -1,
+                            from = -2,
                             damage = GetDmg(s, 0),
                             fast = true,
-                            piercing = true,
                             moveEnemy = 2,
                         },
                         new AAttack ()
                         {
-                            from = 1,
+
                             damage = GetDmg(s, 0),
                             fast = true,
-                            piercing = true,
                             moveEnemy = -2,
                         },
                         new AAttack ()
                         {
-                            from = -1,
+                            from = 2,
                             damage = GetDmg(s, 3),
                             fast = true,
-                            piercing = true,
                         }
                     };
             }

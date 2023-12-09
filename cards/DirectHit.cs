@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TuckerTheSaboteur.cards
 {
     [CardMeta(rarity = Rarity.common, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class Hook : Card
+    public class DirectHit : Card
     {
         public override List<CardAction> GetActions(State s, Combat c)
         {
@@ -17,31 +17,31 @@ namespace TuckerTheSaboteur.cards
                 case Upgrade.None:
                     return new List<CardAction> ()
                     {
-                        new AAttack ()
+                        new ABluntAttack ()
                         {
-                            from = -3,
-                            damage = GetDmg(s, 2),
-                            moveEnemy = 2,
+                            damage = GetDmg(s, 5),
                         }
                     };
                 case Upgrade.A:
                     return new List<CardAction> ()
                     {
-                        new AAttack ()
+                        new ABluntAttack ()
                         {
-                            from = -3,
-                            damage = GetDmg(s, 2),
-                            moveEnemy = 2,
+                            damage = GetDmg(s, 6),
                         }
                     };
                 case Upgrade.B:
                     return new List<CardAction> ()
                     {
-                        new AAttack ()
+                        new AStatus()
                         {
-                            from = -1,
-                            damage = GetDmg(s, 2),
-                            moveEnemy = 2,
+                            status = Enum.Parse<Status>("shield"),
+                            statusAmount = -2,
+                            targetPlayer = false,
+                        },
+                        new ABluntAttack ()
+                        {
+                            damage = GetDmg(s, 5),
                         }
                     };
             }
@@ -50,8 +50,7 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = 1,
-                flippable = (upgrade == Upgrade.A ? true : false)
+                cost = 2
             };
         }
     }
