@@ -60,10 +60,21 @@ namespace TuckerTheSaboteur.cards
         }
         public override CardData GetData(State state)
         {
+            string desc = "";
+            switch (this.upgrade)
+            {
+                case Upgrade.None:
+                    desc = $"Move the enemy 1 space to the {flipped ? left : right}. Gain a misdirection"; break;
+                case Upgrade.A:
+                    desc = $"Move the enemy 2 spaces to the {flipped ? left : right}. Gain a misdirection"; break;
+                case Upgrade.B:
+                    desc = $"Gain 2 misdirection"; break;
+            },
             return new()
             {
                 cost = 1,
-                flippable = (upgrade == Upgrade.B ? false : true)
+                flippable = (this.upgrade != Upgrade.B),
+                description = desc
             };
         }
     }
