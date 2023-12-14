@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TuckertheSabotuer.Artifacts;
 
 namespace TuckerTheSaboteur.actions
 {
@@ -21,6 +22,15 @@ namespace TuckerTheSaboteur.actions
                 base.weaken = false;
                 base.brittle = false;
                 base.armorize = false;
+            }
+            else
+            {
+                var ownedBrick = g.state.EnumerateAllArtifacts().Where((Artifact a) => a.GetType() == typeof(Brick)).FirstOrDefault() as Brick;
+                if (ownedBrick != null)
+                {
+                    ownedBrick.Pulse();
+                    base.damage += 1; // not using GetDamage here, since it was already used. If we used it again, it'd apply overdrive (and similar effects) twice
+                }
             }
 
             base.Begin(g, s, c);
