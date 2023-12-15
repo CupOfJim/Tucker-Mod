@@ -9,7 +9,7 @@ using TuckertheSabotuer.Artifacts;
 namespace TuckerMod
 {
     [HarmonyPatch(typeof(AAttack))]
-    public class ComJammerController
+    public class CommJammerController
     {
         [HarmonyPrefix]
         [HarmonyPatch(nameof(AAttack.Begin))]
@@ -17,9 +17,9 @@ namespace TuckerMod
         {
             if (__instance.fromDroneX == null || !__instance.targetPlayer) return true;
 
-            var ownedComJammer = g.state.EnumerateAllArtifacts().Where((Artifact a) => a.GetType() == typeof(ComJammer)).FirstOrDefault() as ComJammer;
+            var ownedCommJammer = g.state.EnumerateAllArtifacts().Where((Artifact a) => a.GetType() == typeof(CommJammer)).FirstOrDefault() as CommJammer;
             __instance.damage -= 1;
-            ownedComJammer.Pulse();
+            ownedCommJammer.Pulse();
 
             return true;
         }

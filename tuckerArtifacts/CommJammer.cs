@@ -2,5 +2,5 @@
 {
 
     [ArtifactMeta(pools = new ArtifactPool[] { ArtifactPool.Common })]
-    public class ComJammer : Artifact {}
+    public class CommJammer : Artifact {}
 }

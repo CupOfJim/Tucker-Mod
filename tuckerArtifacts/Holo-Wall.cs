@@ -12,7 +12,7 @@
             {
                 targetPlayer = true,
                 status = Enum.Parse<Status>("buffer"),
-                statusAmount = 2
+                statusAmount = 3
             });
         }
     }
