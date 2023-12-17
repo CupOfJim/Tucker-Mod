@@ -187,10 +187,10 @@ namespace TuckerTheSaboteur
         {
             var animationInfo = new Dictionary<string, IEnumerable<ExternalSprite>>();
             // these are the required animations
-            //animationInfo["neutral"] = new ExternalSprite[] { sprites["tucker_neutral_0"], sprites["philip_neutral_1"], sprites["philip_neutral_0"], sprites["philip_neutral_1"] };
-            //animationInfo["squint"] = new ExternalSprite[] { sprites["philip_squint_0"], sprites["philip_squint_1"], sprites["philip_squint_0"], sprites["philip_squint_1"] };
-            //animationInfo["gameover"] = new ExternalSprite[] { sprites["philip_surprise_0"], sprites["philip_surprise_1"], sprites["philip_surprise_0"], sprites["philip_surprise_1"] };
-            //animationInfo["mini"] = new ExternalSprite[] { sprites["philip_mini"] };
+            animationInfo["neutral"] = new ExternalSprite[] { sprites["tucker_neutral_1"], sprites["tucker_neutral_2"], sprites["tucker_neutral_3"], sprites["tucker_neutral_4"] };
+            animationInfo["squint"] = new ExternalSprite[] { sprites["tucker_squint_1"], sprites["tucker_squint_2"], sprites["tucker_squint_3"], sprites["tucker_squint_4"] };
+            animationInfo["gameover"] = new ExternalSprite[] { sprites["tucker_death"] };
+            animationInfo["mini"] = new ExternalSprite[] { sprites["mini_tucker"] };
 
             foreach (var kvp in animationInfo)
             {
@@ -258,8 +258,12 @@ namespace TuckerTheSaboteur
             HoloWall.RegisterArtifact(HoloWall);
 
             var CommJammer = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Comm_Jammer", typeof(CommJammer), sprites["Comm_Jammer"], ownerDeck: deck);
-            CommJammer.AddLocalisation("COMM JAMMER", "Take 1 less damage from <c=drone>midrow objects</c>.");
+            CommJammer.AddLocalisation("INTERCEPTOR", "Take 1 less damage from <c=drone>midrow objects</c>.");
             CommJammer.RegisterArtifact(CommJammer);
+
+            var ArtofWar = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Art_of_War", typeof(ArtofWar), sprites["Art_of_War"], ownerDeck: deck);
+            ArtofWar.AddLocalisation("ART OF WAR", "When out of shields, gain a <c=card>Counter-attack</c>.");
+            ArtofWar.RegisterArtifact(ArtofWar);
         }
     }
 }

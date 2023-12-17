@@ -21,7 +21,7 @@ namespace TuckerTheSaboteur.cards
                         {
                             damage = GetDmg(s, 1),
                             status = Enum.Parse<Status>("tempshield"),
-                            statusAmount = 3,
+                            statusAmount = 4,
                             targetPlayer = true,
                         }
                     };
@@ -32,7 +32,7 @@ namespace TuckerTheSaboteur.cards
                         {
                             damage = GetDmg(s, 2),
                             status = Enum.Parse<Status>("tempshield"),
-                            statusAmount = 4,
+                            statusAmount = 5,
                             targetPlayer = true,
                         }
                     };
@@ -43,7 +43,7 @@ namespace TuckerTheSaboteur.cards
                         {
                             damage = GetDmg(s, 1),
                             status = Enum.Parse<Status>("tempshield"),
-                            statusAmount = 3,
+                            statusAmount = 4,
                             targetPlayer = true,
                         }
                     };
