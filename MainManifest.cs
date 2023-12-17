@@ -12,6 +12,7 @@ using HarmonyLib;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework.Graphics;
 using TuckerTheSaboteur.cards;
+using TuckertheSabotuer.Artifacts;
 
 namespace TuckerTheSaboteur
 {
@@ -145,12 +146,12 @@ namespace TuckerTheSaboteur
 
         public void LoadManifest(IDeckRegistry registry)
         {
-            var philipColor = 0;
-            unchecked { philipColor = (int)0xffe9bd5c; } // TODO: set the hex color you want for Tucker
+            var tuckerColor = 0;
+            unchecked { tuckerColor = (int)0xffe9bd5c; }
 
             deck = new ExternalDeck(
                 "SoggoruWaffle.Tucker.TuckerDeck",
-                System.Drawing.Color.FromArgb(philipColor),
+                System.Drawing.Color.FromArgb(tuckerColor),
                 System.Drawing.Color.Black,
                 sprites["card/tucker_default"],
                 sprites["frame_tucker"],
@@ -178,7 +179,7 @@ namespace TuckerTheSaboteur
 
             character.AddNameLocalisation("Tucker");
             // TODO: set color here too, and also write the description
-            character.AddDescLocalisation("<c=0xffe9bd5c>TUCKER</c>\nA retired sabotuer. His cards manipulate <c=aa00bb>the enemy's shield</c> and <c=aa00bb>positioning</c>.");
+            character.AddDescLocalisation("<c=e9bd5c>TUCKER</c>\nA retired sabotuer. His cards manipulate <c=aa00bb>the enemy's shield</c> and <c=aa00bb>positioning</c>.");
 
             if (!registry.RegisterCharacter(character)) throw new Exception("Tucker is lost! Could not register Tucker!");
         }
@@ -245,25 +246,25 @@ namespace TuckerTheSaboteur
 
         public void LoadManifest(IArtifactRegistry registry)
         {
-            var AntiqueMotor = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Antique_Motor", typeof(AntiqueMotor), sprites["Antique_Motor"], ownerDeck: deck);
-            AntiqueMotor.AddLocalisation("ANTIQUE MOTOR", "Gain 1 extra <c=energy>ENERGY</c> every turn. <c=downside>Gain 1</c> <c=status>FUEL LEAK</c> <c=downside>on the first turn</c>.");
-            registry.RegisterArtifact(AntiqueMotor);
+            var antiqueMotor = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Antique_Motor", typeof(AntiqueMotor), sprites["Antique_Motor"], ownerDeck: deck);
+            antiqueMotor.AddLocalisation("ANTIQUE MOTOR", "Gain 1 extra <c=energy>ENERGY</c> every turn. <c=downside>Gain 1</c> <c=status>FUEL LEAK</c> <c=downside>on the first turn</c>.");
+            registry.RegisterArtifact(antiqueMotor);
 
-            var Brick = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Brick", typeof(Brick), sprites["Brick"], ownerDeck: deck);
-            Brick.AddLocalisation("BRICK", "<c=card>BLUNT ATTACKS</c> deal +1 damage.");
-            Brick.RegisterArtifact(Brick);
+            var brick = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Brick", typeof(Brick), sprites["Brick"], ownerDeck: deck);
+            brick.AddLocalisation("BRICK", "<c=card>BLUNT ATTACKS</c> deal +1 damage.");
+            registry.RegisterArtifact(brick);
 
-            var HoloWall = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Holo-Wall", typeof(HoloWall), sprites["Holo-Wall"], ownerDeck: deck);
-            HoloWall.AddLocalisation("HOLO-WALL", "Gain 3 <c=status>Buffer</c> on the first turn.");
-            HoloWall.RegisterArtifact(HoloWall);
+            var holoWall = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Holo-Wall", typeof(HoloWall), sprites["Holo-Wall"], ownerDeck: deck);
+            holoWall.AddLocalisation("HOLO-WALL", "Gain 3 <c=status>Buffer</c> on the first turn.");
+            registry.RegisterArtifact(holoWall);
 
-            var CommJammer = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Comm_Jammer", typeof(CommJammer), sprites["Comm_Jammer"], ownerDeck: deck);
-            CommJammer.AddLocalisation("INTERCEPTOR", "Take 1 less damage from <c=drone>midrow objects</c>.");
-            CommJammer.RegisterArtifact(CommJammer);
+            var commJammer = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Comm_Jammer", typeof(CommJammer), sprites["Comm_Jammer"], ownerDeck: deck);
+            commJammer.AddLocalisation("INTERCEPTOR", "Take 1 less damage from <c=drone>midrow objects</c>.");
+            registry.RegisterArtifact(commJammer);
 
-            var ArtofWar = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Art_of_War", typeof(ArtofWar), sprites["Art_of_War"], ownerDeck: deck);
-            ArtofWar.AddLocalisation("ART OF WAR", "When out of shields, gain a <c=card>Counter-attack</c>.");
-            ArtofWar.RegisterArtifact(ArtofWar);
+            var artofWar = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Art_of_War", typeof(ArtofWar), sprites["Art_of_War"], ownerDeck: deck);
+            artofWar.AddLocalisation("ART OF WAR", "When out of shields, gain a <c=card>Counter-attack</c>.");
+            registry.RegisterArtifact(artofWar);
         }
     }
 }
