@@ -19,7 +19,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            from = -1,
+                            fromX = -1,
                             damage = GetDmg(s, 1),
                             fast = true,
                         },
@@ -30,7 +30,7 @@ namespace TuckerTheSaboteur.cards
                         },
                         new AAttack ()
                         {
-                            from = 1,
+                            fromX = 1,
                             damage = GetDmg(s, 1),
                             fast = true,
                         }
@@ -40,12 +40,12 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            from = -2,
+                            fromX = -2,
                             damage = GetDmg(s, 1),
                             fast = true,
                         },
-                        {
-                            from = -1,
+                        new AAttack () {
+                            fromX = -1,
                             damage = GetDmg(s, 1),
                             fast = true,
                         },
@@ -56,12 +56,12 @@ namespace TuckerTheSaboteur.cards
                         },
                         new AAttack ()
                         {
-                            from = 1,
+                            fromX = 1,
                             damage = GetDmg(s, 1),
                             fast = true,
                         },
-                        {
-                            from = 2,
+                        new AAttack () {
+                            fromX = 2,
                             damage = GetDmg(s, 1),
                             fast = true,
                         }
@@ -71,7 +71,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            from = -1,
+                            fromX = -1,
                             damage = GetDmg(s, 1),
                             fast = true,
                             piercing = true,
@@ -84,13 +84,15 @@ namespace TuckerTheSaboteur.cards
                         },
                         new AAttack ()
                         {
-                            from = 1,
+                            fromX = 1,
                             damage = GetDmg(s, 1),
                             fast = true,
                             piercing = true,
                         }
                     };
             }
+
+            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
         }
         public override CardData GetData(State state)
         {

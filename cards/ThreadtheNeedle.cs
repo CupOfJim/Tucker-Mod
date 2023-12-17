@@ -19,7 +19,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            from = -2,
+                            fromX = -2,
                             damage = GetDmg(s, 0),
                             status = Enum.Parse<Status>("tempshield"),
                             statusAmount = 3,
@@ -27,7 +27,7 @@ namespace TuckerTheSaboteur.cards
                         },
                         new AAttack ()
                         {
-                            from = 2,
+                            fromX = 2,
                             damage = GetDmg(s, 0),
                             status = Enum.Parse<Status>("tempshield"),
                             statusAmount = 3,
@@ -44,7 +44,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            from = -2,
+                            fromX = -2,
                             damage = GetDmg(s, 0),
                             status = Enum.Parse<Status>("tempshield"),
                             statusAmount = 4,
@@ -52,7 +52,7 @@ namespace TuckerTheSaboteur.cards
                         },
                         new AAttack ()
                         {
-                            from = 2,
+                            fromX = 2,
                             damage = GetDmg(s, 0),
                             status = Enum.Parse<Status>("tempshield"),
                             statusAmount = 4,
@@ -69,7 +69,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            from = -1,
+                            fromX = -1,
                             damage = GetDmg(s, 0),
                             status = Enum.Parse<Status>("tempshield"),
                             statusAmount = 4,
@@ -82,6 +82,8 @@ namespace TuckerTheSaboteur.cards
                         }
                     };
             }
+
+            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
         }
         public override CardData GetData(State state)
         {

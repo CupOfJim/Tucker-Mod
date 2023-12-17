@@ -62,7 +62,9 @@ namespace TuckerTheSaboteur.cards
                             targetPlayer = true
                         }
                     };
-            };
+            }
+
+            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
         }
         public override CardData GetData(State state)
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TuckerTheSaboteur.actions;
 
 namespace TuckerTheSaboteur.cards
 {
@@ -48,6 +49,8 @@ namespace TuckerTheSaboteur.cards
                         new AShieldSteal() { amount = 3 }
                     };
             }
+
+            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
         }
         public override CardData GetData(State state)
         {

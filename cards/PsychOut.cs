@@ -58,12 +58,14 @@ namespace TuckerTheSaboteur.cards
                         },
                         new AAttack ()
                         {
-                            from = -2
+                            fromX = -2,
                             damage = GetDmg(s, 1),
                             fast = true,
                         }
                     };
-            };
+            }
+
+            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
         }
         public override CardData GetData(State state)
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tuckermod.actions;
 
 namespace TuckerTheSaboteur.cards
 {
@@ -19,21 +20,21 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            from = -1,
+                            fromX = -1,
                             damage = GetDmg(s, 0),
                             fast = true,
                             moveEnemy = 2,
                         },
                         new AAttack ()
                         {
-                            from = 1,
+                            fromX = 1,
                             damage = GetDmg(s, 0),
                             fast = true,
                             moveEnemy = -2,
                         },
                         new AAttack ()
                         {
-                            from = -1,
+                            fromX = -1,
                             damage = GetDmg(s, 3),
                             fast = true,
                         }
@@ -43,14 +44,14 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            from = -1,
+                            fromX = -1,
                             damage = GetDmg(s, 0),
                             fast = true,
                             moveEnemy = 2,
                         },
                         new AAttack ()
                         {
-                            from = 1,
+                            fromX = 1,
                             damage = GetDmg(s, 0),
                             fast = true,
                             moveEnemy = -2,
@@ -58,7 +59,7 @@ namespace TuckerTheSaboteur.cards
                         new AReplay(),
                         new AAttack ()
                         {
-                            from = -1,
+                            fromX = -1,
                             damage = GetDmg(s, 4),
                             fast = true,
                         }
@@ -68,7 +69,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            from = -2,
+                            fromX = -2,
                             damage = GetDmg(s, 0),
                             fast = true,
                             moveEnemy = 2,
@@ -82,12 +83,14 @@ namespace TuckerTheSaboteur.cards
                         },
                         new AAttack ()
                         {
-                            from = 2,
+                            fromX = 2,
                             damage = GetDmg(s, 3),
                             fast = true,
                         }
                     };
             }
+
+            throw new Exception("Juggle was upgraded to something that doesn't exist.");
         }
         public override CardData GetData(State state)
         {

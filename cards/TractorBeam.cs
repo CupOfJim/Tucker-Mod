@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TuckerTheSaboteur.actions;
 
 namespace TuckerTheSaboteur.cards
 {
@@ -22,7 +23,7 @@ namespace TuckerTheSaboteur.cards
             {
                 cost = 0,
                 exhaust = (upgrade == Upgrade.A ? false : true),
-                bouyant = (upgrade == Upgrade.B ? true : false)
+                buoyant = (upgrade == Upgrade.B ? true : false)
             };
         }
     }

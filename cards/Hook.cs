@@ -19,7 +19,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            from = -3,
+                            fromX = -3,
                             damage = GetDmg(s, 2),
                             moveEnemy = 2,
                         }
@@ -29,7 +29,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            from = -3,
+                            fromX = -3,
                             damage = GetDmg(s, 2),
                             moveEnemy = 2,
                         }
@@ -39,12 +39,14 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            from = -1,
+                            fromX = -1,
                             damage = GetDmg(s, 2),
                             moveEnemy = 2,
                         }
                     };
             }
+
+            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
         }
         public override CardData GetData(State state)
         {
