@@ -20,7 +20,7 @@ namespace TuckerTheSaboteur.actions
             Ship ship = (targetPlayer ? s.ship : c.otherShip);
             if (ship != null)
             {
-                ship.DirectHullDamage(s, c, ship.Get((Status)MainManifest.statuses["fuel_leak"].Id));
+                ship.NormalDamage(s, c, ship.Get((Status)MainManifest.statuses["fuel_leak"].Id), -999, piercing: false, worldSpaceAgnostic: true);
                 Audio.Play(Event.Status_CorrodeHurt);
                 ship.PulseStatus((Status)MainManifest.statuses["fuel_leak"].Id);
             }
