@@ -2,9 +2,9 @@
 {
 
     [ArtifactMeta(pools = new ArtifactPool[] { ArtifactPool.Common })]
-    public class Holowall : Artifact
+    public class HoloWall : Artifact
     {
-        public override string Description() => "Gain 2 <c=status>Buffer</c> on the first turn.";
+        public override string Description() => "Gain 3 <c=status>Buffer</c> on the first turn.";
         public override void OnCombatStart(State state, Combat combat)
         {
             this.Pulse();

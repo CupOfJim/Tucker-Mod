@@ -64,6 +64,11 @@ namespace TuckerTheSaboteur
                 "icons/Replay",
                 "icons/Buffer",
                 "icons/Fuel_Leak",
+                "icons/War_of_War",
+                "icons/Holo-Wall",
+                "icons/Antique_Motor",
+                "icons/Brick",
+                "icons/Comm_Jammer",
 
                 "cards/Psych_Out",
                 "cards/Mutual_Gain",
@@ -106,6 +111,27 @@ namespace TuckerTheSaboteur
             var cardDefinitions = new ExternalCard[]
             {
                 new ExternalCard("SoggoruWaffle.Tucker.cards.Mutual Gain", typeof(MutualGain), sprites["cards/Mutual_Gain"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Counter-attack", typeof(Counterattack), sprites["cards/Counter-attack"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Counterfeit Swap", typeof(CounterfeitSwap), sprites["cards/Counterfeit_Swap"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Cripple", typeof(Cripple), sprites["cards/Cripple"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Curveball", typeof(Curveball), sprites["cards/Curveball"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Direct Hit", typeof(DirectHit), sprites["cards/Direct_Hit"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Fortress Mode", typeof(FortressMode), sprites["cards/Fortress_Mode"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Hook", typeof(Hook), sprites["cards/Hook"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Juggle", typeof(Juggle), sprites["cards/Juggle"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Lie Low", typeof(LieLow), sprites["cards/Lie_Low"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Lockpick", typeof(Lockpick), sprites["cards/Lockpick"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Misdirection", typeof(Misdirection), sprites["cards/Misdirection"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Nav Override", typeof(NavOverride), sprites["cards/Nav_Override"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Pressure Gun", typeof(PressureGun), sprites["cards/Pressure_Gun"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Psych Out", typeof(PsychOut), sprites["cards/Psych_Out"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Quantum Cannon", typeof(QuantumCannon), sprites["cards/Quantum_Cannon"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Rubber Bullet", typeof(RubberBullet), sprites["cards/Rubber_Bullet"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Sabotage", typeof(Sabotage), sprites["cards/Sabotage"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Spray and Pray", typeof(SprayandPray), sprites["cards/Spray_and_Pray"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Thread the Needle", typeof(ThreadtheNeedle), sprites["cards/Thread_the_Needle"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Tractor Beam", typeof(TractorBeam), sprites["cards/Tractor_Beam"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Lock-on", typeof(Lockon), sprites["cards/Lock-on"], deck),
             };
             
             foreach(var card in cardDefinitions)
@@ -137,7 +163,7 @@ namespace TuckerTheSaboteur
         {
             //var realStartingCards = new Type[] { typeof(OverdriveMod), typeof(RecycleParts) };
             // TODO: initialize realStartingCards like above
-            var realStartingCards = new Type[0];
+            var realStartingCards = new Type[] { typeof(Sabotage), typeof(DirectHit) };
             var allCards = cards.Values.Select(card => card.CardType).ToList();
 
             character = new ExternalCharacter(
@@ -152,7 +178,7 @@ namespace TuckerTheSaboteur
 
             character.AddNameLocalisation("Tucker");
             // TODO: set color here too, and also write the description
-            character.AddDescLocalisation("<c=aaaa00>TUCKER</c>\nHe's <c=aa00bb>cool</c>.");
+            character.AddDescLocalisation("<c=0xffe9bd5c>TUCKER</c>\nA retired sabotuer. His cards manipulate <c=aa00bb>the enemy's shield</c> and <c=aa00bb>positioning</c>.");
 
             if (!registry.RegisterCharacter(character)) throw new Exception("Tucker is lost! Could not register Tucker!");
         }
@@ -161,7 +187,7 @@ namespace TuckerTheSaboteur
         {
             var animationInfo = new Dictionary<string, IEnumerable<ExternalSprite>>();
             // these are the required animations
-            //animationInfo["neutral"] = new ExternalSprite[] { sprites["philip_neutral_0"], sprites["philip_neutral_1"], sprites["philip_neutral_0"], sprites["philip_neutral_1"] };
+            //animationInfo["neutral"] = new ExternalSprite[] { sprites["tucker_neutral_0"], sprites["philip_neutral_1"], sprites["philip_neutral_0"], sprites["philip_neutral_1"] };
             //animationInfo["squint"] = new ExternalSprite[] { sprites["philip_squint_0"], sprites["philip_squint_1"], sprites["philip_squint_0"], sprites["philip_squint_1"] };
             //animationInfo["gameover"] = new ExternalSprite[] { sprites["philip_surprise_0"], sprites["philip_surprise_1"], sprites["philip_surprise_0"], sprites["philip_surprise_1"] };
             //animationInfo["mini"] = new ExternalSprite[] { sprites["philip_mini"] };
@@ -183,10 +209,18 @@ namespace TuckerTheSaboteur
 
         public void LoadManifest(IGlossaryRegisty registry)
         {
-            //RegisterGlossaryEntry(registry, "AReplay", sprites["icon_play_twice"],
-            //    "play twice",
-            //    "Play all actions prior to the Play Twice action twice."
-            //);
+            RegisterGlossaryEntry(registry, "AReplay", sprites["replay"],
+                "play twice",
+                "Play all actions prior to the Play Twice action twice."
+            );
+            RegisterGlossaryEntry(registry, "ABluntAttack", sprites["blunt_attack"],
+                "blunt attack",
+                "Completely negated by shields. This goes for effects it would otherwise apply, as well."
+            );
+            RegisterGlossaryEntry(registry, "AShieldSteal", sprites["shield_steal"],
+                "shield steal",
+                "Steal up to {0} shield from the enemy and apply it to yourself. If they have no shield, steal temp shield instead."
+            );
         }
         private void RegisterGlossaryEntry(IGlossaryRegisty registry, string itemName, ExternalSprite sprite, string displayName, string description)
         {
@@ -200,7 +234,7 @@ namespace TuckerTheSaboteur
         {
             var fuelLeak = new ExternalStatus("SoggoruWaffle.Tucker.statuses.fuel_leak", true, System.Drawing.Color.Red, null, sprites["icons/Fuel_Leak"], false);
             statusRegistry.RegisterStatus(fuelLeak);
-            fuelLeak.AddLocalisation("fuel_leak", "Deals {0} hull damage every time the ship moves any distance.");
+            fuelLeak.AddLocalisation("fuel_leak", "Take {0} damage every time the ship moves any distance.");
             statuses["fuel_leak"] = fuelLeak;
 
             var buffer = new ExternalStatus("SoggoruWaffle.Tucker.statuses.buffer", true, System.Drawing.Color.Crimson, null, sprites["icons/Buffer"], false);
@@ -211,9 +245,21 @@ namespace TuckerTheSaboteur
 
         public void LoadManifest(IArtifactRegistry registry)
         {
-            //var wireClippers = new ExternalArtifact("clay.PhilipTheMechanic.Artifacts.WireClippers", typeof(WireClippers), sprites["artifact_wire_clippers"], ownerDeck: deck);
-            //wireClippers.AddLocalisation("WIRE CLIPPERS", "All unplayable cards become playable");
-            //registry.RegisterArtifact(wireClippers);
+            var AntiqueMotor = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Antique_Motor", typeof(AntiqueMotor), sprites["Antique_Motor"], ownerDeck: deck);
+            AntiqueMotor.AddLocalisation("ANTIQUE MOTOR", "Gain 1 extra <c=energy>ENERGY</c> every turn. <c=downside>Gain 1</c> <c=status>FUEL LEAK</c> <c=downside>on the first turn</c>.");
+            registry.RegisterArtifact(AntiqueMotor);
+
+            var Brick = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Brick", typeof(Brick), sprites["Brick"], ownerDeck: deck);
+            Brick.AddLocalisation("BRICK", "<c=card>BLUNT ATTACKS</c> deal +1 damage.");
+            Brick.RegisterArtifact(Brick);
+
+            var HoloWall = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Holo-Wall", typeof(HoloWall), sprites["Holo-Wall"], ownerDeck: deck);
+            HoloWall.AddLocalisation("HOLO-WALL", "Gain 3 <c=status>Buffer</c> on the first turn.");
+            HoloWall.RegisterArtifact(HoloWall);
+
+            var CommJammer = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Comm_Jammer", typeof(CommJammer), sprites["Comm_Jammer"], ownerDeck: deck);
+            CommJammer.AddLocalisation("COMM JAMMER", "Take 1 less damage from <c=drone>midrow objects</c>.");
+            CommJammer.RegisterArtifact(CommJammer);
         }
     }
 }
