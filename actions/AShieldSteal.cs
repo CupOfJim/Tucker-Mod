@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FSPRO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,12 +16,13 @@ namespace TuckerTheSaboteur.actions
         {
             int enemyShield = c.otherShip.Get(Enum.Parse<Status>("shield"));
             int steal = Math.Min(enemyShield, amount);
+            Audio.Play(Event.Status_PowerUp);
             c.otherShip.Set(Enum.Parse<Status>("shield"), enemyShield - steal);
 
             c.QueueImmediate(new AStatus()
             {
                 status = Enum.Parse<Status>("shield"),
-                statusAmount = amount,
+                statusAmount = steal,
                 targetPlayer = true
             });
         }
