@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using CobaltCoreModding.Definitions;
+﻿using CobaltCoreModding.Definitions;
 using CobaltCoreModding.Definitions.ExternalItems;
 using CobaltCoreModding.Definitions.ModContactPoints;
 using CobaltCoreModding.Definitions.ModManifests;
 using HarmonyLib;
-using Microsoft.Extensions.Logging;
-using Microsoft.Xna.Framework.Graphics;
 using TuckerTheSaboteur.cards;
 using TuckertheSabotuer.Artifacts;
 
