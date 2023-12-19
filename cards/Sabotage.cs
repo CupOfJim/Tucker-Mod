@@ -28,7 +28,7 @@ namespace TuckerTheSaboteur.cards
                         {
                             status = Enum.Parse<Status>("shield"),
                             statusAmount = -1,
-                            targetPlayer = true
+                            targetPlayer = false
                         }
                     };
                 case Upgrade.B:
