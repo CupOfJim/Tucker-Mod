@@ -55,6 +55,8 @@ namespace TuckerTheSaboteur
                 "character/tucker_squint_3",
                 "character/tucker_squint_4",
                 "character/tucker_death",
+                "character/tucker_border",
+                "character/mini_tucker",
 
                 "icons/Blunt_Attack",
                 "icons/Blunt_Attack_Fail",
@@ -71,6 +73,7 @@ namespace TuckerTheSaboteur
                 "icons/Brick",
                 "icons/Comm_Jammer",
 
+                "cards/Card_Border",
                 "cards/Psych_Out",
                 "cards/Mutual_Gain",
                 "cards/Direct_Hit",
@@ -153,8 +156,8 @@ namespace TuckerTheSaboteur
                 "SoggoruWaffle.Tucker.TuckerDeck",
                 System.Drawing.Color.FromArgb(tuckerColor),
                 System.Drawing.Color.Black,
-                sprites["card/tucker_default"],
-                sprites["frame_tucker"],
+                sprites["cards/Sabotage"],
+                sprites["cards/Card_Border"],
                 null
             );
             if (!registry.RegisterDeck(deck)) throw new Exception("Tucker's lost his deck! Cannot proceed, he needs help finding it.");
@@ -170,7 +173,7 @@ namespace TuckerTheSaboteur
             character = new ExternalCharacter(
                 "SoggoruWaffle.Tucker",
                 deck,
-                sprites["char_frame_tucker"],
+                sprites["character/tucker_border"],
                 realStartingCards,
                 new Type[0],
                 animations["neutral"],
@@ -188,10 +191,10 @@ namespace TuckerTheSaboteur
         {
             var animationInfo = new Dictionary<string, IEnumerable<ExternalSprite>>();
             // these are the required animations
-            animationInfo["neutral"] = new ExternalSprite[] { sprites["tucker_neutral_1"], sprites["tucker_neutral_2"], sprites["tucker_neutral_3"], sprites["tucker_neutral_4"] };
-            animationInfo["squint"] = new ExternalSprite[] { sprites["tucker_squint_1"], sprites["tucker_squint_2"], sprites["tucker_squint_3"], sprites["tucker_squint_4"] };
-            animationInfo["gameover"] = new ExternalSprite[] { sprites["tucker_death"] };
-            animationInfo["mini"] = new ExternalSprite[] { sprites["mini_tucker"] };
+            animationInfo["neutral"] = new ExternalSprite[] { sprites["character/tucker_neutral_1"], sprites["character/tucker_neutral_2"], sprites["character/tucker_neutral_3"], sprites["character/tucker_neutral_4"] };
+            animationInfo["squint"] = new ExternalSprite[] { sprites["character/tucker_squint_1"], sprites["character/tucker_squint_2"], sprites["character/tucker_squint_3"], sprites["character/tucker_squint_4"] };
+            animationInfo["gameover"] = new ExternalSprite[] { sprites["character/tucker_death"] };
+            animationInfo["mini"] = new ExternalSprite[] { sprites["character/mini_tucker"] };
 
             foreach (var kvp in animationInfo)
             {
@@ -210,15 +213,15 @@ namespace TuckerTheSaboteur
 
         public void LoadManifest(IGlossaryRegisty registry)
         {
-            RegisterGlossaryEntry(registry, "AReplay", sprites["replay"],
+            RegisterGlossaryEntry(registry, "AReplay", sprites["icons/Replay"],
                 "play twice",
                 "Play all actions prior to the Play Twice action twice."
             );
-            RegisterGlossaryEntry(registry, "ABluntAttack", sprites["blunt_attack"],
+            RegisterGlossaryEntry(registry, "ABluntAttack", sprites["icons/Blunt_Attack"],
                 "blunt attack",
                 "Completely negated by shields. This goes for effects it would otherwise apply, as well."
             );
-            RegisterGlossaryEntry(registry, "AShieldSteal", sprites["shield_steal"],
+            RegisterGlossaryEntry(registry, "AShieldSteal", sprites["icons/Shield_Steal"],
                 "shield steal",
                 "Steal up to {0} shield from the enemy and apply it to yourself. If they have no shield, steal temp shield instead."
             );
