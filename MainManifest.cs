@@ -54,7 +54,7 @@ namespace TuckerTheSaboteur
                 "character/tucker_squint_2",
                 "character/tucker_squint_3",
                 "character/tucker_squint_4",
-                "character/tucker_surprise_1",
+                "character/tucker_death",
 
                 "icons/Blunt_Attack",
                 "icons/Blunt_Attack_Fail",
