@@ -21,7 +21,7 @@ namespace TuckerTheSaboteur.cards
                         new ABluntAttack ()
                         {
                             damage = GetDmg(s, 2),
-                            status = Enum.Parse<Status>("fuelleak"),
+                            status = (Status)MainManifest.statuses["fuel_leak"].Id,
                             statusAmount = 1,
                         }
                     };
@@ -31,7 +31,7 @@ namespace TuckerTheSaboteur.cards
                         new AAttack ()
                         {
                             damage = GetDmg(s, 2),
-                            status = Enum.Parse<Status>("fuelleak"),
+                            status = (Status)MainManifest.statuses["fuel_leak"].Id,
                             statusAmount = 1,
                         }
                     };
@@ -41,13 +41,13 @@ namespace TuckerTheSaboteur.cards
                         new ABluntAttack ()
                         {
                             damage = GetDmg(s, 1),
-                            status = Enum.Parse<Status>("fuelleak"),
+                            status = (Status)MainManifest.statuses["fuel_leak"].Id,
                             statusAmount = 1,
                         },
                         new AAttack ()
                         {
                             damage = GetDmg(s, 1),
-                            status = Enum.Parse<Status>("fuelleak"),
+                            status = (Status)MainManifest.statuses["fuel_leak"].Id,
                             statusAmount = 1,
                         }
                     };

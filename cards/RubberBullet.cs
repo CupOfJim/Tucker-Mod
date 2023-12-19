@@ -21,7 +21,7 @@ namespace TuckerTheSaboteur.cards
                         new ABluntAttack ()
                         {
                             damage = GetDmg(s, 1),
-                            status = Enum.Parse<Status>("tempshield"),
+                            status = Enum.Parse<Status>("tempShield"),
                             statusAmount = 4,
                             targetPlayer = true,
                         }
@@ -32,7 +32,7 @@ namespace TuckerTheSaboteur.cards
                         new ABluntAttack ()
                         {
                             damage = GetDmg(s, 2),
-                            status = Enum.Parse<Status>("tempshield"),
+                            status = Enum.Parse<Status>("tempShield"),
                             statusAmount = 5,
                             targetPlayer = true,
                         }
@@ -43,7 +43,7 @@ namespace TuckerTheSaboteur.cards
                         new AAttack ()
                         {
                             damage = GetDmg(s, 1),
-                            status = Enum.Parse<Status>("tempshield"),
+                            status = Enum.Parse<Status>("tempShield"),
                             statusAmount = 4,
                             targetPlayer = true,
                         }

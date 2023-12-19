@@ -1,4 +1,6 @@
-﻿namespace TuckertheSabotuer.Artifacts
+﻿using TuckerTheSaboteur;
+
+namespace TuckertheSabotuer.Artifacts
 {
 
     [ArtifactMeta(pools = new ArtifactPool[] { ArtifactPool.Boss })]
@@ -11,7 +13,7 @@
             combat.QueueImmediate(new AStatus()
             {
                 targetPlayer = true,
-                status = Enum.Parse<Status>("fuelleak"),
+                status = (Status)MainManifest.statuses["fuel_leak"].Id,
                 statusAmount = 1
             });
         }

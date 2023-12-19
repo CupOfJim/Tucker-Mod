@@ -57,7 +57,7 @@ namespace TuckerTheSaboteur.cards
                         },
                         new AStatus ()
                         {
-                            status = Enum.Parse<Status>("tempshield"),
+                            status = Enum.Parse<Status>("tempShield"),
                             statusAmount = 2,
                             targetPlayer = true
                         },

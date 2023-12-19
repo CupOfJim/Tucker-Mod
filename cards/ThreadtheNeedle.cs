@@ -21,7 +21,7 @@ namespace TuckerTheSaboteur.cards
                         {
                             fromX = -2,
                             damage = GetDmg(s, 0),
-                            status = Enum.Parse<Status>("tempshield"),
+                            status = Enum.Parse<Status>("tempShield"),
                             statusAmount = 3,
                             fast = true,
                         },
@@ -29,7 +29,7 @@ namespace TuckerTheSaboteur.cards
                         {
                             fromX = 2,
                             damage = GetDmg(s, 0),
-                            status = Enum.Parse<Status>("tempshield"),
+                            status = Enum.Parse<Status>("tempShield"),
                             statusAmount = 3,
                             fast = true,
                         },
@@ -46,7 +46,7 @@ namespace TuckerTheSaboteur.cards
                         {
                             fromX = -2,
                             damage = GetDmg(s, 0),
-                            status = Enum.Parse<Status>("tempshield"),
+                            status = Enum.Parse<Status>("tempShield"),
                             statusAmount = 4,
                             fast = true,
                         },
@@ -54,7 +54,7 @@ namespace TuckerTheSaboteur.cards
                         {
                             fromX = 2,
                             damage = GetDmg(s, 0),
-                            status = Enum.Parse<Status>("tempshield"),
+                            status = Enum.Parse<Status>("tempShield"),
                             statusAmount = 4,
                             fast = true,
                         },
@@ -71,7 +71,7 @@ namespace TuckerTheSaboteur.cards
                         {
                             fromX = -1,
                             damage = GetDmg(s, 0),
-                            status = Enum.Parse<Status>("tempshield"),
+                            status = Enum.Parse<Status>("tempShield"),
                             statusAmount = 4,
                             fast = true,
                         },

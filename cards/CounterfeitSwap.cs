@@ -21,7 +21,7 @@ namespace TuckerTheSaboteur.cards
                         new AShieldSteal() { amount = 3 },
                         new AStatus()
                         {
-                            status = Enum.Parse<Status>("tempshield"),
+                            status = Enum.Parse<Status>("tempShield"),
                             statusAmount = 3,
                             targetPlayer = true
                         }
@@ -32,7 +32,7 @@ namespace TuckerTheSaboteur.cards
                         new AShieldSteal() { amount = 4 },
                         new AStatus()
                         {
-                            status = Enum.Parse<Status>("tempshield"),
+                            status = Enum.Parse<Status>("tempShield"),
                             statusAmount = 4,
                             targetPlayer = true
                         }
@@ -42,7 +42,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AStatus()
                         {
-                            status = Enum.Parse<Status>("tempshield"),
+                            status = Enum.Parse<Status>("tempShield"),
                             statusAmount = 3,
                             targetPlayer = true
                         },

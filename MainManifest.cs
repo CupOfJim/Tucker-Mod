@@ -80,7 +80,7 @@ namespace TuckerTheSaboteur
                 "cards/Counter-attack",
                 "cards/Counterfeit_Swap",
                 "cards/Cripple",
-                "cards/Cureball",
+                "cards/Curveball",
                 "cards/Fortress_Mode",
                 "cards/Hook",
                 "cards/Juggle",
@@ -96,6 +96,7 @@ namespace TuckerTheSaboteur
                 "cards/Spray_and_Pray",
                 "cards/Thread_the_Needle",
                 "cards/Tractor_Beam",
+                "cards/Rubber_Bullet",
             };
 
             foreach (var filename in filenames) {
@@ -182,7 +183,7 @@ namespace TuckerTheSaboteur
 
             character.AddNameLocalisation("Tucker");
             // TODO: set color here too, and also write the description
-            character.AddDescLocalisation("<c=e9bd5c>TUCKER</c>\nA retired sabotuer. His cards manipulate <c=aa00bb>the enemy's shield</c> and <c=aa00bb>positioning</c>.");
+            character.AddDescLocalisation("<c=e9bd5c>TUCKER</c>\nA retired sabotuer. His cards manipulate <c=keyword>the enemy's shield</c> and <c=keyword>positioning</c>.");
 
             if (!registry.RegisterCharacter(character)) throw new Exception("Tucker is lost! Could not register Tucker!");
         }
@@ -228,7 +229,7 @@ namespace TuckerTheSaboteur
         }
         private void RegisterGlossaryEntry(IGlossaryRegisty registry, string itemName, ExternalSprite sprite, string displayName, string description)
         {
-            var entry = new ExternalGlossary("SoggoruWaffle.Tucker.Glossary", itemName, false, ExternalGlossary.GlossayType.action, sprite);
+            var entry = new ExternalGlossary("SoggoruWaffle.Tucker.Glossary." + itemName, itemName, false, ExternalGlossary.GlossayType.action, sprite);
             entry.AddLocalisation("en", displayName, description);
             registry.RegisterGlossary(entry);
             glossary[entry.ItemName] = entry;
@@ -249,23 +250,23 @@ namespace TuckerTheSaboteur
 
         public void LoadManifest(IArtifactRegistry registry)
         {
-            var antiqueMotor = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Antique_Motor", typeof(AntiqueMotor), sprites["Antique_Motor"], ownerDeck: deck);
+            var antiqueMotor = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Antique_Motor", typeof(AntiqueMotor), sprites["icons/Antique_Motor"], ownerDeck: deck);
             antiqueMotor.AddLocalisation("ANTIQUE MOTOR", "Gain 1 extra <c=energy>ENERGY</c> every turn. <c=downside>Gain 1</c> <c=status>FUEL LEAK</c> <c=downside>on the first turn</c>.");
             registry.RegisterArtifact(antiqueMotor);
 
-            var brick = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Brick", typeof(Brick), sprites["Brick"], ownerDeck: deck);
+            var brick = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Brick", typeof(Brick), sprites["icons/Brick"], ownerDeck: deck);
             brick.AddLocalisation("BRICK", "<c=card>BLUNT ATTACKS</c> deal +1 damage.");
             registry.RegisterArtifact(brick);
 
-            var holoWall = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Holo-Wall", typeof(HoloWall), sprites["Holo-Wall"], ownerDeck: deck);
+            var holoWall = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Holo-Wall", typeof(HoloWall), sprites["icons/Holo-Wall"], ownerDeck: deck);
             holoWall.AddLocalisation("HOLO-WALL", "Gain 3 <c=status>Buffer</c> on the first turn.");
             registry.RegisterArtifact(holoWall);
 
-            var commJammer = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Comm_Jammer", typeof(CommJammer), sprites["Comm_Jammer"], ownerDeck: deck);
+            var commJammer = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Comm_Jammer", typeof(CommJammer), sprites["icons/Comm_Jammer"], ownerDeck: deck);
             commJammer.AddLocalisation("INTERCEPTOR", "Take 1 less damage from <c=drone>midrow objects</c>.");
             registry.RegisterArtifact(commJammer);
 
-            var artofWar = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Art_of_War", typeof(ArtofWar), sprites["Art_of_War"], ownerDeck: deck);
+            var artofWar = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Art_of_War", typeof(ArtofWar), sprites["icons/Art_of_War"], ownerDeck: deck);
             artofWar.AddLocalisation("ART OF WAR", "When out of shields, gain a <c=card>Counter-attack</c>.");
             registry.RegisterArtifact(artofWar);
         }
