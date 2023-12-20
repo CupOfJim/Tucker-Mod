@@ -12,6 +12,7 @@ namespace TuckerTheSaboteur.cards
         public override List<CardAction> GetActions(State s, Combat c)
         {
             Upgrade upgrade = base.upgrade;
+            int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
             switch (upgrade)
             {
                 case Upgrade.None:
@@ -19,7 +20,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            fromX = -3,
+                            fromX = cannonX-3,
                             damage = GetDmg(s, 2),
                             moveEnemy = 2,
                         }
@@ -29,7 +30,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            fromX = -3,
+                            fromX = cannonX-3,
                             damage = GetDmg(s, 2),
                             moveEnemy = 2,
                         }
@@ -39,7 +40,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            fromX = -1,
+                            fromX = cannonX-1,
                             damage = GetDmg(s, 2),
                             moveEnemy = 2,
                         }
