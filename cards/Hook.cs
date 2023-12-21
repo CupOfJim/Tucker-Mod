@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TuckerTheSaboteur.actions;
 
 namespace TuckerTheSaboteur.cards
 {
@@ -12,49 +13,62 @@ namespace TuckerTheSaboteur.cards
         public override List<CardAction> GetActions(State s, Combat c)
         {
             Upgrade upgrade = base.upgrade;
-            int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
-            switch (upgrade)
-            {
-                case Upgrade.None:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack ()
-                        {
-                            fromX = cannonX-3,
-                            damage = GetDmg(s, 2),
-                            moveEnemy = 2,
-                        }
-                    };
-                case Upgrade.A:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack ()
-                        {
-                            fromX = cannonX-3,
-                            damage = GetDmg(s, 2),
-                            moveEnemy = 2,
-                        }
-                    };
-                case Upgrade.B:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack ()
-                        {
-                            fromX = cannonX-1,
-                            damage = GetDmg(s, 2),
-                            moveEnemy = 2,
-                        }
-                    };
-            }
 
-            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
+            // handle attack offset
+            int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
+
+            int offset = upgrade == Upgrade.A ? -1 : -3;
+            int offsetAmount = Math.Abs(offset);
+            if (flipped) { offset *= -1; }
+
+            Spr offsetSprite = flipped 
+                ? (Spr)MainManifest.sprites["icons/Offset_Shot_Right"].Id
+                : (Spr)MainManifest.sprites["icons/Offset_Shot_Left"].Id;
+
+            // handle attack damage
+            int damage = GetDmg(s, 2);
+
+            Icon attackIcon = ABluntAttack.DoWeHaveCannonsThough(s)
+                ? new Icon(Enum.Parse<Spr>("icons_attack"), damage, Colors.redd)
+                : new Icon(Enum.Parse<Spr>("icons_attackFail"), damage, Colors.attackFail);
+
+            // handle move enemy
+            int moveDistance = 2;
+            int moveAmount = Math.Abs(moveDistance);
+            if (flipped) { moveDistance *= -1; }
+
+            Spr moveSprite = flipped
+                ? Enum.Parse<Spr>("icons_moveLeftEnemy")
+                : Enum.Parse<Spr>("icons_moveRightEnemy");
+
+            // return final result
+            return new List<CardAction>()
+            {
+                new TuckerTheSaboteur.actions.AAttackNoIcon ()
+                {
+                    fromX = cannonX + offset,
+                    damage = damage,
+                    moveEnemy = moveDistance,
+                },
+                new TuckerTheSaboteur.actions.ATooltipDummy()
+                {
+                    tooltips = new() { }, // eventually put the tooltip for offset attacks here
+                    icons = new()
+                    {
+                        new Icon(offsetSprite, offsetAmount, Colors.redd),
+                        attackIcon,
+                        new Icon(moveSprite, moveAmount, Colors.redd),
+                    }
+                },
+                new ADummyAction()
+            };
         }
         public override CardData GetData(State state)
         {
             return new()
             {
                 cost = 1,
-                flippable = (upgrade == Upgrade.A ? true : false)
+                flippable = (upgrade == Upgrade.A ? true : false) || (state.ship.Get(Enum.Parse<Status>("tableFlip")) > 0)
             };
         }
     }

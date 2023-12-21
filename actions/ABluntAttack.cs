@@ -39,7 +39,7 @@ namespace TuckerTheSaboteur.actions
         // Lifted directly from decompiled game code
         // Yes it is called that in the source
         // I love the devs
-        private bool DoWeHaveCannonsThough(State s)
+        public static bool DoWeHaveCannonsThough(State s)
         {
             foreach (Part part in s.ship.parts)
             {
