@@ -56,20 +56,21 @@ namespace TuckerTheSaboteur
                 var localVars = originalMethod.GetMethodBody()!.LocalVariables;
 
                 return new SequenceBlockMatcher<CodeInstruction>(instructions)
+                    .Find(ILMatches.)
                     .Find(
-                        ILMatches.Ldloc<List<Card>>(localVars),
-                        ILMatches.AnyLdloc,
-                        ILMatches.Call("AddRange")
+                        ILMatches.Ldloca<Icon>(localVars),
+                        ILMatches.Call("get_HasValue"),
+                        ILMatches.Brfalse
                     )
                     .PointerMatcher(SequenceMatcherRelativeElement.First)
-                    .CreateLdlocInstruction(out var cardList)
+                    .CreateLdlocInstruction(out var action)
                     .Advance(2)
                     .Insert(SequenceMatcherPastBoundsDirection.After, SequenceMatcherInsertionResultingBounds.JustInsertion,
                         new List<CodeInstruction>
                         {
                         new(OpCodes.Ldarg_0),
-                        cardList,
-                        new(OpCodes.Call, AccessTools.DeclaredMethod(typeof(CardBrowsePatch), nameof(InjectCards)))
+                        action,
+                        new(OpCodes.Call, AccessTools.DeclaredMethod(typeof(OffsetAttackPatches), nameof(DrawThing)))
                         })
                     .AllElements();
             }
@@ -78,6 +79,16 @@ namespace TuckerTheSaboteur
                 Console.WriteLine("Card.RenderAction patch failed!");
                 Console.WriteLine(e);
                 return instructions;
+            }
+        }
+
+
+        private static void DrawThing(Card c, CardAction a)
+        {
+            if (a is AAttack aattack && aattack.fromX != null)
+            {
+                int baseX = (__instance.attack.targetPlayer ? c.otherShip : s.ship).parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
+                int xOffset = (int)(aattack.fromX - baseX); IconAndOrNumber((Spr)TuckerTheSaboteur.MainManifest.sprites["icons/offset_attack"].id, xOffset, Colors.redd);
             }
         }
 
