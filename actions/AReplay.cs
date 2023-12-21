@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TuckerTheSaboteur;
 
-namespace Tuckermod.actions
+namespace TuckerTheSaboteur.actions
 {
     public class AReplay : CardAction
     {
