@@ -18,6 +18,8 @@ namespace TuckerMod
             if (__instance.fromDroneX == null || !__instance.targetPlayer) return true;
 
             var ownedCommJammer = g.state.EnumerateAllArtifacts().Where((Artifact a) => a.GetType() == typeof(CommJammer)).FirstOrDefault() as CommJammer;
+            if (ownedCommJammer == null) return true;
+
             __instance.damage -= 1;
             ownedCommJammer.Pulse();
 
