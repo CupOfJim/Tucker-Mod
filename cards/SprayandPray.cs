@@ -66,26 +66,39 @@ namespace TuckerTheSaboteur.cards
 
             int numAttacks = actions.Count;
 
-            foreach (var action in actions)
+            for (int i = 0; i < numAttacks; i++)
             {
-                var aattack = action as AAttack;
+                var aattack = actions[i] as AAttack;
+
+                Icon attackIcon = ABluntAttack.DoWeHaveCannonsThough(s)
+                    ? new Icon(Enum.Parse<Spr>(aattack.piercing ? "icons_attackPiercing" : "icons_attack"), aattack.damage, Colors.redd)
+                    : new Icon(Enum.Parse<Spr>(aattack.piercing ? "icons_attackPiercingFail" : "icons_attackFail"), aattack.damage, Colors.attackFail);
+
+                if (aattack.fromX == null)
+                {
+                    actions.Add(new TuckerTheSaboteur.actions.ATooltipDummy()
+                    {
+                        tooltips = new() { },
+                        icons = new()
+                        {
+                            attackIcon
+                        }
+                    });
+                    continue;
+                }
+
                 int offset = (int)(aattack.fromX - cannonX);
 
                 Spr offsetSprite = offset > 0
                     ? (Spr)MainManifest.sprites["icons/Offset_Shot_Right"].Id
                     : (Spr)MainManifest.sprites["icons/Offset_Shot_Left"].Id;
 
-
-                Icon attackIcon = ABluntAttack.DoWeHaveCannonsThough(s)
-                    ? new Icon(Enum.Parse<Spr>(aattack.piercing ? "icons_attackPiercing" : "icons_attack"), aattack.damage, Colors.redd)
-                    : new Icon(Enum.Parse<Spr>(aattack.piercing ? "icons_attackPiercingFail" : "icons_attackFail"), aattack.damage, Colors.attackFail);
-
                 actions.Add(new TuckerTheSaboteur.actions.ATooltipDummy()
                 {
                     tooltips = new() { }, // eventually put the tooltip for offset attacks here
                     icons = new()
                     {
-                        new Icon(offsetSprite, offset, Colors.redd),
+                        new Icon(offsetSprite, Math.Abs(offset), Colors.redd),
                         attackIcon
                     }
                 });
