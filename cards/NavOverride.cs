@@ -66,11 +66,11 @@ namespace TuckerTheSaboteur.cards
             switch (this.upgrade)
             {
                 case Upgrade.None:
-                    desc = $"Move the enemy 1 space to the {(flipped ? "left ": "right")}. Gain a <c=card>misdirection"; break;
+                    desc = $"Move the enemy 1 space to the {(flipped ? "right": "left")}. Gain a <c=card>Misdirection</c>."; break;
                 case Upgrade.A:
-                    desc = $"Move the enemy 2 spaces to the {(flipped ? "left ": "right")}. Gain a <c=card>misdirection"; break;
+                    desc = $"Move the enemy 2 spaces to the {(flipped ? "right": "left")}. Gain a <c=card>Misdirection</c>."; break;
                 case Upgrade.B:
-                    desc = $"Gain 2 <c=card>misdirections"; break;
+                    desc = $"Gain 2 <c=card>Misdirections</c>."; break;
             }
             return new()
             {
