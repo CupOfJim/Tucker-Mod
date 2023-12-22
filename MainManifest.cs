@@ -3,6 +3,7 @@ using CobaltCoreModding.Definitions.ExternalItems;
 using CobaltCoreModding.Definitions.ModContactPoints;
 using CobaltCoreModding.Definitions.ModManifests;
 using HarmonyLib;
+using shockah;
 using TuckerTheSaboteur.cards;
 using TuckertheSabotuer.Artifacts;
 
@@ -30,6 +31,9 @@ namespace TuckerTheSaboteur
 
         public void BootMod(IModLoaderContact contact)
         {
+            ReflectionExt.CurrentAssemblyLoadContext.LoadFromAssemblyPath(Path.Combine(ModRootFolder!.FullName, "Shrike.dll"));
+            ReflectionExt.CurrentAssemblyLoadContext.LoadFromAssemblyPath(Path.Combine(ModRootFolder!.FullName, "Shrike.Harmony.dll"));
+
             Instance = this;
             var harmony = new Harmony(this.Name);
             harmony.PatchAll();

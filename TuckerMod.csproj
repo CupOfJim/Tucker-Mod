@@ -1,4 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="Config.user" />
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -13,7 +15,17 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
 		<PackageReference Include="Lib.Harmony" Version="2.2.2" />
+		<PackageReference Include="Shrike" Version="3.0.0" />
+		<PackageReference Include="Shrike.Harmony" Version="3.0.0" />
   </ItemGroup>
+    
+  
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+    <StartAction>Program</StartAction>
+    <StartProgram>$(ModLoaderPath)\CobaltCoreModLoaderApp.exe</StartProgram>
+    <StartWorkingDirectory>$(ModLoaderPath)</StartWorkingDirectory>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
 
   <ItemGroup>
     <Reference Include="CobaltCore">
