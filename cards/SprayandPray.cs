@@ -95,6 +95,8 @@ namespace TuckerTheSaboteur.cards
             {
                 actions.Add(new ADummyAction());
             }
+
+            return actions;
         }
         public override CardData GetData(State state)
         {
