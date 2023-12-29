@@ -44,7 +44,7 @@ namespace TuckerTheSaboteur.cards
                         tooltips = new() { }, // eventually put the tooltip for offset attacks here
                         icons = new()
                         {
-                            new Icon(Enum.Parse<Spr>("icons_moveLeftEnemy"), 2, Colors.redd),
+                            new Icon( (Spr)MainManifest.sprites["icons/Offset_Shot_Left"].Id, 2, Colors.redd),
                             attackIcon
                         }
                     }
