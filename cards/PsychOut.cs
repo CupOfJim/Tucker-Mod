@@ -57,6 +57,8 @@ namespace TuckerTheSaboteur.cards
                         fast = true,
                     }
                 );
+
+                actions.Insert(0, new ADummyAction());
             }
 
             return actions;
