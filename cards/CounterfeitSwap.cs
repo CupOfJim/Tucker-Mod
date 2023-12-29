@@ -23,7 +23,7 @@ namespace TuckerTheSaboteur.cards
                         {
                             status = Enum.Parse<Status>("tempShield"),
                             statusAmount = 3,
-                            targetPlayer = true
+                            targetPlayer = false
                         }
                     };
                 case Upgrade.A:
@@ -34,7 +34,7 @@ namespace TuckerTheSaboteur.cards
                         {
                             status = Enum.Parse<Status>("tempShield"),
                             statusAmount = 4,
-                            targetPlayer = true
+                            targetPlayer = false
                         }
                     };
                 case Upgrade.B:
@@ -44,7 +44,7 @@ namespace TuckerTheSaboteur.cards
                         {
                             status = Enum.Parse<Status>("tempShield"),
                             statusAmount = 3,
-                            targetPlayer = true
+                            targetPlayer = false
                         },
                         new AShieldSteal() { amount = 3 }
                     };

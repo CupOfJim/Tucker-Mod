@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TuckerTheSaboteur.actions;
 
 namespace TuckerTheSaboteur.cards
 {
@@ -12,41 +13,44 @@ namespace TuckerTheSaboteur.cards
         public override List<CardAction> GetActions(State s, Combat c)
         {
             Upgrade upgrade = base.upgrade;
-            switch (upgrade)
-            {
-                case Upgrade.None:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack ()
-                        {
-                            fromX = -2,
-                            damage = GetDmg(s, 2),
-                            fast = true,
-                        }
-                    };
-                case Upgrade.A:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack ()
-                        {
-                            fromX = -2,
-                            damage = GetDmg(s, 2),
-                            fast = true,
-                        }
-                    };
-                case Upgrade.B:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack ()
-                        {
-                            fromX = -4,
-                            damage = GetDmg(s, 2),
-                            fast = true,
-                        }
-                    };
-            }
 
-            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
+            // handle attack offset
+            int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
+
+            int offset = upgrade == Upgrade.B ? -4 : -2;
+            int offsetAmount = Math.Abs(offset);
+            if (flipped) { offset *= -1; }
+
+            Spr offsetSprite = flipped
+                ? (Spr)MainManifest.sprites["icons/Offset_Shot_Right"].Id
+                : (Spr)MainManifest.sprites["icons/Offset_Shot_Left"].Id;
+
+            // handle attack damage
+            int damage = GetDmg(s, 2);
+
+            Icon attackIcon = ABluntAttack.DoWeHaveCannonsThough(s)
+                ? new Icon(Enum.Parse<Spr>("icons_attack"), damage, Colors.redd)
+                : new Icon(Enum.Parse<Spr>("icons_attackFail"), damage, Colors.attackFail);
+
+            // return final result
+            return new List<CardAction>()
+            {
+                new TuckerTheSaboteur.actions.AAttackNoIcon ()
+                {
+                    fromX = cannonX + offset,
+                    damage = damage,
+                },
+                new TuckerTheSaboteur.actions.ATooltipDummy()
+                {
+                    tooltips = new() { }, // eventually put the tooltip for offset attacks here
+                    icons = new()
+                    {
+                        new Icon(offsetSprite, offsetAmount, Colors.redd),
+                        attackIcon,
+                    }
+                },
+                new ADummyAction()
+            };
         }
         public override CardData GetData(State state)
         {
