@@ -24,7 +24,7 @@ namespace TuckerTheSaboteur.cards
                         },
                         new AAddCard
                         {
-                            card = new Misdirection(),
+                            card = new TuckerMisdirection(),
                             destination = Enum.Parse<CardDestination>("Hand")
                         }
                     };
@@ -38,7 +38,7 @@ namespace TuckerTheSaboteur.cards
                         },
                         new AAddCard
                         {
-                            card = new Misdirection(),
+                            card = new TuckerMisdirection(),
                             destination = Enum.Parse<CardDestination>("Hand")
                         }
                     };
@@ -47,12 +47,12 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAddCard
                         {
-                            card = new Misdirection(),
+                            card = new TuckerMisdirection(),
                             destination = Enum.Parse<CardDestination>("Hand")
                         },
                         new AAddCard
                         {
-                            card = new Misdirection(),
+                            card = new TuckerMisdirection(),
                             destination = Enum.Parse<CardDestination>("Hand")
                         }
                     };
