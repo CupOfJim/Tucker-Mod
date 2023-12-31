@@ -28,7 +28,6 @@ namespace TuckerTheSaboteur.cards
                     fromX = cannonX - 2,
                     damage = GetDmg(s, 1),
                     fast = true,
-                    piercing = true,
                 });
             }
 
@@ -60,7 +59,6 @@ namespace TuckerTheSaboteur.cards
                     fromX = cannonX + 2,
                     damage = GetDmg(s, 1),
                     fast = true,
-                    piercing = true,
                 });
             }
 

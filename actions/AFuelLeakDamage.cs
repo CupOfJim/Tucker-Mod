@@ -22,7 +22,6 @@ namespace TuckerTheSaboteur.actions
             if (ship != null)
             {
                 var leak = ship.Get((Status)MainManifest.statuses["fuel_leak"].Id);
-                MainManifest.Instance.Logger.LogInformation("Leacakge: " + leak);
                 ship.NormalDamage(s, c, leak, null);
                 Audio.Play(Event.Status_CorrodeHurt);
                 ship.PulseStatus((Status)MainManifest.statuses["fuel_leak"].Id);

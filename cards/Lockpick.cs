@@ -56,8 +56,8 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = 1,
-                retain = (upgrade == Upgrade.A ? true : false)
+                cost = 0,
+                retain = (upgrade == Upgrade.B ? true : false)
             };
         }
     }
