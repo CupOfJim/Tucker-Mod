@@ -36,8 +36,7 @@ namespace TuckerTheSaboteur.actions
 
         public override Icon? GetIcon(State s)
         {
-            //return new Icon((Spr)MainManifest.sprites["icon_play_twice"].Id, null, Colors.heal);
-            return null;
+            return new Icon((Spr)MainManifest.sprites["icons/Replay"].Id, null, Colors.textMain);
         }
     }
 }

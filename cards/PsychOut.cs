@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
+using TuckerTheSaboteur.actions;
 
 namespace TuckerTheSaboteur.cards
 {
@@ -11,61 +13,55 @@ namespace TuckerTheSaboteur.cards
     {
         public override List<CardAction> GetActions(State s, Combat c)
         {
-            Upgrade upgrade = base.upgrade;
-            switch (upgrade)
+
+            List<CardAction> actions = new()
             {
-                case Upgrade.None:
-                    return new List<CardAction> ()
+                new AStatus ()
+                {
+                    status = Enum.Parse<Status>("autododgeLeft"),
+                    statusAmount = base.upgrade == Upgrade.B ? 2 : 1,
+                    targetPlayer = false
+                },
+                new AAttack ()
+                {
+                    damage = GetDmg(s, 1),
+                    fast = base.upgrade == Upgrade.B
+                }
+            };
+
+            if (base.upgrade == Upgrade.B)
+            {
+                var damage = GetDmg(s, 1);
+                int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
+
+                Icon attackIcon = ABluntAttack.DoWeHaveCannonsThough(s)
+                    ? new Icon(Enum.Parse<Spr>("icons_attack"), damage, Colors.redd)
+                    : new Icon(Enum.Parse<Spr>("icons_attackFail"), damage, Colors.attackFail);
+
+                actions.Add(
+                    new TuckerTheSaboteur.actions.ATooltipDummy()
                     {
-                        new AStatus ()
+                        tooltips = new() { }, // eventually put the tooltip for offset attacks here
+                        icons = new()
                         {
-                            status = Enum.Parse<Status>("autododgeLeft"),
-                            statusAmount = 1,
-                            targetPlayer = false
-                        },
-                        new AAttack ()
-                        {
-                            damage = GetDmg(s, 1),
+                            new Icon( (Spr)MainManifest.sprites["icons/Offset_Shot_Left"].Id, 2, Colors.redd),
+                            attackIcon
                         }
-                    };
-                case Upgrade.A:
-                    return new List<CardAction> ()
+                    }
+                );
+                actions.Add(
+                    new actions.AAttackNoIcon()
                     {
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("autododgeLeft"),
-                            statusAmount = 1,
-                            targetPlayer = false
-                        },
-                        new AAttack ()
-                        {
-                            damage = GetDmg(s, 1),
-                        }
-                    };
-                case Upgrade.B:
-                    return new List<CardAction> ()
-                    {
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("autododgeLeft"),
-                            statusAmount = 2,
-                            targetPlayer = false
-                        },
-                        new AAttack ()
-                        {
-                            damage = GetDmg(s, 1),
-                            fast = true,
-                        },
-                        new AAttack ()
-                        {
-                            fromX = -2,
-                            damage = GetDmg(s, 1),
-                            fast = true,
-                        }
-                    };
+                        fromX = cannonX-2,
+                        damage = damage,
+                        fast = true,
+                    }
+                );
+
+                actions.Insert(0, new ADummyAction());
             }
 
-            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
+            return actions;
         }
         public override CardData GetData(State state)
         {

@@ -14,6 +14,64 @@ namespace TuckerTheSaboteur.actions
         public List<Tooltip> tooltips;
         public List<Icon>? icons;
 
+        public static ATooltipDummy BuildStandIn(CardAction action, State s)
+        {
+            if (action is AAttack aattack)
+            {
+                int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
+                return BuildFromAttack(aattack, s, cannonX: cannonX);
+            }
+
+            Icon? icon = action.GetIcon(s);
+            return new ATooltipDummy()
+            {
+                tooltips = action.GetTooltips(s),
+                icons = icon == null ? new() : new() { (Icon)action.GetIcon(s) }
+            };
+        }
+
+        public static ATooltipDummy BuildFromAttack(AAttack aattack, State s, int? cannonX = null, Spr? statusSprite = null, bool hideOutgoingArrow = true)
+        {
+            List<Icon> icons = new();
+
+            if (cannonX != null && aattack.fromX != null && aattack.fromX != cannonX)
+            {
+                int offset = (int)(aattack.fromX - cannonX);
+                Spr spr = offset < 0
+                    ? (Spr)MainManifest.sprites["icons/Offset_Shot_Left"].Id
+                    : (Spr)MainManifest.sprites["icons/Offset_Shot_Right"].Id;
+
+                icons.Add(new Icon(spr, Math.Abs(offset), Colors.redd));
+            }
+
+            icons.Add(new Icon(Enum.Parse<Spr>("icons_attack"), aattack.damage, Colors.redd));
+
+            if (aattack.stunEnemy)
+            {
+                icons.Add(new Icon(Enum.Parse<Spr>("icons_stun"), null, Colors.textMain));
+            }
+
+            if (aattack.status != null && statusSprite != null)
+            {
+                if (!hideOutgoingArrow) icons.Add(new Icon(Enum.Parse<Spr>("icons_outgoing"), null, Colors.textMain));
+                icons.Add(new Icon((Spr)statusSprite, aattack.statusAmount, Colors.textMain));
+            }
+
+            if (aattack.moveEnemy != 0)
+            {
+                Spr spr = aattack.moveEnemy < 0
+                    ? Enum.Parse<Spr>("icons_moveLeftEnemy")
+                    : Enum.Parse<Spr>("icons_moveRightEnemy");
+                icons.Add(new Icon(spr, Math.Abs(aattack.moveEnemy), Colors.textMain));
+            }
+
+            return new ATooltipDummy()
+            {
+                tooltips = aattack.GetTooltips(s), // eventually put the tooltip for offset attacks here
+                icons = icons
+            };
+        }
+
         public override List<Tooltip> GetTooltips(State s)
         {
             return tooltips ?? new();
