@@ -19,10 +19,10 @@ namespace TuckerTheSaboteur.cards
             actions.Add(
                 new AAttack()
                 {
-                    fromX = cannonX + (base.upgrade == Upgrade.B ? -2 : -1),
+                    fromX = cannonX + (base.upgrade == Upgrade.B ? 2 : -1),
                     damage = GetDmg(s, 0),
                     fast = true,
-                    moveEnemy = 2,
+                    moveEnemy = (base.upgrade == Upgrade.B ? -2 : 2),
                 }
             );
             actions.Add(
@@ -40,7 +40,7 @@ namespace TuckerTheSaboteur.cards
             actions.Add(
                 new AAttack()
                 {
-                    fromX = cannonX + (base.upgrade == Upgrade.B ? 2 : -1),
+                    fromX = cannonX + (base.upgrade == Upgrade.B ? -2 : -1),
                     damage = GetDmg(s, (base.upgrade == Upgrade.A ? 4 : 3)),
                     fast = true,
                 }

@@ -20,8 +20,7 @@ namespace TuckerTheSaboteur.cards
                         new AAttack ()
                         {
                             damage = GetDmg(s, 2),
-                            status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 1,
+                            stunEnemy = true
                         },
                         new AStatus ()
                         {
@@ -36,8 +35,7 @@ namespace TuckerTheSaboteur.cards
                         new AAttack ()
                         {
                             damage = GetDmg(s, 3),
-                            status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 1,
+                            stunEnemy = true
                         },
                         new AStatus ()
                         {
@@ -52,13 +50,12 @@ namespace TuckerTheSaboteur.cards
                         new AAttack ()
                         {
                             damage = GetDmg(s, 2),
-                            status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 2,
+                            stunEnemy = true
                         },
                         new AStatus ()
                         {
                             status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 3,
+                            statusAmount = 1,
                             targetPlayer = true
                         }
                     };
