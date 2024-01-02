@@ -13,7 +13,7 @@ namespace TuckerMod
     {
         [HarmonyPrefix]
         [HarmonyPatch(nameof(AAttack.Begin))]
-        public static bool Begin(AAttack __instance, G g, State s, Combat c)
+        public static bool HarmonyPrefix_ComJammerDronePatch(AAttack __instance, G g, State s, Combat c)
         {
             if (__instance.fromDroneX == null || !__instance.targetPlayer) return true;
 
