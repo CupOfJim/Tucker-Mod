@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FMOD;
+using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,13 +9,26 @@ using TuckertheSabotuer.Artifacts;
 
 namespace TuckerTheSaboteur.actions
 {
+    [HarmonyPatch]
     public class ABluntAttack : AAttack
     {
+        static bool blockStunSource = false;
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(Ship), nameof(Ship.Get))]
+        public static void HarmonyPostfix_BluntAttackBlockStunCharge(ref int __result, Status status)
+        {
+            if (!blockStunSource) return;
+            if (status != Enum.Parse<Status>("stunCharge")) return;
+            __result = 0;
+        }
+
         public override void Begin(G g, State s, Combat c)
         {
             int enemyShield = c.otherShip.Get(Enum.Parse<Status>("shield")) + c.otherShip.Get(Enum.Parse<Status>("tempShield"));
             if (enemyShield > 0) 
             {
+                blockStunSource = true;
                 base.status = null;
                 base.statusAmount = 0;
                 base.damage = 0;
@@ -34,6 +49,7 @@ namespace TuckerTheSaboteur.actions
             }
 
             base.Begin(g, s, c);
+            blockStunSource = false;
         }
 
         // Lifted directly from decompiled game code
@@ -63,12 +79,19 @@ namespace TuckerTheSaboteur.actions
 
         public override Icon? GetIcon(State s)
         {
-            if (DoWeHaveCannonsThough(s))
+            int buff = 0;
+            var ownedBrick = s.EnumerateAllArtifacts().Where((Artifact a) => a.GetType() == typeof(Brick)).FirstOrDefault() as Brick;
+            if (ownedBrick != null)
             {
-                return new Icon((Spr)MainManifest.sprites["icons/Blunt_Attack"].Id, damage, Colors.redd);
+                buff = 1;
             }
 
-            return new Icon((Spr)MainManifest.sprites["icons/Blunt_Attack_Fail"].Id, damage, Colors.redd);
+            if (DoWeHaveCannonsThough(s))
+            {
+                return new Icon((Spr)MainManifest.sprites["icons/Blunt_Attack"].Id, damage+buff, Colors.redd);
+            }
+
+            return new Icon((Spr)MainManifest.sprites["icons/Blunt_Attack_Fail"].Id, damage+buff, Colors.redd);
         }
     }
 }
