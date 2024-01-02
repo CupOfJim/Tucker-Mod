@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace TuckerTheSaboteur.actions
 {
@@ -22,11 +23,39 @@ namespace TuckerTheSaboteur.actions
                 return BuildFromAttack(aattack, s, cannonX: cannonX);
             }
 
+            if (action is AStatus astatus)
+            {
+                return BuildFromStatus(astatus, s);
+            }
+
             Icon? icon = action.GetIcon(s);
             return new ATooltipDummy()
             {
                 tooltips = action.GetTooltips(s),
                 icons = icon == null ? new() : new() { (Icon)action.GetIcon(s) }
+            };
+        }
+
+        public static ATooltipDummy BuildFromStatus(AStatus astatus, State s)
+        {
+            List<Icon> icons = new();
+
+            if (!astatus.targetPlayer)
+            {
+                icons.Add(new Icon(Enum.Parse<Spr>("icons_outgoing"), null, Colors.textMain));
+            }
+
+            Icon? icon = astatus.GetIcon(s);
+            if (icon != null)
+            {
+                icons.Add((Icon)icon);
+            }
+
+
+            return new ATooltipDummy()
+            {
+                tooltips = astatus.GetTooltips(s),
+                icons = icons
             };
         }
 
