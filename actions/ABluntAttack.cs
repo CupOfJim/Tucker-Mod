@@ -16,10 +16,10 @@ namespace TuckerTheSaboteur.actions
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(Ship), nameof(Ship.Get))]
-        public static void HarmonyPostfix_BluntAttackBlockStunCharge(ref int __result, Status status)
+        public static void HarmonyPostfix_BluntAttackBlockStunCharge(ref int __result, Status name)
         {
             if (!blockStunSource) return;
-            if (status != Enum.Parse<Status>("stunCharge")) return;
+            if (name != Enum.Parse<Status>("stunCharge")) return;
             __result = 0;
         }
 
