@@ -20,7 +20,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new ABluntAttack ()
                         {
-                            damage = GetDmg(s, 0),
+                            damage = GetDmg(s, 1),
                             moveEnemy = -3,
                         }
                     };
@@ -29,7 +29,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new ABluntAttack ()
                         {
-                            damage = GetDmg(s, 0),
+                            damage = GetDmg(s, 1),
                             moveEnemy = -3,
                         }
                     };
@@ -38,7 +38,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            damage = GetDmg(s, 0),
+                            damage = GetDmg(s, 1),
                             moveEnemy = -3,
                         }
                     };

@@ -57,7 +57,7 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = 1
+                cost = 2
             };
         }
     }

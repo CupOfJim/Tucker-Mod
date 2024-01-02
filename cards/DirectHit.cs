@@ -28,7 +28,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new ABluntAttack ()
                         {
-                            damage = GetDmg(s, 6),
+                            damage = GetDmg(s, 7),
                         }
                     };
                 case Upgrade.B:
