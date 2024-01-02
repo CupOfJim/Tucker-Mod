@@ -3,7 +3,9 @@ using CobaltCoreModding.Definitions.ExternalItems;
 using CobaltCoreModding.Definitions.ModContactPoints;
 using CobaltCoreModding.Definitions.ModManifests;
 using HarmonyLib;
+using Microsoft.Extensions.Logging;
 using shockah;
+using System.Runtime.CompilerServices;
 using TuckerTheSaboteur.cards;
 using TuckertheSabotuer.Artifacts;
 
@@ -68,6 +70,7 @@ namespace TuckerTheSaboteur
                 "icons/Antique_Motor",
                 "icons/Brick",
                 "icons/Comm_Jammer",
+                "icons/Art_of_War",
 
                 "cards/Card_Border",
                 "cards/Psych_Out",
