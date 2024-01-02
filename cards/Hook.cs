@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TuckerMod.actions;
 using TuckerTheSaboteur.actions;
 
 namespace TuckerTheSaboteur.cards
@@ -12,56 +13,30 @@ namespace TuckerTheSaboteur.cards
     {
         public override List<CardAction> GetActions(State s, Combat c)
         {
-            Upgrade upgrade = base.upgrade;
-
-            // handle attack offset
             int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
 
-            int offset = upgrade == Upgrade.A ? -1 : -3;
-            int offsetAmount = Math.Abs(offset);
+            int offset = base.upgrade == Upgrade.A ? -1 : -3;
             if (flipped) { offset *= -1; }
 
-            Spr offsetSprite = flipped 
-                ? (Spr)MainManifest.sprites["icons/Offset_Shot_Right"].Id
-                : (Spr)MainManifest.sprites["icons/Offset_Shot_Left"].Id;
-
-            // handle attack damage
-            int damage = GetDmg(s, 2);
-
-            Icon attackIcon = ABluntAttack.DoWeHaveCannonsThough(s)
-                ? new Icon(Enum.Parse<Spr>("icons_attack"), damage, Colors.redd)
-                : new Icon(Enum.Parse<Spr>("icons_attackFail"), damage, Colors.attackFail);
-
-            // handle move enemy
             int moveDistance = 2;
-            int moveAmount = Math.Abs(moveDistance);
             if (flipped) { moveDistance *= -1; }
 
-            Spr moveSprite = flipped
-                ? Enum.Parse<Spr>("icons_moveLeftEnemy")
-                : Enum.Parse<Spr>("icons_moveRightEnemy");
-
-            // return final result
-            return new List<CardAction>()
+            List<CardAction> actions = new()
             {
                 new TuckerTheSaboteur.actions.AAttackNoIcon ()
                 {
                     fromX = cannonX + offset,
-                    damage = damage,
+                    damage = GetDmg(s, 2),
                     moveEnemy = moveDistance,
-                },
-                new TuckerTheSaboteur.actions.ATooltipDummy()
-                {
-                    tooltips = new() { }, // eventually put the tooltip for offset attacks here
-                    icons = new()
-                    {
-                        new Icon(offsetSprite, offsetAmount, Colors.redd),
-                        attackIcon,
-                        new Icon(moveSprite, moveAmount, Colors.redd),
-                    }
-                },
-                new ADummyAction()
+                }
             };
+
+            List<CardAction> finalActions = new();
+            for (int i = 0; i < actions.Count; i++) finalActions.Add(new ADummyAction());
+            finalActions.AddRange(actions.Select(a => ATooltipDummy.BuildStandIn(a, s)));
+            finalActions.AddRange(actions.Select(a => new ANoIconWrapper() { action = a }));
+
+            return finalActions;
         }
         public override CardData GetData(State state)
         {

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using TuckerTheSaboteur.actions;
+using TuckerMod.actions;
 
 namespace TuckerTheSaboteur.cards
 {
@@ -13,7 +14,6 @@ namespace TuckerTheSaboteur.cards
     {
         public override List<CardAction> GetActions(State s, Combat c)
         {
-
             List<CardAction> actions = new()
             {
                 new AStatus ()
@@ -31,37 +31,24 @@ namespace TuckerTheSaboteur.cards
 
             if (base.upgrade == Upgrade.B)
             {
-                var damage = GetDmg(s, 1);
                 int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
 
-                Icon attackIcon = ABluntAttack.DoWeHaveCannonsThough(s)
-                    ? new Icon(Enum.Parse<Spr>("icons_attack"), damage, Colors.redd)
-                    : new Icon(Enum.Parse<Spr>("icons_attackFail"), damage, Colors.attackFail);
-
                 actions.Add(
-                    new TuckerTheSaboteur.actions.ATooltipDummy()
+                    new AAttack()
                     {
-                        tooltips = new() { }, // eventually put the tooltip for offset attacks here
-                        icons = new()
-                        {
-                            new Icon( (Spr)MainManifest.sprites["icons/Offset_Shot_Left"].Id, 2, Colors.redd),
-                            attackIcon
-                        }
-                    }
-                );
-                actions.Add(
-                    new actions.AAttackNoIcon()
-                    {
-                        fromX = cannonX-2,
-                        damage = damage,
+                        fromX = cannonX - 2,
+                        damage = GetDmg(s, 1),
                         fast = true,
                     }
                 );
-
-                actions.Insert(0, new ADummyAction());
             }
 
-            return actions;
+            List<CardAction> finalActions = new();
+            for (int i = 0; i < actions.Count; i++) finalActions.Add(new ADummyAction());
+            finalActions.AddRange(actions.Select(a => ATooltipDummy.BuildStandIn(a, s)));
+            finalActions.AddRange(actions.Select(a => new ANoIconWrapper() { action = a }));
+
+            return finalActions;
         }
         public override CardData GetData(State state)
         {
