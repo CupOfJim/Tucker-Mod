@@ -30,7 +30,7 @@ namespace TuckerTheSaboteur.actions
             };
         }
 
-        public static ATooltipDummy BuildFromAttack(AAttack aattack, State s, int? cannonX = null, Spr? statusSprite = null, bool hideOutgoingArrow = true)
+        public static ATooltipDummy BuildFromAttack(AAttack aattack, State s, int? cannonX = null, bool hideOutgoingArrow = true)
         {
             List<Icon> icons = new();
 
@@ -51,10 +51,20 @@ namespace TuckerTheSaboteur.actions
                 icons.Add(new Icon(Enum.Parse<Spr>("icons_stun"), null, Colors.textMain));
             }
 
-            if (aattack.status != null && statusSprite != null)
+            if (aattack.status != null)
             {
-                if (!hideOutgoingArrow) icons.Add(new Icon(Enum.Parse<Spr>("icons_outgoing"), null, Colors.textMain));
-                icons.Add(new Icon((Spr)statusSprite, aattack.statusAmount, Colors.textMain));
+                // this cast is ridiculous. It's needed because C# still thinks aattack.status can be null, even though it must be non-null to get here
+                var icon = new AStatus() { 
+                    status = (Status)aattack.status, 
+                    targetPlayer = hideOutgoingArrow, 
+                    statusAmount = aattack.statusAmount 
+                }.GetIcon(s);
+
+                if(icon != null)
+                {
+                    if (!hideOutgoingArrow) icons.Add(new Icon(Enum.Parse<Spr>("icons_outgoing"), null, Colors.textMain));
+                    icons.Add((Icon)icon);
+                }
             }
 
             if (aattack.moveEnemy != 0)

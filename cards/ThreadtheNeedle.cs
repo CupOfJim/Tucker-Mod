@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TuckerMod.actions;
 using TuckerTheSaboteur.actions;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -13,20 +14,14 @@ namespace TuckerTheSaboteur.cards
     {
         public override List<CardAction> GetActions(State s, Combat c)
         {
-
-            Spr attackSpr = ABluntAttack.DoWeHaveCannonsThough(s)
-                ? Enum.Parse<Spr>("icons_attack")
-                : Enum.Parse<Spr>("icons_attackFail");
-
             int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
 
             int offset = base.upgrade == Upgrade.B ? -1 : 2;
             int statusAmount = base.upgrade == Upgrade.None ? 3: 4;
-            int damage3 = base.upgrade == Upgrade.A ? 4 : 6;
 
             List<CardAction> actions = new()
             {
-                new AAttackNoIcon ()
+                new AAttack ()
                 {
                     fromX = cannonX+offset,
                     damage = GetDmg(s, 0),
@@ -34,9 +29,9 @@ namespace TuckerTheSaboteur.cards
                     statusAmount = statusAmount,
                     fast = true,
                 },
-                new AAttackNoIcon ()
+                new AAttack ()
                 {
-                    damage = GetDmg(s, damage3),
+                    damage = GetDmg(s, base.upgrade == Upgrade.A ? 4 : 6),
                     fast = true,
                 }
             };
@@ -44,7 +39,7 @@ namespace TuckerTheSaboteur.cards
             if (base.upgrade != Upgrade.B)
             {
                 actions.Insert(0,
-                    new AAttackNoIcon()
+                    new AAttack()
                     {
                         fromX = cannonX - offset,
                         damage = GetDmg(s, 0),
@@ -53,48 +48,14 @@ namespace TuckerTheSaboteur.cards
                         fast = true,
                     }
                 );
-
-                actions.Add(
-                    new TuckerTheSaboteur.actions.ATooltipDummy()
-                    {
-                        tooltips = new() { }, // eventually put the tooltip for offset attacks here
-                        icons = new()
-                        {
-                            new Icon((Spr)MainManifest.sprites["icons/Offset_Shot_Left"].Id, offset, Colors.redd),
-                            new Icon(Enum.Parse<Spr>("icons_attack"), GetDmg(s, 0), Colors.redd),
-                            new Icon(Enum.Parse<Spr>("icons_outgoing"), null, Colors.textMain),
-                            new Icon(Enum.Parse<Spr>("icons_tempShield"), statusAmount, Colors.textMain)
-                        }
-                    }
-                );
             }
 
-            actions.Add(
-                new TuckerTheSaboteur.actions.ATooltipDummy()
-                {
-                    tooltips = new() { }, // eventually put the tooltip for offset attacks here
-                    icons = new()
-                    {
-                            new Icon((Spr)MainManifest.sprites["icons/Offset_Shot_Left"].Id, offset, Colors.redd),
-                            new Icon(Enum.Parse<Spr>("icons_attack"), GetDmg(s, 0), Colors.redd),
-                            new Icon(Enum.Parse<Spr>("icons_outgoing"), null, Colors.textMain),
-                            new Icon(Enum.Parse<Spr>("icons_tempShield"), statusAmount, Colors.textMain)
-                    }
-                }
-            );
+            List<CardAction> finalActions = new();
+            for (int i = 0; i < actions.Count; i++) finalActions.Add(new ADummyAction());
+            finalActions.AddRange(actions.Select(a => ATooltipDummy.BuildStandIn(a, s)));
+            finalActions.AddRange(actions.Select(a => new ANoIconWrapper() { action = a }));
 
-            actions.Add(
-                new TuckerTheSaboteur.actions.ATooltipDummy()
-                {
-                    tooltips = new() { }, // eventually put the tooltip for offset attacks here
-                    icons = new()
-                    {
-                        new Icon(Enum.Parse<Spr>("icons_attack"), GetDmg(s, damage3), Colors.redd),
-                    }
-                }
-            );
-
-            return actions;
+            return finalActions;
         }
         public override CardData GetData(State state)
         {
