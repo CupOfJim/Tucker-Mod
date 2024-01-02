@@ -13,7 +13,7 @@ namespace TuckerTheSaboteur
     {
 
         [HarmonyPostfix]
-        [HarmonyPatch(nameof(Ship.OnAfterTurn))]
+        [HarmonyPatch(nameof(Ship.OnBeginTurn))]
         public static void HarmonyPostfix_Ship_OnAfterTurn(Ship __instance, State s, Combat c)
         {
             if (__instance.Get((Status)MainManifest.statuses["buffer"].Id) > 0)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,18 @@ namespace TuckerTheSaboteur.cards
                             status = Enum.Parse<Status>("lockdown"),
                             statusAmount = -2,
                             targetPlayer = true
+                        },
+                        new AStatus ()
+                        {
+                            status = Enum.Parse<Status>("engineStall"),
+                            statusAmount = -2,
+                            targetPlayer = true
+                        },
+                        new AStatus ()
+                        {
+                            status = Enum.Parse<Status>("tempShield"),
+                            statusAmount = 1,
+                            targetPlayer = true
                         }
                     };
                 case Upgrade.A:
@@ -33,9 +46,17 @@ namespace TuckerTheSaboteur.cards
                             statusAmount = -2,
                             targetPlayer = true
                         },
-                        new ADrawCard ()
+                        new AStatus ()
                         {
-                            count = 1
+                            status = Enum.Parse<Status>("engineStall"),
+                            statusAmount = -2,
+                            targetPlayer = true
+                        },
+                        new AStatus ()
+                        {
+                            status = Enum.Parse<Status>("shield"),
+                            statusAmount = 1,
+                            targetPlayer = true
                         }
                     };
                 case Upgrade.B:
@@ -45,6 +66,18 @@ namespace TuckerTheSaboteur.cards
                         {
                             status = Enum.Parse<Status>("lockdown"),
                             statusAmount = -2,
+                            targetPlayer = true
+                        },
+                        new AStatus ()
+                        {
+                            status = Enum.Parse<Status>("engineStall"),
+                            statusAmount = -2,
+                            targetPlayer = true
+                        },
+                        new AStatus ()
+                        {
+                            status = Enum.Parse<Status>("tempShield"),
+                            statusAmount = 1,
                             targetPlayer = true
                         }
                     };
@@ -56,8 +89,9 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = 1,
-                retain = (upgrade == Upgrade.A ? true : false)
+                cost = 0,
+                retain = (upgrade == Upgrade.B ? true : false),
+                artTint = "ffffaa"
             };
         }
     }

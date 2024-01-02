@@ -15,7 +15,7 @@ namespace TuckerTheSaboteur.cards
         {
             int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
 
-            int offset = base.upgrade == Upgrade.A ? -1 : -3;
+            int offset = base.upgrade == Upgrade.A ? -3 : -1;
             if (flipped) { offset *= -1; }
 
             int moveDistance = 2;
@@ -43,7 +43,8 @@ namespace TuckerTheSaboteur.cards
             return new()
             {
                 cost = 1,
-                flippable = (upgrade == Upgrade.A ? true : false) || (state.ship.Get(Enum.Parse<Status>("tableFlip")) > 0)
+                flippable = (upgrade == Upgrade.A ? true : false) || (state.ship.Get(Enum.Parse<Status>("tableFlip")) > 0),
+                artTint = "ffffaa"
             };
         }
     }

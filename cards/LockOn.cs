@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TuckerTheSaboteur.cards
 {
-    [CardMeta(rarity = Rarity.uncommon, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
+    [CardMeta(rarity = Rarity.common, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
     public class Lockon : Card
     {
         public override List<CardAction> GetActions(State s, Combat c)
@@ -20,8 +20,7 @@ namespace TuckerTheSaboteur.cards
                         new AAttack ()
                         {
                             damage = GetDmg(s, 2),
-                            status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 1,
+                            stunEnemy = true
                         },
                         new AStatus ()
                         {
@@ -36,8 +35,7 @@ namespace TuckerTheSaboteur.cards
                         new AAttack ()
                         {
                             damage = GetDmg(s, 3),
-                            status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 1,
+                            stunEnemy = true
                         },
                         new AStatus ()
                         {
@@ -52,13 +50,12 @@ namespace TuckerTheSaboteur.cards
                         new AAttack ()
                         {
                             damage = GetDmg(s, 2),
-                            status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 2,
+                            stunEnemy = true
                         },
                         new AStatus ()
                         {
-                            status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 3,
+                            status = Enum.Parse<Status>("engineStall"),
+                            statusAmount = 2,
                             targetPlayer = true
                         }
                     };
@@ -70,7 +67,8 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = 1
+                cost = 1,
+                artTint = "ffffaa"
             };
         }
     }

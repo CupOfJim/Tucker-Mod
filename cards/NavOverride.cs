@@ -66,17 +66,18 @@ namespace TuckerTheSaboteur.cards
             switch (this.upgrade)
             {
                 case Upgrade.None:
-                    desc = $"Move the enemy 1 space to the {(flipped ? "right": "left")}. Gain a <c=card>Misdirection</c>."; break;
+                    desc = $"Move the enemy 1 space to the {(flipped ? "right": "left")}. Gain a <c=card>Redirect</c>."; break;
                 case Upgrade.A:
-                    desc = $"Move the enemy 2 spaces to the {(flipped ? "right": "left")}. Gain a <c=card>Misdirection</c>."; break;
+                    desc = $"Move the enemy 2 spaces to the {(flipped ? "right": "left")}. Gain a <c=card>Redirect</c>."; break;
                 case Upgrade.B:
-                    desc = $"Gain 2 <c=card>Misdirections</c>."; break;
+                    desc = $"Gain 2 <c=card>Redirects</c>."; break;
             }
             return new()
             {
                 cost = 1,
                 flippable = (this.upgrade != Upgrade.B),
-                description = desc
+                description = desc,
+                artTint = "ffffaa"
             };
         }
     }

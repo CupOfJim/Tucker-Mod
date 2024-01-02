@@ -9,6 +9,8 @@ namespace TuckerTheSaboteur.cards
     [CardMeta(rarity = Rarity.common, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
     public class MutualGain : Card
     {
+        private string ffffff;
+
         public override List<CardAction> GetActions(State s, Combat c)
         {
             if (this.upgrade == Upgrade.B)
@@ -69,7 +71,8 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = (upgrade == Upgrade.A ? 0 : 1)
+                cost = (upgrade == Upgrade.A ? 0 : 1),
+                artTint = "ffffaa"
             };
         }
     }

@@ -19,10 +19,10 @@ namespace TuckerTheSaboteur.cards
             actions.Add(
                 new AAttack()
                 {
-                    fromX = cannonX + (base.upgrade == Upgrade.B ? -2 : -1),
+                    fromX = cannonX + (base.upgrade == Upgrade.B ? 2 : -1),
                     damage = GetDmg(s, 0),
                     fast = true,
-                    moveEnemy = 2,
+                    moveEnemy = (base.upgrade == Upgrade.B ? -2 : 2),
                 }
             );
             actions.Add(
@@ -34,13 +34,10 @@ namespace TuckerTheSaboteur.cards
                     moveEnemy = -2,
                 }
             );
-
-            if (base.upgrade == Upgrade.A) actions.Add(new AReplay());
-
             actions.Add(
                 new AAttack()
                 {
-                    fromX = cannonX + (base.upgrade == Upgrade.B ? 2 : -1),
+                    fromX = cannonX + (base.upgrade == Upgrade.B ? -2 : -1),
                     damage = GetDmg(s, (base.upgrade == Upgrade.A ? 4 : 3)),
                     fast = true,
                 }
@@ -57,7 +54,8 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = 1
+                cost = 2,
+                artTint = "ffffaa"
             };
         }
     }

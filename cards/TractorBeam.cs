@@ -23,7 +23,8 @@ namespace TuckerTheSaboteur.cards
             {
                 cost = 0,
                 exhaust = (upgrade == Upgrade.A ? false : true),
-                buoyant = (upgrade == Upgrade.B ? true : false)
+                buoyant = (upgrade == Upgrade.B ? true : false),
+                artTint = "ffffaa"
             };
         }
     }

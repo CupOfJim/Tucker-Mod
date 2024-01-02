@@ -20,10 +20,8 @@ namespace TuckerTheSaboteur.cards
                     {
                         new ABluntAttack ()
                         {
-                            damage = GetDmg(s, 1),
-                            status = Enum.Parse<Status>("tempShield"),
-                            statusAmount = 4,
-                            targetPlayer = true,
+                            damage = GetDmg(s, 2),
+                            stunEnemy = true
                         }
                     };
                 case Upgrade.A:
@@ -31,21 +29,23 @@ namespace TuckerTheSaboteur.cards
                     {
                         new ABluntAttack ()
                         {
-                            damage = GetDmg(s, 2),
-                            status = Enum.Parse<Status>("tempShield"),
-                            statusAmount = 5,
-                            targetPlayer = true,
+                            damage = GetDmg(s, 3),
+                            stunEnemy = true
                         }
                     };
                 case Upgrade.B:
                     return new List<CardAction> ()
                     {
-                        new AAttack ()
+                        new AStatus()
                         {
-                            damage = GetDmg(s, 1),
-                            status = Enum.Parse<Status>("tempShield"),
-                            statusAmount = 4,
-                            targetPlayer = true,
+                            status = Enum.Parse<Status>("shield"),
+                            statusAmount = -2,
+                            targetPlayer = false,
+                        },
+                        new ABluntAttack ()
+                        {
+                            damage = GetDmg(s, 2),
+                            stunEnemy = true
                         }
                     };
             }
@@ -56,7 +56,8 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = 1
+                cost = 1,
+                artTint = "ffffaa"
             };
         }
     }
