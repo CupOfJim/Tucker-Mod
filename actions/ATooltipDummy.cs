@@ -72,7 +72,7 @@ namespace TuckerTheSaboteur.actions
                 Spr spr = aattack.moveEnemy < 0
                     ? Enum.Parse<Spr>("icons_moveLeftEnemy")
                     : Enum.Parse<Spr>("icons_moveRightEnemy");
-                icons.Add(new Icon(spr, Math.Abs(aattack.moveEnemy), Colors.textMain));
+                icons.Add(new Icon(spr, Math.Abs(aattack.moveEnemy), Colors.redd));
             }
 
             return new ATooltipDummy()
