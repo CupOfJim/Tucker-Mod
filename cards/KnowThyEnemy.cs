@@ -43,7 +43,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack
                         {
-                            damage = GetDmg(s, 1),
+                            damage = GetDmg(s, 2),
                             piercing = true,
                             disabled = flipped,
                         },
@@ -91,7 +91,8 @@ namespace TuckerTheSaboteur.cards
             return new()
             {
                 cost = 1,
-                floppable = true
+                floppable = true,
+                art = flipped ? (Spr)MainManifest.sprites["cards/MiningDrill_Top"].Id : (Spr)MainManifest.sprites["cards/MiningDrill_Bottom"].Id
             };
         }
     }

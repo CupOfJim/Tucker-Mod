@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -23,6 +24,16 @@ namespace TuckerTheSaboteur.actions
             {
                 status = Enum.Parse<Status>("shield"),
                 statusAmount = steal,
+                targetPlayer = true
+            });
+            int enemyTempShield = c.otherShip.Get(Enum.Parse<Status>("tempShield"));
+            int tempSteal = Math.Min(enemyTempShield, amount - steal);
+            c.otherShip.Set(Enum.Parse<Status>("tempShield"), enemyTempShield - tempSteal);
+
+            c.QueueImmediate(new AStatus()
+            {
+                status = Enum.Parse<Status>("tempShield"),
+                statusAmount = tempSteal,
                 targetPlayer = true
             });
         }

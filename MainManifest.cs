@@ -93,6 +93,8 @@ namespace TuckerTheSaboteur
                 "cards/Thread_the_Needle",
                 "cards/Tractor_Beam",
                 "cards/Rubber_Bullet",
+                "cards/MiningDrill_Top",
+                "cards/MiningDrill_Bottom",
             };
 
             foreach (var filename in filenames) {
@@ -122,7 +124,7 @@ namespace TuckerTheSaboteur
                 new ExternalCard("SoggoruWaffle.Tucker.cards.Juggle", typeof(Juggle), sprites["cards/Juggle"], deck),
                 new ExternalCard("SoggoruWaffle.Tucker.cards.Lie Low", typeof(LieLow), sprites["cards/Lie_Low"], deck),
                 new ExternalCard("SoggoruWaffle.Tucker.cards.Lockpick", typeof(Lockpick), sprites["cards/Lockpick"], deck),
-                new ExternalCard("SoggoruWaffle.Tucker.cards.Misdirection", typeof(TuckerMisdirection), sprites["cards/Misdirection"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Mislead", typeof(TuckerMisdirection), sprites["cards/Misdirection"], deck),
                 new ExternalCard("SoggoruWaffle.Tucker.cards.Nav Override", typeof(NavOverride), sprites["cards/Nav_Override"], deck),
                 new ExternalCard("SoggoruWaffle.Tucker.cards.Pressure Gun", typeof(PressureGun), sprites["cards/Pressure_Gun"], deck),
                 new ExternalCard("SoggoruWaffle.Tucker.cards.Psych Out", typeof(PsychOut), sprites["cards/Psych_Out"], deck),
@@ -133,6 +135,8 @@ namespace TuckerTheSaboteur
                 new ExternalCard("SoggoruWaffle.Tucker.cards.Thread the Needle", typeof(ThreadtheNeedle), sprites["cards/Thread_the_Needle"], deck),
                 new ExternalCard("SoggoruWaffle.Tucker.cards.Tractor Beam", typeof(TractorBeam), sprites["cards/Tractor_Beam"], deck),
                 new ExternalCard("SoggoruWaffle.Tucker.cards.Lock-on", typeof(Lockon), sprites["cards/Lock-on"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Know Thy Enemy", typeof(KnowThyEnemy), sprites["cards/MiningDrill_Top"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Know Thy Enemy", typeof(KnowThyEnemy), sprites["cards/MiningDrill_Bottom"], deck),
             };
             
             foreach(var card in cardDefinitions)
@@ -240,7 +244,7 @@ namespace TuckerTheSaboteur
 
             var buffer = new ExternalStatus("SoggoruWaffle.Tucker.statuses.buffer", true, System.Drawing.Color.Crimson, null, sprites["icons/Buffer"], false);
             statusRegistry.RegisterStatus(buffer);
-            buffer.AddLocalisation("buffer", "Grants {0} temp shield and reduces by 1 at the end of every turn.");
+            buffer.AddLocalisation("buffer", "Gain {0} temp shield each turn.<c=downside> Decreases by 1 afterwards.");
             statuses["buffer"] = buffer;
         }
 

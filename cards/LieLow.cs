@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TuckerTheSaboteur.cards
 {
-    [CardMeta(rarity = Rarity.common, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
+    [CardMeta(rarity = Rarity.uncommon, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
     public class LieLow : Card
     {
         public override List<CardAction> GetActions(State s, Combat c)
@@ -17,10 +17,16 @@ namespace TuckerTheSaboteur.cards
                 case Upgrade.None:
                     return new List<CardAction> ()
                     {
+                        new AStatus() {
+                            status = Enum.Parse<Status>("maxShield"),
+                            targetPlayer = true,
+                            statusAmount = 1,
+                            mode = AStatusMode.Add,
+                        },
                         new AStatus ()
                         {
                             status = Enum.Parse<Status>("shield"),
-                            statusAmount = 3,
+                            statusAmount = 2,
                             targetPlayer = true
                         },
                         new AStatus ()
@@ -33,10 +39,16 @@ namespace TuckerTheSaboteur.cards
                 case Upgrade.A:
                     return new List<CardAction> ()
                     {
+                        new AStatus() {
+                            status = Enum.Parse<Status>("maxShield"),
+                            targetPlayer = true,
+                            statusAmount = 1,
+                            mode = AStatusMode.Add,
+                        },
                         new AStatus ()
                         {
                             status = Enum.Parse<Status>("shield"),
-                            statusAmount = 3,
+                            statusAmount = 2,
                             targetPlayer = true
                         },
                         new AStatus ()
@@ -49,16 +61,16 @@ namespace TuckerTheSaboteur.cards
                 case Upgrade.B:
                     return new List<CardAction> ()
                     {
+                        new AStatus() {
+                            status = Enum.Parse<Status>("maxShield"),
+                            targetPlayer = true,
+                            statusAmount = 1,
+                            mode = AStatusMode.Add,
+                        },
                         new AStatus ()
                         {
                             status = Enum.Parse<Status>("shield"),
                             statusAmount = 3,
-                            targetPlayer = true
-                        },
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("tempShield"),
-                            statusAmount = 2,
                             targetPlayer = true
                         },
                         new AStatus ()

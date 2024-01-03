@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TuckerTheSaboteur.cards
 {
-    [CardMeta(rarity = Rarity.uncommon, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
+    [CardMeta(rarity = Rarity.common, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
     public class Lockon : Card
     {
         public override List<CardAction> GetActions(State s, Combat c)

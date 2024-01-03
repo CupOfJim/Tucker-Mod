@@ -37,7 +37,7 @@ namespace TuckerTheSaboteur.cards
                         new AStatus()
                         {
                             status = Enum.Parse<Status>("shield"),
-                            statusAmount = -2,
+                            statusAmount = -3,
                             targetPlayer = false,
                         },
                         new ABluntAttack ()
