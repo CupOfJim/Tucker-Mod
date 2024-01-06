@@ -34,9 +34,6 @@ namespace TuckerTheSaboteur.cards
                     moveEnemy = -2,
                 }
             );
-
-            if (base.upgrade == Upgrade.A) actions.Add(new AReplay());
-
             actions.Add(
                 new AAttack()
                 {
