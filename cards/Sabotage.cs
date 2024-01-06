@@ -50,7 +50,8 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = 1
+                cost = 1,
+                artTint = "ffffaa"
             };
         }
     }

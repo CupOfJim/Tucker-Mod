@@ -68,7 +68,8 @@ namespace TuckerTheSaboteur.cards
             return new()
             {
                 cost = (upgrade == Upgrade.A ? 1 : 2),
-                exhaust = true
+                exhaust = true,
+                artTint = "ffffaa"
             };
         }
     }

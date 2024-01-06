@@ -57,7 +57,8 @@ namespace TuckerTheSaboteur.cards
                 temporary = true,
                 exhaust = true,
                 retain = true,
-                flippable = true
+                flippable = true,
+                artTint = "ffffaa"
             };
         }
     }

@@ -20,7 +20,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new ABluntAttack ()
                         {
-                            damage = GetDmg(s, 1),
+                            damage = GetDmg(s, 0),
                             moveEnemy = -3,
                         }
                     };
@@ -29,7 +29,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new ABluntAttack ()
                         {
-                            damage = GetDmg(s, 1),
+                            damage = GetDmg(s, 0),
                             moveEnemy = -3,
                         }
                     };
@@ -38,7 +38,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack ()
                         {
-                            damage = GetDmg(s, 1),
+                            damage = GetDmg(s, 0),
                             moveEnemy = -3,
                         }
                     };
@@ -51,7 +51,8 @@ namespace TuckerTheSaboteur.cards
             return new()
             {
                 cost = 0,
-                flippable = (upgrade == Upgrade.A ? true : false)
+                flippable = (upgrade == Upgrade.A ? true : false),
+                artTint = "ffffaa"
             };
         }
     }

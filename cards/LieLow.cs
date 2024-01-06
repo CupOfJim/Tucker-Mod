@@ -48,13 +48,13 @@ namespace TuckerTheSaboteur.cards
                         new AStatus ()
                         {
                             status = Enum.Parse<Status>("shield"),
-                            statusAmount = 2,
+                            statusAmount = 3,
                             targetPlayer = true
                         },
                         new AStatus ()
                         {
                             status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 3,
+                            statusAmount = 2,
                             targetPlayer = true
                         }
                     };
@@ -70,13 +70,13 @@ namespace TuckerTheSaboteur.cards
                         new AStatus ()
                         {
                             status = Enum.Parse<Status>("shield"),
-                            statusAmount = 3,
+                            statusAmount = 2,
                             targetPlayer = true
                         },
                         new AStatus ()
                         {
                             status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 2,
+                            statusAmount = 3,
                             targetPlayer = true
                         }
                     };
@@ -88,7 +88,8 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = (upgrade == Upgrade.A ? 0 : 1)
+                cost = (upgrade == Upgrade.B ? 0 : 1),
+                artTint = "ffffaa"
             };
         }
     }

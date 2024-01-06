@@ -7,7 +7,7 @@ using TuckerTheSaboteur.actions;
 
 namespace TuckerTheSaboteur.cards
 {
-    [CardMeta(rarity = Rarity.common, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
+    [CardMeta(rarity = Rarity.rare, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
     public class KnowThyEnemy : Card
     {
         public override List<CardAction> GetActions(State s, Combat c)
@@ -92,7 +92,8 @@ namespace TuckerTheSaboteur.cards
             {
                 cost = 1,
                 floppable = true,
-                art = flipped ? (Spr)MainManifest.sprites["cards/MiningDrill_Top"].Id : (Spr)MainManifest.sprites["cards/MiningDrill_Bottom"].Id
+                art = flipped ? (Spr)MainManifest.sprites["cards/MiningDrill_Bottom"].Id : (Spr)MainManifest.sprites["cards/MiningDrill_Top"].Id,
+                artTint = "ffffaa"
             };
         }
     }

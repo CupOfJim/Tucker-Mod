@@ -124,7 +124,7 @@ namespace TuckerTheSaboteur
                 new ExternalCard("SoggoruWaffle.Tucker.cards.Juggle", typeof(Juggle), sprites["cards/Juggle"], deck),
                 new ExternalCard("SoggoruWaffle.Tucker.cards.Lie Low", typeof(LieLow), sprites["cards/Lie_Low"], deck),
                 new ExternalCard("SoggoruWaffle.Tucker.cards.Lockpick", typeof(Lockpick), sprites["cards/Lockpick"], deck),
-                new ExternalCard("SoggoruWaffle.Tucker.cards.Mislead", typeof(TuckerMisdirection), sprites["cards/Misdirection"], deck),
+                new ExternalCard("SoggoruWaffle.Tucker.cards.Redirect", typeof(TuckerMisdirection), sprites["cards/Misdirection"], deck),
                 new ExternalCard("SoggoruWaffle.Tucker.cards.Nav Override", typeof(NavOverride), sprites["cards/Nav_Override"], deck),
                 new ExternalCard("SoggoruWaffle.Tucker.cards.Pressure Gun", typeof(PressureGun), sprites["cards/Pressure_Gun"], deck),
                 new ExternalCard("SoggoruWaffle.Tucker.cards.Psych Out", typeof(PsychOut), sprites["cards/Psych_Out"], deck),

@@ -48,7 +48,8 @@ namespace TuckerTheSaboteur.cards
             {
                 cost = 0,
                 temporary = true,
-                exhaust = (upgrade == Upgrade.B ? false : true)
+                exhaust = (upgrade == Upgrade.B ? false : true),
+                artTint = "ffffaa"
             };
         }
     }
