@@ -36,9 +36,15 @@ namespace TuckerTheSaboteur.cards
                 case Upgrade.B:
                     return new List<CardAction> ()
                     {
+                        new AStatus()
+                        {
+                            status = Enum.Parse<Status>("shield"),
+                            statusAmount = -2,
+                            targetPlayer = false,
+                        },
                         new ABluntAttack ()
                         {
-                            damage = GetDmg(s, 1),
+                            damage = GetDmg(s, 2),
                             stunEnemy = true
                         }
                     };
@@ -50,7 +56,7 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = (upgrade == Upgrade.B ? 0 : 1),
+                cost = 1,
                 artTint = "ffffaa"
             };
         }
