@@ -62,6 +62,7 @@ namespace TuckerTheSaboteur.actions
         public static ATooltipDummy BuildFromAttack(AAttack aattack, State s, int? cannonX = null, bool hideOutgoingArrow = true)
         {
             List<Icon> icons = new();
+            var tooltips = aattack.GetTooltips(s);
 
             if (cannonX != null && aattack.fromX != null && aattack.fromX != cannonX)
             {
@@ -71,6 +72,9 @@ namespace TuckerTheSaboteur.actions
                     : (Spr)MainManifest.sprites["icons/Offset_Shot_Right"].Id;
 
                 icons.Add(new Icon(spr, Math.Abs(offset), Colors.redd));
+
+                if (offset < 0) tooltips.Add(new TTGlossary(MainManifest.glossary["ALeftShotOffset"].Head, Math.Abs(offset)));
+                if (offset > 0) tooltips.Add(new TTGlossary(MainManifest.glossary["ARightShotOffset"].Head, Math.Abs(offset)));
             }
 
             icons.Add(new Icon(Enum.Parse<Spr>("icons_attack"), aattack.damage, Colors.redd));
@@ -106,7 +110,7 @@ namespace TuckerTheSaboteur.actions
 
             return new ATooltipDummy()
             {
-                tooltips = aattack.GetTooltips(s), // eventually put the tooltip for offset attacks here
+                tooltips = tooltips,
                 icons = icons
             };
         }

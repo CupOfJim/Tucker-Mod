@@ -229,6 +229,14 @@ namespace TuckerTheSaboteur
                 "shield steal",
                 "Steal up to {0} shield from the enemy and apply it to yourself. If they have no shield, steal temp shield instead."
             );
+            RegisterGlossaryEntry(registry, "ALeftShotOffset", sprites["icons/Offset_Shot_Left"],
+                "Left Shot Offset",
+                "Attack {0} spaces to the left of your cannon."
+            );
+            RegisterGlossaryEntry(registry, "ARightShotOffset", sprites["icons/Offset_Shot_Right"],
+                "Right Shot Offset",
+                "Attack {0} spaces to the right of your cannon."
+            );
         }
         private void RegisterGlossaryEntry(IGlossaryRegisty registry, string itemName, ExternalSprite sprite, string displayName, string description)
         {
