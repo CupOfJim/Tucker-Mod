@@ -12,6 +12,9 @@ namespace TuckerTheSaboteur.actions
     [HarmonyPatch(typeof(Card))]
     public class ATooltipDummy : ADummyAction
     {
+        public delegate void OnGetTooltips(State s);
+
+        public OnGetTooltips onGetTooltips;
         public List<Tooltip> tooltips;
         public List<Icon>? icons;
 
@@ -59,10 +62,26 @@ namespace TuckerTheSaboteur.actions
             };
         }
 
+        public static List<Tooltip> GetTooltipsNoSideEffects(AAttack aattack, State s)
+        {
+            var sshipparts = s.ship.parts;
+            s.ship.parts = new();
+            var c = s.route is Combat combat ? combat : null;
+            var cstuff = c != null ? c.stuff : null;
+            if (c != null) c.stuff = new();
+
+            var tooltips = aattack.GetTooltips(s);
+
+            if (c != null) c.stuff = cstuff;
+            s.ship.parts = sshipparts;
+
+            return tooltips;
+        }
+
         public static ATooltipDummy BuildFromAttack(AAttack aattack, State s, int? cannonX = null, bool hideOutgoingArrow = true)
         {
             List<Icon> icons = new();
-            var tooltips = aattack.GetTooltips(s);
+            var tooltips = GetTooltipsNoSideEffects(aattack, s);
 
             if (cannonX != null && aattack.fromX != null && aattack.fromX != cannonX)
             {
@@ -113,12 +132,14 @@ namespace TuckerTheSaboteur.actions
             return new ATooltipDummy()
             {
                 tooltips = tooltips,
-                icons = icons
+                icons = icons,
+                onGetTooltips = (s) => aattack.GetTooltips(s)
             };
         }
 
         public override List<Tooltip> GetTooltips(State s)
         {
+            if (onGetTooltips != null) onGetTooltips(s);
             return tooltips ?? new();
         }
 
