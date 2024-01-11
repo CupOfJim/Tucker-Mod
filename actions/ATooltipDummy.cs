@@ -73,8 +73,10 @@ namespace TuckerTheSaboteur.actions
 
                 icons.Add(new Icon(spr, Math.Abs(offset), Colors.redd));
 
-                if (offset < 0) tooltips.Add(new TTGlossary(MainManifest.glossary["ALeftShotOffset"].Head, Math.Abs(offset)));
-                if (offset > 0) tooltips.Add(new TTGlossary(MainManifest.glossary["ARightShotOffset"].Head, Math.Abs(offset)));
+                if (offset <  -1) tooltips.Add(new TTGlossary(MainManifest.glossary["ALeftShotOffset"].Head, Math.Abs(offset)));
+                if (offset >   1) tooltips.Add(new TTGlossary(MainManifest.glossary["ARightShotOffset"].Head, Math.Abs(offset)));
+                if (offset ==  1) tooltips.Add(new TTGlossary(MainManifest.glossary["ARightShotOffsetSingle"].Head, 1));
+                if (offset == -1) tooltips.Add(new TTGlossary(MainManifest.glossary["ALeftShotOffsetSingle"].Head, 1));
             }
 
             icons.Add(new Icon(Enum.Parse<Spr>("icons_attack"), aattack.damage, Colors.redd));

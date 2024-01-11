@@ -237,6 +237,14 @@ namespace TuckerTheSaboteur
                 "Right Shot Offset",
                 "Attack {0} spaces to the right of your cannon."
             );
+            RegisterGlossaryEntry(registry, "ALeftShotOffsetSingle", sprites["icons/Offset_Shot_Left"],
+                "Left Shot Offset",
+                "Attack {0} space to the left of your cannon."
+            );
+            RegisterGlossaryEntry(registry, "ARightShotOffsetSingle", sprites["icons/Offset_Shot_Right"],
+                "Right Shot Offset",
+                "Attack {0} space to the right of your cannon."
+            );
         }
         private void RegisterGlossaryEntry(IGlossaryRegisty registry, string itemName, ExternalSprite sprite, string displayName, string description)
         {
