@@ -70,7 +70,9 @@ namespace TuckerTheSaboteur.actions
             var cstuff = c != null ? c.stuff : null;
             if (c != null) c.stuff = new();
 
+            OffsetAttackPatches.SideEffectsOverride = true;
             var tooltips = aattack.GetTooltips(s);
+            OffsetAttackPatches.SideEffectsOverride = false;
 
             if (c != null) c.stuff = cstuff;
             s.ship.parts = sshipparts;

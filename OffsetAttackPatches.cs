@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Nanoray.Shrike;
 using Nanoray.Shrike.Harmony;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace TuckerTheSaboteur
 {
@@ -16,6 +17,12 @@ namespace TuckerTheSaboteur
     [HarmonyPatch]
     public static class OffsetAttackPatches
     {
+        // ============================================
+        //
+        // Offset Attack functionality patches (I think these just make offset attacks work with volleys)
+        //
+        // ============================================
+
         public static int xOffset = 0;
 
         [HarmonyPrefix]
@@ -95,6 +102,17 @@ namespace TuckerTheSaboteur
         //}
 
 
+
+
+        // ============================================
+        //
+        // CANNON RECOIL ANIMATION PATCH
+        //
+        // ============================================
+
+
+
+
         // the firingCannons variable prevents offset attacks that land on another cannon from erasing eachother's effects
         // eg, if you're piloting the Ares and you've got both cannons active, an attack with a left offset of 2 would look like this:
         // 1  2
@@ -129,7 +147,7 @@ namespace TuckerTheSaboteur
             {
                 // extract the offset amount from the fromX
                 int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
-                cannonAnimXOffset = (__instance.fromX ?? 0) - cannonX;
+                cannonAnimXOffset = (__instance.fromX ?? cannonX) - cannonX;
 
                 // if this will be a volley, 
                 bool willBeVolley = (!__instance.targetPlayer && !__instance.fromDroneX.HasValue && g.state.ship.GetPartTypeCount(PType.cannon) > 1 && !__instance.multiCannonVolley);
@@ -198,5 +216,112 @@ namespace TuckerTheSaboteur
             return null;
         }
 
+
+
+        // ============================================
+        //
+        // ATTACK INTENT LINES PATCH
+        //
+        // ============================================
+
+        // Patch AAttack.GetTooltips to store fromX-cannonX in a global variable
+        // then in prefix Combat.DrawIntentLinesForPart, 
+        // if (!isplayership) return true;
+        // if (part.hilight && part.type == PType.cannon) {
+        //    draw intent line at i-offset
+        //    return false;
+        // }
+        // return true;
+
+        public static int intentXOffset = 0;
+        //public static Dictionary<int, Part> columnToCannonPart = new();
+        public static Dictionary<Part, List<int>> cannonFireLanes = new();
+        public static bool SideEffectsOverride = false;
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(AAttack), nameof(AAttack.GetTooltips))]
+        public static void IntentLinesSetup(AAttack __instance, State s)
+        {
+            if (SideEffectsOverride) return;
+            if (s.route is not Combat c) return;
+            //if (c.hoveringDeck != (Deck)MainManifest.deck.Id) return;
+
+            int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
+            intentXOffset = (__instance.fromX ?? cannonX) - cannonX;
+
+            for (int i = 0; i < s.ship.parts.Count; i++)
+            {
+                var part = s.ship.parts[i];
+                if (part.type == PType.cannon && part.active) // && part.hilight)
+                {
+                    //columnToCannonPart[i + intentXOffset] = part;
+                    if (!cannonFireLanes.ContainsKey(part)) cannonFireLanes[part] = new();
+                    cannonFireLanes[part].Add(i + intentXOffset);
+                }
+            }
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Combat), nameof(Combat.DrawIntentLinesForPart))]
+        public static bool IntentLinesFollowthrough(Combat __instance, Ship shipSource, Ship shipTarget, int i, Part part, Vec v)
+        {
+            if (!shipSource.isPlayerShip) return true;
+            //if (columnToCannonPart.ContainsKey(i))
+            //{
+            //    part = columnToCannonPart[i];
+            //}
+
+            //if (part.type == PType.cannon && part.active && part.hilight)
+            //{
+            //    i += intentXOffset;
+            //}
+
+            // return true;
+
+            if (!cannonFireLanes.ContainsKey(part)) return true;
+
+            cannonFireLanes[part].ForEach(j => RIPPED_DrawIntentLinesForPart(__instance.stuff, shipSource, shipTarget, j, part, v));
+            cannonFireLanes[part].Clear();
+
+            return false;
+        }
+
+        //[HarmonyPostfix]
+        //[HarmonyPatch(typeof(G), nameof(G.Render))]
+        //public static void IntentLinesCleanup(double deltaTime)
+        //{
+        //    columnToCannonPart.Clear();
+        //}
+
+        private static void RIPPED_DrawIntentLinesForPart(Dictionary<int, StuffBase> stuff, Ship shipSource, Ship shipTarget, int i, Part part, Vec v)
+        {
+            if (part.intent is IntentAttack || part.hilight)
+            {
+                Color value = ((part.intent is IntentAttack intentAttack && intentAttack.status.HasValue) ? Colors.attackStatusHint : Colors.attackHint);
+                if (shipSource.isPlayerShip)
+                {
+                    value = Colors.attackStatusHintPlayer;
+                }
+                bool flag = shipTarget.HasNonEmptyPartAtWorldX(shipSource.x + i);
+                Vec vec = new Vec(shipSource.xLerped * 16.0) + FxPositions.Hull(i, shipSource.isPlayerShip) - new Vec(7.0);
+                Vec vec2 = new Vec(shipSource.xLerped * 16.0) + (flag ? FxPositions.Hull(i, shipTarget.isPlayerShip) : FxPositions.WayBack(i, shipTarget.isPlayerShip)) + new Vec(8.0);
+                vec = vec.round();
+                vec2 = vec2.round();
+                if (stuff.TryGetValue(shipSource.x + i, out StuffBase value2) && (!(value2 is Missile) || shipSource.isPlayerShip))
+                {
+                    vec2.y = FxPositions.Drone(i).y - 2.0;
+                    Spr? id = Spr.parts_hilight_endcap;
+                    double x = v.x + vec.x;
+                    double y = v.y + vec2.y;
+                    bool flipY = !shipSource.isPlayerShip;
+                    Vec? originRel = new Vec(0.0, 0.5);
+                    Color? color = value;
+                    BlendState screen = BlendMode.Screen;
+                    Draw.Sprite(id, x, y, flipX: false, flipY, 0.0, null, originRel, null, null, color, screen);
+                }
+                Rect rect = Rect.FromPoints(vec, vec2);
+                Draw.Rect(v.x + rect.x, v.y + rect.y, rect.w, rect.h, value, BlendMode.Screen);
+            }
+        }
     }
 }
