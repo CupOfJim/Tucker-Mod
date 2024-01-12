@@ -93,5 +93,110 @@ namespace TuckerTheSaboteur
 
         //    return false;
         //}
+
+
+        // the firingCannons variable prevents offset attacks that land on another cannon from erasing eachother's effects
+        // eg, if you're piloting the Ares and you've got both cannons active, an attack with a left offset of 2 would look like this:
+        // 1  2
+        // |  |
+        // |  |
+        // |  |  
+        //    ^##^
+        //   
+        // without firingCannons preventing interference, what would happen is that attack 1 would trigger cannon 1 to recoil,
+        // and then attack 2 would clear the recoil on cannon 1 (since attack 2 did not actually come from that part)
+        // firingCannons says "hey! don't clear the recoil from this part! A previous attack decided it SHOULD recoil"
+        private static int cannonAnimXOffset = 0;
+        private static HashSet<int> firingCannons = new();
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(AAttack), nameof(AAttack.Begin))]
+        public static void OffsetAttacks_CannonRecoilAnimation(AAttack __instance, G g, State s, Combat c)
+        {
+            // only the player gets offset attacks
+            if (__instance.targetPlayer) return;
+
+            // check to see if this is a regular, non-offset attack, and if so, clear offset attack data
+            // note: volley attacks will always have a fromX value
+            if (!__instance.fromX.HasValue)
+            {
+                cannonAnimXOffset = 0;
+                return;
+            }
+
+            // if we're not a multiCannonVolley, that means we're either on a one cannon ship or we're setting up a multicannon volley
+            if (!__instance.multiCannonVolley)
+            {
+                // extract the offset amount from the fromX
+                int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
+                cannonAnimXOffset = (__instance.fromX ?? 0) - cannonX;
+
+                // if this will be a volley, 
+                bool willBeVolley = (!__instance.targetPlayer && !__instance.fromDroneX.HasValue && g.state.ship.GetPartTypeCount(PType.cannon) > 1 && !__instance.multiCannonVolley);
+                if (willBeVolley)
+                {
+                    firingCannons.Clear();
+                    return;
+                }
+
+                // the below chunk of code taken from the actual AAttack.Begin source code
+                // our goal here is to clear the recoil from the part the game thinks this attack is fired from
+                int? num = AAttack_GetFromX(__instance, s, c);
+                if (!num.HasValue) return;
+
+                Part partAtLocalX = s.ship.GetPartAtLocalX(num.Value);
+                if (partAtLocalX != null)
+                {
+                    partAtLocalX.pulse = 0.0; // Part.pulse is what handles the recoil animation
+                }
+
+                // and now we're begining the recoil animation on the part that ACTUALLY fired this attack
+                int realPartX = num.Value - cannonAnimXOffset;
+                Part partAtRealLocalX = s.ship.GetPartAtLocalX(realPartX);
+                if (partAtRealLocalX != null)
+                {
+                    partAtRealLocalX.pulse = 1.0;
+                }
+
+            }
+            else
+            {
+                // NOTE: a volley attack will always happen sometime after the non-volley attack that set it up
+                // same as the end of the non-volley case
+                int? num = AAttack_GetFromX(__instance, s, c);
+                if (num.HasValue && !firingCannons.Contains(num.Value))
+                {
+                    Part partAtLocalX = s.ship.GetPartAtLocalX(num.Value);
+                    if (partAtLocalX != null)
+                    {
+                        partAtLocalX.pulse = 0.0;
+                    }
+                }
+
+                int realPartX = num.Value - cannonAnimXOffset;
+                Part partAtRealLocalX = s.ship.GetPartAtLocalX(realPartX);
+                if (partAtRealLocalX != null)
+                {
+                    partAtRealLocalX.pulse = 1.0;
+                }
+                firingCannons.Add(realPartX);
+
+            }
+        }
+
+        private static int? AAttack_GetFromX(AAttack a, State s, Combat c)
+        {
+            if (a.fromX.HasValue)
+            {
+                return a.fromX;
+            }
+            int num = (a.targetPlayer ? c.otherShip : s.ship).parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
+            if (num != -1)
+            {
+                return num;
+            }
+            return null;
+        }
+
     }
 }
