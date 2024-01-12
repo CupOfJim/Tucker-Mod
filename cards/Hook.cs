@@ -15,7 +15,7 @@ namespace TuckerTheSaboteur.cards
         {
             int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
 
-            int offset = base.upgrade == Upgrade.A ? -3 : -1;
+            int offset = base.upgrade == Upgrade.B ? -1 : -3;
             if (flipped) { offset *= -1; }
 
             int moveDistance = 2;

@@ -270,7 +270,7 @@ namespace TuckerTheSaboteur
         public void LoadManifest(IArtifactRegistry registry)
         {
             var antiqueMotor = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Antique_Motor", typeof(AntiqueMotor), sprites["icons/Antique_Motor"], ownerDeck: deck);
-            antiqueMotor.AddLocalisation("ANTIQUE MOTOR", "Gain 1 extra <c=energy>ENERGY</c> every turn. <c=downside>Gain 1</c> <c=status>FUEL LEAK</c> <c=downside>on the first turn</c>.");
+            antiqueMotor.AddLocalisation("ANTIQUE MOTOR", "Gain 1 extra <c=energy>ENERGY</c> every turn. <c=downside>Gain 1</c> <c=status>FUEL LEAK</c> <c=downside>on the first turn.");
             registry.RegisterArtifact(antiqueMotor);
 
             var brick = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Brick", typeof(Brick), sprites["icons/Brick"], ownerDeck: deck);
@@ -278,7 +278,7 @@ namespace TuckerTheSaboteur
             registry.RegisterArtifact(brick);
 
             var holoWall = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Holo-Wall", typeof(HoloWall), sprites["icons/Holo-Wall"], ownerDeck: deck);
-            holoWall.AddLocalisation("HOLO-WALL", "Gain 3 <c=status>Buffer</c> on the first turn.");
+            holoWall.AddLocalisation("HOLO-WALL", "Gain 3 <c=status>BUFFER</c> on the first turn.");
             registry.RegisterArtifact(holoWall);
 
             var commJammer = new ExternalArtifact("SoggoruWaffle.TuckerTheSabotuer.Artifacts.Comm_Jammer", typeof(CommJammer), sprites["icons/Comm_Jammer"], ownerDeck: deck);
