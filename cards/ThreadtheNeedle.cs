@@ -31,7 +31,7 @@ namespace TuckerTheSaboteur.cards
                 },
                 new AAttack ()
                 {
-                    damage = GetDmg(s, base.upgrade == Upgrade.A ? 4 : 6),
+                    damage = GetDmg(s, base.upgrade == Upgrade.A ? 6 : 4),
                     fast = true,
                 }
             };
