@@ -186,7 +186,7 @@ namespace TuckerTheSaboteur
 
             character.AddNameLocalisation("Tucker");
             // TODO: set color here too, and also write the description
-            character.AddDescLocalisation("<c=e9bd5c>TUCKER</c>\nA retired sabotuer. His cards manipulate <c=keyword>the enemy's shield</c> and <c=keyword>positioning</c>.");
+            character.AddDescLocalisation("<c=e9bd5c>TUCKER</c>\nA retired saboteur. His cards manipulate <c=keyword>the enemy's shield</c> and <c=keyword>positioning</c>.");
 
             if (!registry.RegisterCharacter(character)) throw new Exception("Tucker is lost! Could not register Tucker!");
         }
