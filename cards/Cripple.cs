@@ -28,7 +28,7 @@ namespace TuckerTheSaboteur.cards
                 case Upgrade.A:
                     return new List<CardAction> ()
                     {
-                        new AAttack ()
+                        new ABluntAttack ()
                         {
                             damage = GetDmg(s, 2),
                             status = (Status)MainManifest.statuses["fuel_leak"].Id,
@@ -59,7 +59,7 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = (upgrade == Upgrade.B ? 4 : 3),
+                cost = (upgrade == Upgrade.A ? 3 : 4),
                 exhaust = true,
                 artTint = "ffffaa"
             };
