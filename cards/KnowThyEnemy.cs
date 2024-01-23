@@ -20,51 +20,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AAttack
                         {
-                            damage = GetDmg(s, 1),
-                            piercing = true,
-                            disabled = flipped,
-                        },
-                        new AStatus()
-                        {
-                            status = Enum.Parse<Status>("shield"),
-                            statusAmount = -1,
-                            targetPlayer = false,
-                            disabled = flipped,
-                        },
-                        new ADummyAction(),
-                        new ABluntAttack ()
-                        {
-                            damage = GetDmg(s, 3),
-                            disabled = !flipped,
-                        }
-                    };
-                case Upgrade.A:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack
-                        {
                             damage = GetDmg(s, 2),
-                            piercing = true,
-                            disabled = flipped,
-                        },
-                        new AShieldSteal()
-                        {
-                            amount = 1,
-                            disabled = flipped,
-                        },
-                        new ADummyAction(),
-                        new ABluntAttack ()
-                        {
-                            damage = GetDmg(s, 3),
-                            disabled = !flipped,
-                        }
-                    };
-                case Upgrade.B:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack
-                        {
-                            damage = GetDmg(s, 1),
                             piercing = true,
                             disabled = flipped,
                         },
@@ -78,7 +34,51 @@ namespace TuckerTheSaboteur.cards
                         new ADummyAction(),
                         new ABluntAttack ()
                         {
-                            damage = GetDmg(s, 4),
+                            damage = GetDmg(s, 5),
+                            disabled = !flipped,
+                        }
+                    };
+                case Upgrade.A:
+                    return new List<CardAction> ()
+                    {
+                        new AAttack
+                        {
+                            damage = GetDmg(s, 3),
+                            piercing = true,
+                            disabled = flipped,
+                        },
+                        new AShieldSteal()
+                        {
+                            amount = 2,
+                            disabled = flipped,
+                        },
+                        new ADummyAction(),
+                        new ABluntAttack ()
+                        {
+                            damage = GetDmg(s, 5),
+                            disabled = !flipped,
+                        }
+                    };
+                case Upgrade.B:
+                    return new List<CardAction> ()
+                    {
+                        new AAttack
+                        {
+                            damage = GetDmg(s, 2),
+                            piercing = true,
+                            disabled = flipped,
+                        },
+                        new AStatus()
+                        {
+                            status = Enum.Parse<Status>("shield"),
+                            statusAmount = -3,
+                            targetPlayer = false,
+                            disabled = flipped,
+                        },
+                        new ADummyAction(),
+                        new ABluntAttack ()
+                        {
+                            damage = GetDmg(s, 6),
                             disabled = !flipped,
                         }
                     };
@@ -90,10 +90,10 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = 1,
+                cost = 2,
                 floppable = true,
                 art = flipped ? (Spr)MainManifest.sprites["cards/MiningDrill_Bottom"].Id : (Spr)MainManifest.sprites["cards/MiningDrill_Top"].Id,
-                artTint = "ffffaa"
+                artTint = "ffffff"
             };
         }
     }

@@ -20,7 +20,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new ABluntAttack ()
                         {
-                            damage = GetDmg(s, 5),
+                            damage = GetDmg(s, 3),
                         }
                     };
                 case Upgrade.A:
@@ -28,7 +28,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new ABluntAttack ()
                         {
-                            damage = GetDmg(s, 7),
+                            damage = GetDmg(s, 4),
                         }
                     };
                 case Upgrade.B:
@@ -37,12 +37,12 @@ namespace TuckerTheSaboteur.cards
                         new AStatus()
                         {
                             status = Enum.Parse<Status>("shield"),
-                            statusAmount = -3,
+                            statusAmount = -2,
                             targetPlayer = false,
                         },
                         new ABluntAttack ()
                         {
-                            damage = GetDmg(s, 5),
+                            damage = GetDmg(s, 3),
                         }
                     };
             }
@@ -53,7 +53,7 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = 2,
+                cost = 1,
                 artTint = "ffffaa"
             };
         }

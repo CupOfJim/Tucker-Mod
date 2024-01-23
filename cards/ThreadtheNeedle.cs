@@ -17,7 +17,7 @@ namespace TuckerTheSaboteur.cards
             int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
 
             int offset = base.upgrade == Upgrade.B ? -1 : 2;
-            int statusAmount = base.upgrade == Upgrade.None ? 3: 4;
+            int statusAmount = base.upgrade == Upgrade.B ? 3: 2;
 
             List<CardAction> actions = new()
             {
@@ -31,7 +31,7 @@ namespace TuckerTheSaboteur.cards
                 },
                 new AAttack ()
                 {
-                    damage = GetDmg(s, base.upgrade == Upgrade.A ? 4 : 6),
+                    damage = GetDmg(s, base.upgrade == Upgrade.A ? 4 : 3),
                     fast = true,
                 }
             };
