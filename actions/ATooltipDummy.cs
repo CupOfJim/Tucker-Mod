@@ -18,6 +18,20 @@ namespace TuckerTheSaboteur.actions
         public List<Tooltip> tooltips;
         public List<Icon>? icons;
 
+        public CardAction? standinFor;
+
+        public void UpdateFromStandin(State s)
+        {
+            if (standinFor == null) return;
+
+            ATooltipDummy newStandin = BuildStandIn(standinFor, s);
+            onGetTooltips = newStandin.onGetTooltips;
+            tooltips = newStandin.tooltips;
+            icons = newStandin.icons;
+
+            tooltips.Add(new TTText("UPDATED FROM STANDIN"));
+        }
+
         public static ATooltipDummy BuildStandIn(CardAction action, State s)
         {
             if (action is AAttack aattack)
@@ -35,7 +49,8 @@ namespace TuckerTheSaboteur.actions
             return new ATooltipDummy()
             {
                 tooltips = action.GetTooltips(s),
-                icons = icon == null ? new() : new() { (Icon)action.GetIcon(s) }
+                icons = icon == null ? new() : new() { (Icon)action.GetIcon(s) },
+                standinFor = action
             };
         }
 
@@ -54,11 +69,11 @@ namespace TuckerTheSaboteur.actions
                 icons.Add((Icon)icon);
             }
 
-
             return new ATooltipDummy()
             {
                 tooltips = astatus.GetTooltips(s),
-                icons = icons
+                icons = icons,
+                standinFor = astatus
             };
         }
 
@@ -136,7 +151,8 @@ namespace TuckerTheSaboteur.actions
                 disabled = aattack.disabled,
                 tooltips = tooltips,
                 icons = icons,
-                onGetTooltips = (s) => aattack.GetTooltips(s)
+                onGetTooltips = (s) => aattack.GetTooltips(s),
+                standinFor = aattack
             };
         }
 

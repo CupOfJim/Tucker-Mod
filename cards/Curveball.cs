@@ -19,11 +19,8 @@ namespace TuckerTheSaboteur.cards
 
             int offset = upgrade == Upgrade.B ? -4 : -2;
             int offsetAmount = Math.Abs(offset);
-            if (flipped) { offset *= -1; }
 
-            Spr offsetSprite = flipped
-                ? (Spr)MainManifest.sprites["icons/Offset_Shot_Right"].Id
-                : (Spr)MainManifest.sprites["icons/Offset_Shot_Left"].Id;
+            Spr offsetSprite = (Spr)MainManifest.sprites["icons/Offset_Shot_Left"].Id;
 
             // handle attack damage
             int damage = GetDmg(s, 2);

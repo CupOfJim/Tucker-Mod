@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 using Nanoray.Shrike;
 using Nanoray.Shrike.Harmony;
 using Microsoft.Xna.Framework.Graphics;
+using TuckerMod.actions;
+using static System.Collections.Specialized.BitVector32;
+using TuckerTheSaboteur.actions;
 
 namespace TuckerTheSaboteur
 {
@@ -321,6 +324,54 @@ namespace TuckerTheSaboteur
                 }
                 Rect rect = Rect.FromPoints(vec, vec2);
                 Draw.Rect(v.x + rect.x, v.y + rect.y, rect.w, rect.h, value, BlendMode.Screen);
+            }
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(Card), nameof(Card.GetDataWithOverrides))]
+        public static void CardIsFlippableIfOffsetAttackIsPresent(Card __instance, ref CardData __result, State state)
+        {
+            if (state.route is Combat combat && !__result.flippable && state.ship.Get(Enum.Parse<Status>("tableFlip")) > 0)
+            {
+                foreach (CardAction action in __instance.GetActions(state, combat))
+                {
+                    if ((action is AAttack aAttack && aAttack.fromX.HasValue) || (action is ANoIconWrapper aniw && aniw.action is AAttack aAttack1 && aAttack1.fromX.HasValue))
+                    {
+                        __result.flippable = true;
+                        return;
+                    }
+                }
+            }
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(Card), nameof(Card.GetActionsOverridden))]
+        public static void EnforceFlipOnOffsetAttacks(Card __instance, List<CardAction> __result, State s, Combat c)
+        {
+            if (__instance.flipped)
+            {
+                int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
+                foreach (CardAction item in __result)
+                {
+                    if (item is AAttack aAttack && aAttack.fromX.HasValue)
+                    {
+                        int offset = aAttack.fromX.Value - cannonX;
+                        aAttack.fromX = cannonX - offset;
+                    }
+                    else if (item is ANoIconWrapper aniw && aniw.action is AAttack aAttack1 && aAttack1.fromX.HasValue)
+                    {
+                        int offset1 = aAttack1.fromX.Value - cannonX;
+                        aAttack1.fromX = cannonX - offset1;
+                        aAttack1.moveEnemy *= -1; // normally handled by basegame, but the wrapper gets in the way
+                    }
+                }
+                foreach (CardAction item in __result)
+                { 
+                    if (item is ATooltipDummy atd)
+                    {
+                        atd.UpdateFromStandin(s);
+                    }
+                }
             }
         }
     }

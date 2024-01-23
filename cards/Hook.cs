@@ -14,20 +14,15 @@ namespace TuckerTheSaboteur.cards
         public override List<CardAction> GetActions(State s, Combat c)
         {
             int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
-
             int offset = base.upgrade == Upgrade.B ? -1 : -3;
-            if (flipped) { offset *= -1; }
-
-            int moveDistance = 2;
-            if (flipped) { moveDistance *= -1; }
 
             List<CardAction> actions = new()
             {
-                new TuckerTheSaboteur.actions.AAttackNoIcon ()
+                new AAttack()
                 {
                     fromX = cannonX + offset,
                     damage = GetDmg(s, 2),
-                    moveEnemy = moveDistance,
+                    moveEnemy = 2,
                 }
             };
 
@@ -43,7 +38,7 @@ namespace TuckerTheSaboteur.cards
             return new()
             {
                 cost = 1,
-                flippable = (upgrade == Upgrade.A ? true : false) || (state.ship.Get(Enum.Parse<Status>("tableFlip")) > 0),
+                flippable = upgrade == Upgrade.A ? true : false,
                 artTint = "ffffaa"
             };
         }
