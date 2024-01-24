@@ -59,8 +59,12 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = (upgrade == Upgrade.A ? 3 : 4),
-                exhaust = true,
+                cost = upgrade switch
+                {
+                    Upgrade.None => 3,
+                    Upgrade.A => 2,
+                    Upgrade.B => 4,
+                },
                 artTint = "ffffaa"
             };
         }
