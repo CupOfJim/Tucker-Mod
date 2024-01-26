@@ -93,7 +93,7 @@ namespace TuckerTheSaboteur.cards
                 cost = 2,
                 floppable = true,
                 art = flipped ? (Spr)MainManifest.sprites["cards/MiningDrill_Bottom"].Id : (Spr)MainManifest.sprites["cards/MiningDrill_Top"].Id,
-                artTint = "ffffaa"
+                artTint = "ffffff"
             };
         }
     }

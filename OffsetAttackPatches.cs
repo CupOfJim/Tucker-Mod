@@ -261,8 +261,8 @@ namespace TuckerTheSaboteur
             }
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(Combat), nameof(Combat.DrawIntentLinesForPart))]
+        //[HarmonyPrefix]
+        //[HarmonyPatch(typeof(Combat), nameof(Combat.DrawIntentLinesForPart))]
         public static bool IntentLinesFollowthrough(Combat __instance, Ship shipSource, Ship shipTarget, int i, Part part, Vec v)
         {
             if (!shipSource.isPlayerShip) return true;
