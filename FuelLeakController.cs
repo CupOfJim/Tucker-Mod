@@ -24,5 +24,17 @@ namespace TuckerTheSaboteur
                 });
             }
         }
+
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(Ship), nameof(Ship.OnBeginTurn))]
+        public static void DecrementFuelLeak(Ship __instance, State s, Combat c)
+        {
+            var fuelLeak = __instance.Get((Status)MainManifest.statuses["fuel_leak"].Id);
+            if (fuelLeak > 0)
+            {
+                __instance.Set((Status)MainManifest.statuses["fuel_leak"].Id, fuelLeak - 1);
+            }
+        }
     }
 }
