@@ -6,6 +6,7 @@ using HarmonyLib;
 using Microsoft.Extensions.Logging;
 using shockah;
 using System.Runtime.CompilerServices;
+using TheJazMaster.MoreDifficulties;
 using TuckerTheSaboteur.cards;
 using TuckertheSabotuer.Artifacts;
 
@@ -13,6 +14,8 @@ namespace TuckerTheSaboteur
 {
     public class MainManifest : IModManifest, ISpriteManifest, ICardManifest, ICharacterManifest, IDeckManifest, IAnimationManifest, IGlossaryManifest, IStatusManifest, IArtifactManifest
     {
+        public IMoreDifficultiesApi? MoreDifficultiesApi { get; private set; }
+
         public static MainManifest Instance;
 
         public IEnumerable<DependencyEntry> Dependencies => new DependencyEntry[0];
@@ -35,6 +38,8 @@ namespace TuckerTheSaboteur
         {
             ReflectionExt.CurrentAssemblyLoadContext.LoadFromAssemblyPath(Path.Combine(ModRootFolder!.FullName, "Shrike.dll"));
             ReflectionExt.CurrentAssemblyLoadContext.LoadFromAssemblyPath(Path.Combine(ModRootFolder!.FullName, "Shrike.Harmony.dll"));
+
+            MoreDifficultiesApi = contact.GetApi<IMoreDifficultiesApi>("TheJazMaster.MoreDifficulties");
 
             Instance = this;
             var harmony = new Harmony(this.Name);
@@ -185,8 +190,9 @@ namespace TuckerTheSaboteur
             );
 
             character.AddNameLocalisation("Tucker");
-            // TODO: set color here too, and also write the description
             character.AddDescLocalisation("<c=e9bd5c>TUCKER</c>\nA retired saboteur. His cards manipulate <c=keyword>the enemy's shield</c> and <c=keyword>positioning</c>.");
+
+            MoreDifficultiesApi?.RegisterAltStarters((Deck)deck.Id, new() { cards = new() { new QuantumCannon(), new MutualGain() } });
 
             if (!registry.RegisterCharacter(character)) throw new Exception("Tucker is lost! Could not register Tucker!");
         }
