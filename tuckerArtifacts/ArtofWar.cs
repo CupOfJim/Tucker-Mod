@@ -6,10 +6,11 @@ namespace TuckertheSabotuer.Artifacts
     [ArtifactMeta(pools = new ArtifactPool[] { ArtifactPool.Common })]
     public class ArtofWar : Artifact
     {
+        int lastTurnShield = 0;
         public override void OnTurnStart(State s, Combat c)
         {
             int playerShield = s.ship.Get(Enum.Parse<Status>("shield")) + s.ship.Get(Enum.Parse<Status>("tempShield"));
-            if (playerShield == 0)
+            if (playerShield == 0 && lastTurnShield != 0)
             {
                 c.QueueImmediate(new AAddCard()
                 {
@@ -17,6 +18,8 @@ namespace TuckertheSabotuer.Artifacts
                     destination = Enum.Parse<CardDestination>("Hand")
                 });
             }
+
+            lastTurnShield = playerShield;
         }
     }
 }
