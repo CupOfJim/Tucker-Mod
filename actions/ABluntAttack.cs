@@ -31,7 +31,7 @@ namespace TuckerTheSaboteur.actions
                 blockStunSource = true;
                 base.status = null;
                 base.statusAmount = 0;
-                base.damage = 0;
+                base.damage = -999999;
                 base.moveEnemy = 0;
                 base.stunEnemy = false;
                 base.weaken = false;
