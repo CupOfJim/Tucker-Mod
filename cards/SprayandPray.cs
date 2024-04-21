@@ -23,7 +23,7 @@ namespace TuckerTheSaboteur.cards
 
             if (upgrade == Upgrade.A)
             {
-                actions.Add(new AAttack
+                actions.Add(new ABluntAttack
                 {
                     fromX = cannonX - 2,
                     damage = GetDmg(s, 1),
@@ -54,7 +54,7 @@ namespace TuckerTheSaboteur.cards
 
             if (upgrade == Upgrade.A)
             {
-                actions.Add(new AAttack
+                actions.Add(new ABluntAttack
                 {
                     fromX = cannonX + 2,
                     damage = GetDmg(s, 1),
