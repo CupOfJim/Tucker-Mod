@@ -20,13 +20,13 @@ namespace TuckerTheSaboteur.cards
                         new AStatus ()
                         {
                             status = (Status)MainManifest.statuses["buffer"].Id,
-                            statusAmount = 4,
+                            statusAmount = 3,
                             targetPlayer = true
                         },
                         new AStatus ()
                         {
                             status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 4,
+                            statusAmount = 3,
                             targetPlayer = true
                         }
                     };
@@ -42,7 +42,7 @@ namespace TuckerTheSaboteur.cards
                         new AStatus ()
                         {
                             status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 2,
+                            statusAmount = 3,
                             targetPlayer = true
                         }
                     };
@@ -52,13 +52,13 @@ namespace TuckerTheSaboteur.cards
                         new AStatus ()
                         {
                             status = (Status)MainManifest.statuses["buffer"].Id,
-                            statusAmount = 5,
+                            statusAmount = 3,
                             targetPlayer = true
                         },
                         new AStatus ()
                         {
-                            status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 4,
+                            status = Enum.Parse<Status>("engineStall"),
+                            statusAmount = 3,
                             targetPlayer = true
                         }
                     };

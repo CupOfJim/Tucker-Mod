@@ -264,7 +264,7 @@ namespace TuckerTheSaboteur
         {
             var fuelLeak = new ExternalStatus("SoggoruWaffle.Tucker.statuses.fuel_leak", true, System.Drawing.Color.Red, null, sprites["icons/Fuel_Leak"], false);
             statusRegistry.RegisterStatus(fuelLeak);
-            fuelLeak.AddLocalisation("fuel_leak", "Take {0} damage every time the ship moves any distance.");
+            fuelLeak.AddLocalisation("fuel_leak", "Take {0} damage every time the ship moves any distance. <c=downside>Decreases by 1 at the end of each turn.");
             statuses["fuel_leak"] = fuelLeak;
 
             var buffer = new ExternalStatus("SoggoruWaffle.Tucker.statuses.buffer", true, System.Drawing.Color.Crimson, null, sprites["icons/Buffer"], false);
