@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Collections.Specialized.BitVector32;
 
 namespace TuckerTheSaboteur.actions
 {
@@ -20,11 +19,13 @@ namespace TuckerTheSaboteur.actions
 
         public CardAction? standinFor;
 
+        private int stunOverride = 0;
+
         public void UpdateFromStandin(State s)
         {
             if (standinFor == null) return;
 
-            ATooltipDummy newStandin = BuildStandIn(standinFor, s);
+            ATooltipDummy newStandin = BuildStandIn(standinFor, s, stunOverride);
             onGetTooltips = newStandin.onGetTooltips;
             tooltips = newStandin.tooltips;
             icons = newStandin.icons;
@@ -32,12 +33,28 @@ namespace TuckerTheSaboteur.actions
             tooltips.Add(new TTText("UPDATED FROM STANDIN"));
         }
 
-        public static ATooltipDummy BuildStandIn(CardAction action, State s)
+        public static List<CardAction> BuildStandinsAndWrapRealActions(List<CardAction> actions, State s)
+        {
+            List<CardAction> finalActions = new();
+            for (int i = 0; i < actions.Count; i++) finalActions.Add(new ADummyAction());
+            finalActions.AddRange(ATooltipDummy.BuildStandIns(actions, s));
+            finalActions.AddRange(actions.Select(a => new TuckerMod.actions.ANoIconWrapper() { action = a }));
+
+            return finalActions;
+        }
+
+        public static List<ATooltipDummy> BuildStandIns(List<CardAction> actions, State s)
+        {
+            int availableStunCharge = s.ship.Get(Enum.Parse<Status>("stunCharge"));
+            return actions.Select(a => BuildStandIn(a, s, availableStunCharge--)).ToList();
+        }
+
+        public static ATooltipDummy BuildStandIn(CardAction action, State s, int availableStunCharge)
         {
             if (action is AAttack aattack)
             {
                 int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
-                return BuildFromAttack(aattack, s, cannonX: cannonX);
+                return BuildFromAttack(aattack, s, cannonX: cannonX, availableStunCharge: availableStunCharge);
             }
 
             if (action is AStatus astatus)
@@ -95,7 +112,7 @@ namespace TuckerTheSaboteur.actions
             return tooltips;
         }
 
-        public static ATooltipDummy BuildFromAttack(AAttack aattack, State s, int? cannonX = null, bool hideOutgoingArrow = true)
+        public static ATooltipDummy BuildFromAttack(AAttack aattack, State s, int? cannonX = null, bool hideOutgoingArrow = true, int availableStunCharge = 0)
         {
             List<Icon> icons = new();
             var tooltips = GetTooltipsNoSideEffects(aattack, s);
@@ -117,7 +134,7 @@ namespace TuckerTheSaboteur.actions
 
             icons.Add(new Icon(Enum.Parse<Spr>("icons_attack"), aattack.damage, Colors.redd));
 
-            if (aattack.stunEnemy)
+            if (aattack.stunEnemy || availableStunCharge > 0)
             {
                 icons.Add(new Icon(Enum.Parse<Spr>("icons_stun"), null, Colors.textMain));
             }
@@ -152,7 +169,8 @@ namespace TuckerTheSaboteur.actions
                 tooltips = tooltips,
                 icons = icons,
                 onGetTooltips = (s) => aattack.GetTooltips(s),
-                standinFor = aattack
+                standinFor = aattack,
+                stunOverride = availableStunCharge
             };
         }
 

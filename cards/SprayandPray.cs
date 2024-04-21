@@ -23,7 +23,7 @@ namespace TuckerTheSaboteur.cards
 
             if (upgrade == Upgrade.A)
             {
-                actions.Add(new TuckerTheSaboteur.actions.AAttackNoIcon()
+                actions.Add(new AAttack
                 {
                     fromX = cannonX - 2,
                     damage = GetDmg(s, 1),
@@ -31,20 +31,20 @@ namespace TuckerTheSaboteur.cards
                 });
             }
 
-            actions.Add(new TuckerTheSaboteur.actions.AAttackNoIcon()
+            actions.Add(new AAttack
             {
                 fromX = cannonX - 1,
                 damage = GetDmg(s, 1),
                 fast = true,
                 piercing = (upgrade == Upgrade.B),
             });
-            actions.Add(new TuckerTheSaboteur.actions.AAttackNoIcon()
+            actions.Add(new AAttack
             {
                 damage = GetDmg(s, 2),
                 fast = true,
                 piercing = (upgrade == Upgrade.B),
             });
-            actions.Add(new TuckerTheSaboteur.actions.AAttackNoIcon()
+            actions.Add(new AAttack
             {
                 fromX = cannonX + 1,
                 damage = GetDmg(s, 1),
@@ -54,7 +54,7 @@ namespace TuckerTheSaboteur.cards
 
             if (upgrade == Upgrade.A)
             {
-                actions.Add(new TuckerTheSaboteur.actions.AAttackNoIcon()
+                actions.Add(new AAttack
                 {
                     fromX = cannonX + 2,
                     damage = GetDmg(s, 1),
@@ -62,52 +62,7 @@ namespace TuckerTheSaboteur.cards
                 });
             }
 
-            int numAttacks = actions.Count;
-
-            for (int i = 0; i < numAttacks; i++)
-            {
-                var aattack = actions[i] as AAttack;
-
-                Icon attackIcon = ABluntAttack.DoWeHaveCannonsThough(s)
-                    ? new Icon(Enum.Parse<Spr>(aattack.piercing ? "icons_attackPiercing" : "icons_attack"), aattack.damage, Colors.redd)
-                    : new Icon(Enum.Parse<Spr>(aattack.piercing ? "icons_attackPiercingFail" : "icons_attackFail"), aattack.damage, Colors.attackFail);
-
-                if (aattack.fromX == null)
-                {
-                    actions.Add(new TuckerTheSaboteur.actions.ATooltipDummy()
-                    {
-                        tooltips = new() { },
-                        icons = new()
-                        {
-                            attackIcon
-                        }
-                    });
-                    continue;
-                }
-
-                int offset = (int)(aattack.fromX - cannonX);
-
-                Spr offsetSprite = offset > 0
-                    ? (Spr)MainManifest.sprites["icons/Offset_Shot_Right"].Id
-                    : (Spr)MainManifest.sprites["icons/Offset_Shot_Left"].Id;
-
-                actions.Add(new TuckerTheSaboteur.actions.ATooltipDummy()
-                {
-                    tooltips = new() { }, // eventually put the tooltip for offset attacks here
-                    icons = new()
-                    {
-                        new Icon(offsetSprite, Math.Abs(offset), Colors.redd),
-                        attackIcon
-                    }
-                });
-            }
-
-            for(int i = 0; i < numAttacks; i++) 
-            {
-                actions.Add(new ADummyAction());
-            }
-
-            return actions;
+            return ATooltipDummy.BuildStandinsAndWrapRealActions(actions, s);
         }
         public override CardData GetData(State state)
         {

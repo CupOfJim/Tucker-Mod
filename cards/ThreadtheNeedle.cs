@@ -50,12 +50,7 @@ namespace TuckerTheSaboteur.cards
                 );
             }
 
-            List<CardAction> finalActions = new();
-            for (int i = 0; i < actions.Count; i++) finalActions.Add(new ADummyAction());
-            finalActions.AddRange(actions.Select(a => ATooltipDummy.BuildStandIn(a, s)));
-            finalActions.AddRange(actions.Select(a => new ANoIconWrapper() { action = a }));
-
-            return finalActions;
+            return ATooltipDummy.BuildStandinsAndWrapRealActions(actions, s);
         }
         public override CardData GetData(State state)
         {
