@@ -6,7 +6,16 @@ namespace TuckertheSabotuer.Artifacts
     [ArtifactMeta(pools = new ArtifactPool[] { ArtifactPool.Common })]
     public class ArtofWar : Artifact
     {
-        int lastTurnShield = 0;
+        public int lastTurnShield = 0;
+        public override void OnCombatStart(State state, Combat combat)
+        {
+            lastTurnShield = 0;
+        }
+        public override void OnCombatEnd(State state)
+        {
+            lastTurnShield = 0;
+        }
+
         public override void OnTurnStart(State s, Combat c)
         {
             int playerShield = s.ship.Get(Enum.Parse<Status>("shield")) + s.ship.Get(Enum.Parse<Status>("tempShield"));
