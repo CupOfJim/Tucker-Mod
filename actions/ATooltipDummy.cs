@@ -13,7 +13,7 @@ namespace TuckerTheSaboteur.actions
     {
         public delegate void OnGetTooltips(State s);
 
-        public OnGetTooltips onGetTooltips;
+        private OnGetTooltips onGetTooltips;
         public List<Tooltip> tooltips;
         public List<Icon>? icons;
 
