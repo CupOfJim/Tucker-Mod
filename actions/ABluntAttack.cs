@@ -25,18 +25,105 @@ namespace TuckerTheSaboteur.actions
 
         public override void Begin(G g, State s, Combat c)
         {
-            int enemyShield = c.otherShip.Get(Enum.Parse<Status>("shield")) + c.otherShip.Get(Enum.Parse<Status>("tempShield"));
-            if (enemyShield > 0) 
+            int? num = GetFromX(s, c);
+            RaycastResult raycastResult = CombatUtils.RaycastFromShipLocal(s, c, num.Value, targetPlayer);
+            
+            bool targetHasShield = false;
+            if (raycastResult?.hitShip == true) targetHasShield = 0 < c.otherShip.Get(Enum.Parse<Status>("shield")) + c.otherShip.Get(Enum.Parse<Status>("tempShield"));
+            if (raycastResult?.hitDrone == true) targetHasShield = c.stuff[raycastResult.worldX].Invincible() || c.stuff[raycastResult.worldX].bubbleShield;
+
+            if (targetHasShield)
             {
-                blockStunSource = true;
-                base.status = null;
-                base.statusAmount = 0;
-                base.damage = -999999;
-                base.moveEnemy = 0;
-                base.stunEnemy = false;
-                base.weaken = false;
-                base.brittle = false;
-                base.armorize = false;
+                var ship = targetPlayer ? c.otherShip : s.ship;
+                var ship2 = targetPlayer ? s.ship : c.otherShip;
+
+                // handle hitting an invincible drone
+                if (raycastResult?.hitDrone == true && c.stuff[raycastResult.worldX].Invincible()) c.QueueImmediate(c.stuff[raycastResult.worldX].GetActionsOnShotWhileInvincible(s, c, !targetPlayer, damage));
+
+                if (!isBeam && !targetPlayer && !fromDroneX.HasValue)
+                {
+                    Input.Rumble(0.5);
+                }
+                if (!isBeam)
+                {
+                    g.state.storyVars.playerShotJustMissed = true;
+                    g.state.storyVars.playerShotWasFromStrafe = storyFromStrafe;
+                    g.state.storyVars.playerShotWasFromPayback = storyFromPayback;
+
+                    if (!fromDroneX.HasValue)
+                    {
+                        foreach (Artifact item9 in s.EnumerateAllArtifacts())
+                        {
+                            item9.OnPlayerAttack(s, c);
+                        }
+                    }
+                    if (raycastResult.hitShip)
+                    {
+                        if (c.otherShip.ai != null)
+                        {
+                            c.otherShip.ai.OnHitByAttack(s, c, raycastResult.worldX, this);
+                        }
+                        foreach (Artifact item10 in s.EnumerateAllArtifacts())
+                        {
+                            item10.OnEnemyGetHit(s, c, ship2.GetPartAtWorldX(raycastResult.worldX));
+                        }
+                    }
+                    if (!raycastResult.hitShip && !raycastResult.hitDrone && !fromDroneX.HasValue)
+                    {
+                        foreach (Artifact item11 in s.EnumerateAllArtifacts())
+                        {
+                            item11.OnEnemyDodgePlayerAttack(s, c);
+                        }
+                    }
+                    if (!raycastResult.hitShip && !raycastResult.hitDrone)
+                    {
+                        bool flag3 = false;
+                        for (int i = -1; i <= 1; i += 2)
+                        {
+                            if (CombatUtils.RaycastGlobal(c, ship, fromDrone: true, raycastResult.worldX + i).hitShip)
+                            {
+                                flag3 = true;
+                            }
+                        }
+                        if (flag3)
+                        {
+                            foreach (Artifact item12 in s.EnumerateAllArtifacts())
+                            {
+                                item12.OnEnemyDodgePlayerAttackByOneTile(s, c);
+                            }
+                        }
+                    }
+                }
+                if (ship.hull <= 0 && onKillActions != null)
+                {
+                    List<CardAction> list = Mutil.DeepCopy(onKillActions);
+                    foreach (CardAction item13 in list)
+                    {
+                        item13.canRunAfterKill = true;
+                    }
+                    c.QueueImmediate(list);
+                }
+                                
+                Part partAtLocalX = ship.GetPartAtLocalX(num.Value);
+                if (partAtLocalX != null)
+                {
+                    partAtLocalX.pulse = 1.0;
+                }
+
+                // laser effect
+                EffectSpawner.Cannon(
+                    g, 
+                    targetPlayer, 
+                    raycastResult, 
+                    new DamageDone
+                    {
+                        hullAmt = 0,
+                        hitHull = false,
+                        hitShield = true,
+                        poppedShield = false
+                    }, 
+                    isBeam
+                );
             }
             else
             {
@@ -46,9 +133,10 @@ namespace TuckerTheSaboteur.actions
                     ownedBrick.Pulse();
                     base.damage += 1; // not using GetDamage here, since it was already used. If we used it again, it'd apply overdrive (and similar effects) twice
                 }
+
+                base.Begin(g, s, c);
             }
 
-            base.Begin(g, s, c);
             blockStunSource = false;
         }
 
