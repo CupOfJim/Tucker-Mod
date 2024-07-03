@@ -23,9 +23,23 @@ namespace TuckerTheSaboteur.actions
             __result = 0;
         }
 
+        private int? CopypastedGetFromX(State s, Combat c)
+        {
+            if (fromX.HasValue)
+            {
+                return fromX;
+            }
+            int num = (targetPlayer ? c.otherShip : s.ship).parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
+            if (num != -1)
+            {
+                return num;
+            }
+            return null;
+        }
+
         public override void Begin(G g, State s, Combat c)
         {
-            int? num = GetFromX(s, c);
+            int? num = CopypastedGetFromX(s, c);
             RaycastResult raycastResult = CombatUtils.RaycastFromShipLocal(s, c, num.Value, targetPlayer);
             
             bool targetHasShield = false;
