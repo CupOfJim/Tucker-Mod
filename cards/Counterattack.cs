@@ -20,6 +20,7 @@ namespace TuckerTheSaboteur.cards
                         new AAttack ()
                         {
                             damage = GetDmg(s, 2),
+                            piercing = true,
                         }
                     };
                 case Upgrade.A:
@@ -28,6 +29,7 @@ namespace TuckerTheSaboteur.cards
                         new AAttack ()
                         {
                             damage = GetDmg(s, 3),
+                            piercing = true,
                         }
                     };
                 case Upgrade.B:
@@ -36,6 +38,7 @@ namespace TuckerTheSaboteur.cards
                         new AAttack ()
                         {
                             damage = GetDmg(s, 2),
+                            piercing = true,
                         }
                     };
             }
