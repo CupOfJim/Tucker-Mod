@@ -28,8 +28,12 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AMove ()
                         {
-                            dir = -2,
+                            dir = -1,
                             targetPlayer = false
+                        },
+                        new ADrawCard
+                        {
+                            count = 1
                         }
                     };
                 case Upgrade.B:
@@ -37,12 +41,8 @@ namespace TuckerTheSaboteur.cards
                     {
                         new AMove ()
                         {
-                            dir = -1,
+                            dir = -2,
                             targetPlayer = false
-                        },
-                        new ADrawCard
-                        {
-                            count = 1
                         }
                     };
             }
