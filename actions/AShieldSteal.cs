@@ -48,8 +48,6 @@ namespace TuckerTheSaboteur.actions
 
         public override List<Tooltip> GetTooltips(State s)
         {
-            var y = 0;
-            var x = 1 / y;
             return new()
             {
                 new Shockah.Kokoro.CustomTTGlossary
