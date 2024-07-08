@@ -179,6 +179,9 @@ namespace TuckerTheSaboteur.actions
             return false;
         }
 
+        private Spr GetSpr() { return (Spr)MainManifest.sprites["icons/Blunt_Attack"].Id; }
+        private Spr GetSprFail() { return (Spr)MainManifest.sprites["icons/Blunt_Attack_Fail"].Id; }
+
         public override Icon? GetIcon(State s)
         {
             int buff = 0;
@@ -190,10 +193,35 @@ namespace TuckerTheSaboteur.actions
 
             if (DoWeHaveCannonsThough(s))
             {
-                return new Icon((Spr)MainManifest.sprites["icons/Blunt_Attack"].Id, damage+buff, Colors.redd);
+                return new Icon(GetSpr(), damage+buff, Colors.redd);
             }
 
-            return new Icon((Spr)MainManifest.sprites["icons/Blunt_Attack_Fail"].Id, damage+buff, Colors.redd);
+            return new Icon(GetSprFail(), damage+buff, Colors.redd);
+        }
+
+        public override List<Tooltip> GetTooltips(State s)
+        {
+            int buff = 0;
+            var ownedBrick = s.EnumerateAllArtifacts().Where((Artifact a) => a.GetType() == typeof(Brick)).FirstOrDefault() as Brick;
+            if (ownedBrick != null)
+            {
+                buff = 1;
+            }
+
+            return new()
+            {
+                new Shockah.Kokoro.CustomTTGlossary
+                (
+                    Shockah.Kokoro.CustomTTGlossary.GlossaryType.action,
+                    () => GetSpr(),
+                    () => "Blunt Attack",
+                    () => "Deals {0} damage if the enemy has no shields (or temp shields) and is unarmored. Otherwise, deals 0.",
+                    new List<Func<object>>()
+                    {
+                        () => ""+(damage+buff),
+                    }
+                )
+            };
         }
     }
 }
