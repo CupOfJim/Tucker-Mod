@@ -20,7 +20,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new ABluntAttack ()
                         {
-                            damage = GetDmg(s, 2),
+                            damage = GetDmg(s, 4),
                             status = (Status)MainManifest.statuses["fuel_leak"].Id,
                             statusAmount = 1,
                         }
@@ -30,7 +30,7 @@ namespace TuckerTheSaboteur.cards
                     {
                         new ABluntAttack ()
                         {
-                            damage = GetDmg(s, 2),
+                            damage = GetDmg(s, 4),
                             status = (Status)MainManifest.statuses["fuel_leak"].Id,
                             statusAmount = 1,
                         }
@@ -40,13 +40,13 @@ namespace TuckerTheSaboteur.cards
                     {
                         new ABluntAttack ()
                         {
-                            damage = GetDmg(s, 1),
+                            damage = GetDmg(s, 2),
                             status = (Status)MainManifest.statuses["fuel_leak"].Id,
                             statusAmount = 1,
                         },
                         new AAttack ()
                         {
-                            damage = GetDmg(s, 1),
+                            damage = GetDmg(s, 2),
                             status = (Status)MainManifest.statuses["fuel_leak"].Id,
                             statusAmount = 1,
                         }
