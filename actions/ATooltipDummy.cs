@@ -132,7 +132,7 @@ namespace TuckerTheSaboteur.actions
                 if (offset == -1) tooltips.Add(new TTGlossary(MainManifest.glossary["ALeftShotOffsetSingle"].Head, 1));
             }
 
-            icons.Add(new Icon(Enum.Parse<Spr>("icons_attack"), aattack.damage, Colors.redd));
+            icons.Add(new Icon(Enum.Parse<Spr>(aattack.piercing ? "icons_attackPiercing" : "icons_attack"), aattack.damage, Colors.redd));
 
             if (aattack.stunEnemy || availableStunCharge > 0)
             {

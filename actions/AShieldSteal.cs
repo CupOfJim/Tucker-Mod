@@ -1,4 +1,5 @@
 ﻿using FSPRO;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,9 +39,29 @@ namespace TuckerTheSaboteur.actions
             });
         }
 
+        private Spr GetSpr() { return (Spr)MainManifest.sprites["icons/Shield_Steal"].Id; }
+
         public override Icon? GetIcon(State s)
         {
-            return new Icon((Spr)MainManifest.sprites["icons/Shield_Steal"].Id, amount, Colors.redd);
+            return new Icon(GetSpr(), amount, Colors.redd);
+        }
+
+        public override List<Tooltip> GetTooltips(State s)
+        {
+            return new()
+            {
+                new Shockah.Kokoro.CustomTTGlossary
+                (
+                    Shockah.Kokoro.CustomTTGlossary.GlossaryType.action,
+                    () => GetSpr(),
+                    () => "Shield Steal",
+                    () => "Removes up to {0} shield and temp shield from the enemy (preferring shield) and grants you an equal amount of temp shield.",
+                    new List<Func<object>>()
+                    {
+                        () => ""+amount,
+                    }
+                )
+            };
         }
     }
 }
