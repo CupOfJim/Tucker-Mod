@@ -56,7 +56,7 @@ namespace TuckerTheSaboteur.cards
         {
             return new()
             {
-                cost = 1,
+                cost = 0,
                 flippable = (upgrade == Upgrade.B ? true : false),
                 artTint = "ffffaa"
             };
