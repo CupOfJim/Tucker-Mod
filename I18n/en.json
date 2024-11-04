@@ -57,12 +57,12 @@
         },
         "ArtofWar": {
             "name": "ART OF WAR",
-            "description": "When out of shields, gain a <c=card>Counter-attack</c>."
+            "description": "When out of shields, gain a <c=card>Counter Attack</c>."
         }
     },
     "card": {
         "Counterattack": {
-            "name": "Counterattack"
+            "name": "Counter Attack"
         },
         "CounterfeitSwap": {
             "name": "Counterfeit Swap"
