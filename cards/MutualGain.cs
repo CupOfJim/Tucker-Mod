@@ -1,79 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Nickel;
 
-namespace TuckerTheSaboteur.cards
+namespace TuckerTheSaboteur.cards;
+
+public class MutualGain : Card, IRegisterableCard
 {
-    [CardMeta(rarity = Rarity.common, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class MutualGain : Card
-    {
-        private string ffffff;
-
-        public override List<CardAction> GetActions(State s, Combat c)
+    public static void Register(IModHelper helper) {
+        helper.Content.Cards.RegisterCard("MutualGain", new()
         {
-            if (this.upgrade == Upgrade.B)
+            CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+            Meta = new()
             {
-
-                return new()
-                {
-                    new AStatus() {
-                        //status = (Status)MainManifest.statuses["redraw"].Id, // Example of applying a custom status
-                        status = Enum.Parse<Status>("maxShield"),
-                        targetPlayer = false,
-                        statusAmount = 1,
-                        mode = AStatusMode.Add,
-                    },
-                    new AStatus() {
-                        status = Enum.Parse<Status>("shield"),
-                        targetPlayer = false,
-                        statusAmount = 3,
-                        mode = AStatusMode.Add,
-                    },
-                    new AStatus() {
-                        status = Enum.Parse<Status>("maxShield"),
-                        targetPlayer = true,
-                        statusAmount = 1,
-                        mode = AStatusMode.Add,
-                    },
-                    new AStatus() {
-                        status = Enum.Parse<Status>("shield"),
-                        targetPlayer = true,
-                        statusAmount = 3,
-                        mode = AStatusMode.Add,
-                    },
-
-                };
-            }
-            else
-            {
-                return new()
-                {
-                    new AStatus() {
-                        status = Enum.Parse<Status>("shield"),
-                        targetPlayer = false,
-                        statusAmount = 3,
-                        mode = AStatusMode.Add,
-                    },
-                    new AStatus() {
-                        status = Enum.Parse<Status>("shield"),
-                        targetPlayer = true,
-                        statusAmount = 3,
-                        mode = AStatusMode.Add,
-                    },
-
-                };
-            }
-        }
-
-        public override CardData GetData(State state)
-        {
-            return new()
-            {
-                cost = (upgrade == Upgrade.A ? 0 : 1),
-                artTint = "ffffaa"
-            };
-        }
+                deck = Main.Instance.TuckerDeck.Deck,
+                rarity = Rarity.common,
+                upgradesTo = [Upgrade.A, Upgrade.B]
+            },
+            Art = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/Mutual_Gain.png")).Sprite,
+            Name = Main.Instance.AnyLocalizations.Bind(["card", "MutualGain", "name"]).Localize
+        });
     }
+
+    public override List<CardAction> GetActions(State s, Combat c) => upgrade switch {
+        Upgrade.B => [
+            new AStatus {
+                status = Status.maxShield,
+                targetPlayer = false,
+                statusAmount = 1
+            },
+            new AStatus {
+                status = Status.shield,
+                targetPlayer = false,
+                statusAmount = 3
+            },
+            new AStatus {
+                status = Status.maxShield,
+                targetPlayer = true,
+                statusAmount = 1
+            },
+            new AStatus {
+                status = Status.shield,
+                targetPlayer = true,
+                statusAmount = 3
+            },
+        ],
+        _ => [
+            new AStatus {
+                status = Status.shield,
+                targetPlayer = false,
+                statusAmount = 3
+            },
+            new AStatus {
+                status = Status.shield,
+                targetPlayer = true,
+                statusAmount = 3
+            },
+        ]
+    };
+
+    public override CardData GetData(State state) => new() {
+        cost = upgrade == Upgrade.A ? 0 : 1,
+        artTint = "ffffaa"
+    };
 }

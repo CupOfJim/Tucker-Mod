@@ -1,34 +1,39 @@
-﻿using TuckerTheSaboteur.cards;
+﻿using System.Reflection;
+using HarmonyLib;
+using Nickel;
+using TuckerTheSaboteur.cards;
 
-namespace TuckertheSabotuer.Artifacts
+namespace TuckerTheSaboteur.Artifacts;
+
+[HarmonyPatch]
+public class ArtofWar : Artifact, IRegisterableArtifact
 {
 
-    [ArtifactMeta(pools = new ArtifactPool[] { ArtifactPool.Common })]
-    public class ArtofWar : Artifact
-    {
-        public int lastTurnShield = 0;
-        public override void OnCombatStart(State state, Combat combat)
-        {
-            lastTurnShield = 0;
-        }
-        public override void OnCombatEnd(State state)
-        {
-            lastTurnShield = 0;
-        }
+    public int lastShield = 0;
+	public static void Register(IModHelper helper)
+	{
+		helper.Content.Artifacts.RegisterArtifact("ArtofWar", new()
+		{
+			ArtifactType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+			Meta = new()
+			{
+				owner = Main.Instance.TuckerDeck.Deck,
+				pools = [ArtifactPool.Common]
+			},
+			Sprite = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/icons/Art_of_War.png")).Sprite,
+			Name = Main.Instance.AnyLocalizations.Bind(["artifact", "ArtofWar", "name"]).Localize,
+			Description = Main.Instance.AnyLocalizations.Bind(["artifact", "ArtofWar", "description"]).Localize
+		});
+	}
 
-        public override void OnTurnStart(State s, Combat c)
-        {
-            int playerShield = s.ship.Get(Enum.Parse<Status>("shield")) + s.ship.Get(Enum.Parse<Status>("tempShield"));
-            if (playerShield == 0 && lastTurnShield != 0)
-            {
-                c.QueueImmediate(new AAddCard()
-                {
-                    card = new Counterattack(),
-                    destination = Enum.Parse<CardDestination>("Hand")
-                });
-            }
-
-            lastTurnShield = playerShield;
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(Ship), nameof(Ship.NormalDamage))]
+    private static void DidShieldPop(Ship __instance, DamageDone __result, State s, Combat c, int incomingDamage, int? maybeWorldGridX, bool piercing) {
+        if (__result.poppedShield) {
+            c.QueueImmediate(new AAddCard {
+                card = new Counterattack(),
+                destination = CardDestination.Hand
+            });
         }
     }
 }

@@ -1,0 +1,20 @@
+{
+    "UniqueName": "TuckerTheSaboteur",
+    "DisplayName": "Tucker the Saboteur",
+    "Version": "2.0.0",
+    "RequiredApiVersion": "0.1.0",
+    "EntryPointAssembly": "TuckerMod.dll",
+    "LoadPhase": "AfterDbInit",
+    "Dependencies": [
+        {
+            "UniqueName": "TheJazMaster.MoreDifficulties",
+            "Version": "1.3.0",
+            "IsRequired": false
+        }
+    ],
+    "UpdateChecks": {
+        "GitHub": {
+            "Repository": "CupOfJim/Tucker-Mod"
+        }
+    }
+}

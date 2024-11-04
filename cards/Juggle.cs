@@ -3,55 +3,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TuckerMod.actions;
 using TuckerTheSaboteur.actions;
+using Nickel;
+using System.Reflection;
 
-namespace TuckerTheSaboteur.cards
+namespace TuckerTheSaboteur.cards;
+
+public class Juggle : Card, IRegisterableCard
 {
-    [CardMeta(rarity = Rarity.uncommon, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class Juggle : Card
-    {
-        public override List<CardAction> GetActions(State s, Combat c)
+    public static void Register(IModHelper helper) {
+        helper.Content.Cards.RegisterCard("Juggle", new()
         {
-            int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
-
-            List<CardAction> actions = new();
-            actions.Add(
-                new AAttack()
-                {
-                    fromX = cannonX + (base.upgrade == Upgrade.B ? 2 : -1),
-                    damage = GetDmg(s, 0),
-                    fast = true,
-                    moveEnemy = (base.upgrade == Upgrade.B ? -2 : 2),
-                }
-            );
-            actions.Add(
-                new AAttack()
-                {
-                    fromX = cannonX + (base.upgrade == Upgrade.B ? 0 : 1),
-                    damage = GetDmg(s, 0),
-                    fast = true,
-                    moveEnemy = -2,
-                }
-            );
-            actions.Add(
-                new AAttack()
-                {
-                    fromX = cannonX + (base.upgrade == Upgrade.B ? -2 : -1),
-                    damage = GetDmg(s, (base.upgrade == Upgrade.A ? 4 : 3)),
-                    fast = true,
-                }
-            );
-
-            return ATooltipDummy.BuildStandinsAndWrapRealActions(actions, s);
-        }
-        public override CardData GetData(State state)
-        {
-            return new()
+            CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+            Meta = new()
             {
-                cost = 2,
-                artTint = "ffffaa"
-            };
-        }
+                deck = Main.Instance.TuckerDeck.Deck,
+                rarity = Rarity.uncommon,
+                upgradesTo = [Upgrade.A, Upgrade.B]
+            },
+            Art = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/Juggle.png")).Sprite,
+            Name = Main.Instance.AnyLocalizations.Bind(["card", "Juggle", "name"]).Localize
+        });
     }
+
+    public override List<CardAction> GetActions(State s, Combat c) => [
+        new AAttack {
+            damage = GetDmg(s, 0),
+            fast = true,
+            moveEnemy = upgrade == Upgrade.B ? -2 : 2,
+        }.ApplyOffset(s, upgrade == Upgrade.B ? 2 : -1),
+        new AAttack {
+            damage = GetDmg(s, 0),
+            fast = true,
+            moveEnemy = -2,
+        }.ApplyOffset(s, upgrade == Upgrade.B ? 0 : 1),
+        new AAttack {
+            damage = GetDmg(s, upgrade == Upgrade.A ? 4 : 3),
+            fast = true,
+        }.ApplyOffset(s, upgrade == Upgrade.B ? -2 : -1)
+    ];
+
+    public override CardData GetData(State state) => new() {
+        cost = 2,
+        artTint = "ffffaa"
+    };
 }

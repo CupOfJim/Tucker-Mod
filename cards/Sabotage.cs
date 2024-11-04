@@ -4,55 +4,58 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TuckerTheSaboteur.actions;
+using Nickel;
+using System.Reflection;
 
-namespace TuckerTheSaboteur.cards
+namespace TuckerTheSaboteur.cards;
+
+public class Sabotage : Card, IRegisterableCard
 {
-    [CardMeta(rarity = Rarity.common, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class Sabotage : Card
-    {
-        public override List<CardAction> GetActions(State s, Combat c)
+    public static void Register(IModHelper helper) {
+        helper.Content.Cards.RegisterCard("Sabotage", new()
         {
-            Upgrade upgrade = base.upgrade;
-            switch (upgrade)
+            CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+            Meta = new()
             {
-                case Upgrade.None:
-                    return new List<CardAction> ()
-                    {
-                        new AShieldSteal() { amount = 2 },
-                    };
-                case Upgrade.A:
-                    return new List<CardAction> ()
-                    {
-                        new AShieldSteal() { amount = 2 },
-                        new AStatus()
-                        {
-                            status = Enum.Parse<Status>("shield"),
-                            statusAmount = -1,
-                            targetPlayer = false
-                        }
-                    };
-                case Upgrade.B:
-                    return new List<CardAction> ()
-                    {
-                        new AShieldSteal() { amount = 2 },
-                        new AStatus()
-                        {
-                            status = Enum.Parse<Status>("shield"),
-                            statusAmount = 1,
-                            targetPlayer = true
-                        }
-                    };
-            }
-
-            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
-        }
-        public override CardData GetData(State state)
-        {
-            return new()
-            {
-                cost = 1,
-                artTint = "ffffaa"
-            };
-        }
+                deck = Main.Instance.TuckerDeck.Deck,
+                rarity = Rarity.common,
+                upgradesTo = [Upgrade.A, Upgrade.B]
+            },
+            Art = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/Sabotage.png")).Sprite,
+            Name = Main.Instance.AnyLocalizations.Bind(["card", "Sabotage", "name"]).Localize
+        });
     }
+
+    public override List<CardAction> GetActions(State s, Combat c) => upgrade switch {
+        Upgrade.A => [
+            new AShieldSteal {
+                amount = 2
+            },
+            new AStatus {
+                status = Status.shield,
+                statusAmount = -1,
+                targetPlayer = false
+            }
+        ],
+        Upgrade.B => [
+            new AShieldSteal {
+                amount = 2
+            },
+            new AStatus {
+                status = Status.shield,
+                statusAmount = 1,
+                targetPlayer = true
+            }
+        ],
+        _ => [
+            new AShieldSteal {
+                amount = 2
+            },
+        ]
+    };
+
+    public override CardData GetData(State state) => new() {
+        cost = 1,
+        artTint = "ffffaa"
+    };
 }

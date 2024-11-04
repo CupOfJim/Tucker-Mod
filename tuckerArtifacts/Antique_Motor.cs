@@ -1,23 +1,35 @@
-﻿using TuckerTheSaboteur;
+﻿using System.Reflection;
+using Nickel;
 
-namespace TuckertheSabotuer.Artifacts
+namespace TuckerTheSaboteur.Artifacts;
+
+public class AntiqueMotor : Artifact, IRegisterableArtifact
 {
+	public static void Register(IModHelper helper)
+	{
+		helper.Content.Artifacts.RegisterArtifact("AntiqueMotor", new()
+		{
+			ArtifactType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+			Meta = new()
+			{
+				owner = Main.Instance.TuckerDeck.Deck,
+				pools = [ArtifactPool.Boss]
+			},
+			Sprite = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/icons/Antique_Motor.png")).Sprite,
+			Name = Main.Instance.AnyLocalizations.Bind(["artifact", "AntiqueMotor", "name"]).Localize,
+			Description = Main.Instance.AnyLocalizations.Bind(["artifact", "AntiqueMotor", "description"]).Localize
+		});
+	}
 
-    [ArtifactMeta(pools = new ArtifactPool[] { ArtifactPool.Boss })]
-    public class AntiqueMotor : Artifact
-    {
-        public override string Description() => "Gain 1 extra <c=energy>ENERGY</c> every turn. <c=downside>Gain 1</c> <c=status>FUEL LEAK</c> <c=downside>on the first turn.";
-        public override void OnCombatStart(State state, Combat combat)
-        {
-            this.Pulse();
-            combat.QueueImmediate(new AStatus()
-            {
-                targetPlayer = true,
-                status = (Status)MainManifest.statuses["fuel_leak"].Id,
-                statusAmount = 1
-            });
-        }
-        public override void OnReceiveArtifact(State state) => ++state.ship.baseEnergy;
-        public override void OnRemoveArtifact(State state) => --state.ship.baseEnergy;
+	public override void OnTurnStart(State state, Combat combat)
+	{
+        Pulse();
+        combat.QueueImmediate(new AStatus {
+            targetPlayer = true,
+            status = Main.Instance.FuelLeakStatus.Status,
+            statusAmount = 1
+        });
     }
+    public override void OnReceiveArtifact(State state) => ++state.ship.baseEnergy;
+    public override void OnRemoveArtifact(State state) => --state.ship.baseEnergy;
 }

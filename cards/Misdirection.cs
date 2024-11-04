@@ -1,65 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Nickel;
 
-namespace TuckerTheSaboteur.cards
+namespace TuckerTheSaboteur.cards;
+
+public class Misdirection : Card, IRegisterableCard
 {
-    [CardMeta(rarity = Rarity.uncommon, dontOffer = true, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class TuckerMisdirection : Card
-    {
-        public override List<CardAction> GetActions(State s, Combat c)
+    public static void Register(IModHelper helper) {
+        helper.Content.Cards.RegisterCard("Misdirection", new()
         {
-            Upgrade upgrade = base.upgrade;
-            switch (upgrade)
+            CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+            Meta = new()
             {
-                case Upgrade.None:
-                    return new List<CardAction>()
-                    {
-                        new AMove ()
-                        {
-                            dir = -1,
-                            targetPlayer = false
-                        }
-                    };
-                case Upgrade.A:
-                    return new List<CardAction>()
-                    {
-                        new AMove ()
-                        {
-                            dir = -1,
-                            targetPlayer = false
-                        },
-                        new ADrawCard
-                        {
-                            count = 1
-                        }
-                    };
-                case Upgrade.B:
-                    return new List<CardAction>()
-                    {
-                        new AMove ()
-                        {
-                            dir = -2,
-                            targetPlayer = false
-                        }
-                    };
-            }
-
-            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
-        }
-        public override CardData GetData(State state)
-        {
-            return new()
-            {
-                cost = 0,
-                temporary = true,
-                exhaust = true,
-                retain = true,
-                flippable = true,
-                artTint = "ffffaa"
-            };
-        }
+                deck = Main.Instance.TuckerDeck.Deck,
+                rarity = Rarity.uncommon,
+                upgradesTo = [Upgrade.A, Upgrade.B],
+                dontOffer = true
+            },
+            Art = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/Misdirection.png")).Sprite,
+            Name = Main.Instance.AnyLocalizations.Bind(["card", "Misdirection", "name"]).Localize
+        });
     }
+
+    public override List<CardAction> GetActions(State s, Combat c) => upgrade switch {
+        Upgrade.B => [
+            new AMove {
+                dir = -1,
+                targetPlayer = false
+            },
+            new ADrawCard
+            {
+                count = 1
+            }
+        ],
+        _ => [
+            new AMove {
+                dir = upgrade == Upgrade.A ? -2 : -1,
+                targetPlayer = false
+            },
+        ]
+    };
+
+    public override CardData GetData(State state) => new() {
+        cost = 0,
+        temporary = true,
+        exhaust = true,
+        retain = true,
+        flippable = true,
+        artTint = "ffffaa"
+    };
 }

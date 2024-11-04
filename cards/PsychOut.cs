@@ -5,54 +5,59 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using TuckerTheSaboteur.actions;
-using TuckerMod.actions;
+using Nickel;
+using System.Reflection;
 
-namespace TuckerTheSaboteur.cards
+namespace TuckerTheSaboteur.cards;
+
+public class PsychOut : Card, IRegisterableCard
 {
-    [CardMeta(rarity = Rarity.rare, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class PsychOut : Card
-    {
-        public override List<CardAction> GetActions(State s, Combat c)
+    public static void Register(IModHelper helper) {
+        helper.Content.Cards.RegisterCard("PsychOut", new()
         {
-            List<CardAction> actions = new()
+            CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+            Meta = new()
             {
-                new AStatus ()
-                {
-                    status = Enum.Parse<Status>("autododgeLeft"),
-                    statusAmount = base.upgrade == Upgrade.B ? 2 : 1,
-                    targetPlayer = false
-                },
-                new AAttack ()
-                {
-                    damage = GetDmg(s, 1),
-                    fast = base.upgrade == Upgrade.B
-                }
-            };
-
-            if (base.upgrade == Upgrade.B)
-            {
-                int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
-
-                actions.Add(
-                    new AAttack()
-                    {
-                        fromX = cannonX - 2,
-                        damage = GetDmg(s, 1),
-                        fast = true,
-                    }
-                );
-            }
-
-            return ATooltipDummy.BuildStandinsAndWrapRealActions(actions, s);
-        }
-        public override CardData GetData(State state)
-        {
-            return new()
-            {
-                cost = (upgrade == Upgrade.A ? 1 : 2),
-                exhaust = true,
-                artTint = "ffffaa"
-            };
-        }
+                deck = Main.Instance.TuckerDeck.Deck,
+                rarity = Rarity.rare,
+                upgradesTo = [Upgrade.A, Upgrade.B]
+            },
+            Art = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/Psych_Out.png")).Sprite,
+            Name = Main.Instance.AnyLocalizations.Bind(["card", "PsychOut", "name"]).Localize
+        });
     }
+
+    public override List<CardAction> GetActions(State s, Combat c) => upgrade switch {
+        Upgrade.B => [
+            new AStatus {
+                status = Status.autododgeLeft,
+                statusAmount = 2,
+                targetPlayer = false
+            },
+            new AAttack {
+                damage = GetDmg(s, 1),
+                fast = true
+            },
+            new AAttack {
+                damage = GetDmg(s, 1),
+                fast = true,
+            }.ApplyOffset(s, -2)
+        ],
+        _ => [
+            new AStatus {
+                status = Status.autododgeLeft,
+                statusAmount = 1,
+                targetPlayer = false
+            },
+            new AAttack {
+                damage = GetDmg(s, 1)
+            }
+        ]
+    };
+
+    public override CardData GetData(State state) => new() {
+        cost = upgrade == Upgrade.A ? 1 : 2,
+        exhaust = true,
+        artTint = "ffffaa"
+    };
 }

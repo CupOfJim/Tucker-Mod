@@ -1,21 +1,34 @@
-﻿using TuckerTheSaboteur;
+﻿using System.Reflection;
+using Nickel;
 
-namespace TuckertheSabotuer.Artifacts
+namespace TuckerTheSaboteur.Artifacts;
+
+public class HoloWall : Artifact, IRegisterableArtifact
 {
-
-    [ArtifactMeta(pools = new ArtifactPool[] { ArtifactPool.Common })]
-    public class HoloWall : Artifact
+	public static void Register(IModHelper helper)
+	{
+		helper.Content.Artifacts.RegisterArtifact("HoloWall", new()
+		{
+			ArtifactType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+			Meta = new()
+			{
+				owner = Main.Instance.TuckerDeck.Deck,
+				pools = [ArtifactPool.Common]
+			},
+			Sprite = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/icons/Holo-Wall.png")).Sprite,
+			Name = Main.Instance.AnyLocalizations.Bind(["artifact", "HoloWall", "name"]).Localize,
+			Description = Main.Instance.AnyLocalizations.Bind(["artifact", "HoloWall", "description"]).Localize
+		});
+	}
+    
+    public override string Description() => "Gain 3 <c=status>Buffer</c> on the first turn.";
+    public override void OnCombatStart(State state, Combat combat)
     {
-        public override string Description() => "Gain 3 <c=status>Buffer</c> on the first turn.";
-        public override void OnCombatStart(State state, Combat combat)
-        {
-            this.Pulse();
-            combat.QueueImmediate(new AStatus()
-            {
-                targetPlayer = true,
-                status = (Status)MainManifest.statuses["buffer"].Id,
-                statusAmount = 3
-            });
-        }
+        this.Pulse();
+        combat.QueueImmediate(new AStatus {
+            targetPlayer = true,
+            status = Main.Instance.BufferStatus.Status,
+            statusAmount = 3
+        });
     }
 }

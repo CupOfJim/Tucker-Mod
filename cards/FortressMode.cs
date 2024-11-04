@@ -1,78 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Nickel;
 
-namespace TuckerTheSaboteur.cards
+namespace TuckerTheSaboteur.cards;
+
+public class FortressMode : Card, IRegisterableCard
 {
-    [CardMeta(rarity = Rarity.rare, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class FortressMode : Card
-    {
-        public override List<CardAction> GetActions(State s, Combat c)
+    public static void Register(IModHelper helper) {
+        helper.Content.Cards.RegisterCard("FortressMode", new()
         {
-            Upgrade upgrade = base.upgrade;
-            switch (upgrade)
+            CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+            Meta = new()
             {
-                case Upgrade.None:
-                    return new List<CardAction> ()
-                    {
-                        new AStatus ()
-                        {
-                            status = (Status)MainManifest.statuses["buffer"].Id,
-                            statusAmount = 3,
-                            targetPlayer = true
-                        },
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 3,
-                            targetPlayer = true
-                        }
-                    };
-                case Upgrade.A:
-                    return new List<CardAction> ()
-                    {
-                        new AStatus ()
-                        {
-                            status = (Status)MainManifest.statuses["buffer"].Id,
-                            statusAmount = 4,
-                            targetPlayer = true
-                        },
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 3,
-                            targetPlayer = true
-                        }
-                    };
-                case Upgrade.B:
-                    return new List<CardAction> ()
-                    {
-                        new AStatus ()
-                        {
-                            status = (Status)MainManifest.statuses["buffer"].Id,
-                            statusAmount = 3,
-                            targetPlayer = true
-                        },
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("engineStall"),
-                            statusAmount = 3,
-                            targetPlayer = true
-                        }
-                    };
-            }
-
-            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
-        }
-        public override CardData GetData(State state)
-        {
-            return new()
-            {
-                cost = 2,
-                artTint = "ffffaa"
-            };
-        }
+                deck = Main.Instance.TuckerDeck.Deck,
+                rarity = Rarity.rare,
+                upgradesTo = [Upgrade.A, Upgrade.B]
+            },
+            Art = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/Fortress_Mode.png")).Sprite,
+            Name = Main.Instance.AnyLocalizations.Bind(["card", "FortressMode", "name"]).Localize
+        });
     }
+    
+    public override List<CardAction> GetActions(State s, Combat c) => upgrade switch {
+        Upgrade.B => [
+            new AStatus {
+                status = Main.Instance.BufferStatus.Status,
+                statusAmount = 3,
+                targetPlayer = true
+            },
+            new AStatus {
+                status = Status.engineStall,
+                statusAmount = 3,
+                targetPlayer = true
+            }
+        ],
+        _ => [
+            new AStatus {
+                status = Main.Instance.BufferStatus.Status,
+                statusAmount = upgrade == Upgrade.A ? 4 : 3,
+                targetPlayer = true
+            },
+            new AStatus {
+                status = Status.lockdown,
+                statusAmount = 3,
+                targetPlayer = true
+            }
+        ]
+    };
+
+    public override CardData GetData(State state) => new() {
+        cost = 2,
+        artTint = "ffffaa"
+    };
 }

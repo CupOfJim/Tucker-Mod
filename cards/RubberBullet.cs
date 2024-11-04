@@ -4,61 +4,50 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TuckerTheSaboteur.actions;
+using Nickel;
+using System.Reflection;
 
-namespace TuckerTheSaboteur.cards
+namespace TuckerTheSaboteur.cards;
+
+public class RubberBullet : Card, IRegisterableCard
 {
-    [CardMeta(rarity = Rarity.uncommon, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class RubberBullet : Card
-    {
-        public override List<CardAction> GetActions(State s, Combat c)
+    public static void Register(IModHelper helper) {
+        helper.Content.Cards.RegisterCard("RubberBullet", new()
         {
-            Upgrade upgrade = base.upgrade;
-            switch (upgrade)
+            CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+            Meta = new()
             {
-                case Upgrade.None:
-                    return new List<CardAction> ()
-                    {
-                        new ABluntAttack ()
-                        {
-                            damage = GetDmg(s, 2),
-                            stunEnemy = true
-                        }
-                    };
-                case Upgrade.A:
-                    return new List<CardAction> ()
-                    {
-                        new ABluntAttack ()
-                        {
-                            damage = GetDmg(s, 3),
-                            stunEnemy = true
-                        }
-                    };
-                case Upgrade.B:
-                    return new List<CardAction> ()
-                    {
-                        new AStatus()
-                        {
-                            status = Enum.Parse<Status>("shield"),
-                            statusAmount = -2,
-                            targetPlayer = false,
-                        },
-                        new ABluntAttack ()
-                        {
-                            damage = GetDmg(s, 2),
-                            stunEnemy = true
-                        }
-                    };
-            }
-
-            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
-        }
-        public override CardData GetData(State state)
-        {
-            return new()
-            {
-                cost = 1,
-                artTint = "ffffaa"
-            };
-        }
+                deck = Main.Instance.TuckerDeck.Deck,
+                rarity = Rarity.uncommon,
+                upgradesTo = [Upgrade.A, Upgrade.B]
+            },
+            Art = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/Rubber_Bullet.png")).Sprite,
+            Name = Main.Instance.AnyLocalizations.Bind(["card", "RubberBullet", "name"]).Localize
+        });
     }
+
+    public override List<CardAction> GetActions(State s, Combat c) => upgrade switch {
+        Upgrade.B => [
+            new AStatus {
+                status = Status.shield,
+                statusAmount = -2,
+                targetPlayer = false,
+            },
+            new ABluntAttack {
+                damage = GetDmg(s, 2),
+                stunEnemy = true
+            }
+        ],
+        _ => [
+            new ABluntAttack {
+                damage = GetDmg(s, upgrade == Upgrade.A ? 3 : 2),
+                stunEnemy = true
+            }
+        ]
+    };
+    
+    public override CardData GetData(State state) => new() {
+        cost = 1,
+        artTint = "ffffaa"
+    };
 }
