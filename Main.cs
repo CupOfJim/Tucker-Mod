@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Globalization;
+using TuckerTheSaboteur.actions;
 
 namespace TuckerTheSaboteur;
 
@@ -61,7 +62,7 @@ public class Main : SimpleMod
         Instance = this;
         Harmony = new(package.Manifest.UniqueName);
         Harmony.PatchAll();
-        
+
         AnyLocalizations = new JsonLocalizationProvider(
             tokenExtractor: new SimpleLocalizationTokenExtractor(),
             localeStreamFunction: locale => package.PackageRoot.GetRelativeFile($"I18n/{locale}.json").OpenRead()

@@ -1,18 +1,16 @@
-﻿using FMOD;
-using HarmonyLib;
-using System;
+﻿using HarmonyLib;
+using Nanoray.Shrike;
+using Nanoray.Shrike.Harmony;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TuckerTheSaboteur.Artifacts;
+using System.Reflection;
+using System.Reflection.Emit;
 
 namespace TuckerTheSaboteur.actions;
 
 [HarmonyPatch]
 public class ABluntAttack : AAttack
 {
-    static bool blockEffects = false;
+    internal static bool blockEffects = false;
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(Ship), nameof(Ship.Get))]
@@ -27,6 +25,37 @@ public class ABluntAttack : AAttack
     [HarmonyPatch(typeof(Ship), nameof(Ship.ModifyDamageDueToParts))]
     private static bool Ship_ModifyDamageDueToParts_Prefix(State s, Combat c, int incomingDamage, Part part, bool piercing = false) {
         return !blockEffects;
+    }
+
+    [HarmonyTranspiler]
+    [HarmonyPatch(typeof(AAttack), nameof(AAttack.Begin))]
+    private static IEnumerable<CodeInstruction> AAttack_Begin_Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il, MethodBase originalMethod) {
+        return new SequenceBlockMatcher<CodeInstruction>(instructions)
+            .Find(
+                ILMatches.Ldfld("bubbleShield")
+            )
+            .EncompassUntil(SequenceMatcherPastBoundsDirection.Before, [
+                ILMatches.Ldloc<RaycastResult>(originalMethod).CreateLdlocInstruction(out var ldLoc)
+            ])
+            .EncompassUntil(SequenceMatcherPastBoundsDirection.Before, [
+                ILMatches.Ldarg(3).Anchor(out var anchor)
+            ])
+            .EncompassUntil(SequenceMatcherPastBoundsDirection.After, [
+                ILMatches.Br.GetBranchTarget(out var branch)
+            ])
+            .Anchors()
+            .PointerMatcher(anchor)
+            .Insert(SequenceMatcherPastBoundsDirection.After, SequenceMatcherInsertionResultingBounds.IncludingInsertion, new List<CodeInstruction> {
+                ldLoc,
+                new(OpCodes.Call, AccessTools.DeclaredMethod(MethodBase.GetCurrentMethod()!.DeclaringType, nameof(BlockEffects))),
+                new(OpCodes.Brtrue, branch.Value),
+                new(OpCodes.Ldarg_3)
+            })
+            .AllElements();
+    }
+
+    private static bool BlockEffects(Combat c, RaycastResult result) {
+        return c.stuff[result.worldX].bubbleShield && blockEffects;
     }
 
     private int? CopypastedGetFromX(State s, Combat c)

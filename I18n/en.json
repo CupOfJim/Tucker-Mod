@@ -8,8 +8,8 @@
     },
     "action": {
         "bluntAttack": {
-            "name": "Reversible move",
-            "description": "Completely negated by shields. This goes for effects it would otherwise apply, as well."
+            "name": "Blunt attack",
+            "description": "Damage and effects are <c=downside>completely negated by shields.</c>"
         },
         "shieldSteal": {
             "name": "Shield steal",
@@ -31,11 +31,11 @@
     "status": {
         "FuelLeak": {
             "name": "Fuel Leak",
-            "description": "Take {0} damage for every space moved. Decreases by 1 at the end of each turn."
+            "description": "Take {0} damage for every space moved. <c=downside>Decreases by 1 at the end of each turn.</c>"
         },
         "Buffer": {
             "name": "Buffer",
-            "description": "Gain {0} <c=status>temp shield</c> each turn. <c=downside>Decreases by 1 afterwards."
+            "description": "Gain {0} <c=status>temp shield</c> each turn. <c=downside>Decreases by 1 afterwards.</c>"
         }
     },
     "artifact": {
