@@ -12,15 +12,21 @@ namespace TuckerTheSaboteur.actions;
 [HarmonyPatch]
 public class ABluntAttack : AAttack
 {
-    static bool blockStunSource = false;
+    static bool blockEffects = false;
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(Ship), nameof(Ship.Get))]
     public static void HarmonyPostfix_BluntAttackBlockStunCharge(ref int __result, Status name)
     {
-        if (!blockStunSource) return;
+        if (!blockEffects) return;
         if (name != Status.stunCharge) return;
         __result = 0;
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(Ship), nameof(Ship.ModifyDamageDueToParts))]
+    private static bool Ship_ModifyDamageDueToParts_Prefix(State s, Combat c, int incomingDamage, Part part, bool piercing = false) {
+        return !blockEffects;
     }
 
     private int? CopypastedGetFromX(State s, Combat c)
@@ -49,9 +55,9 @@ public class ABluntAttack : AAttack
             brittle = false;
             armorize = false;
         }
-        blockStunSource = true;
+        blockEffects = true;
         base.Begin(g, s, c);
-        blockStunSource = false;
+        blockEffects = false;
     }
 
     private static Spr GetSpr() => Main.Instance.BluntAttackSprite;
