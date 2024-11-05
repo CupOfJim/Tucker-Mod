@@ -29,6 +29,8 @@ public class ArtofWar : Artifact, IRegisterableArtifact
     [HarmonyPostfix]
     [HarmonyPatch(typeof(Ship), nameof(Ship.NormalDamage))]
     private static void DidShieldPop(Ship __instance, DamageDone __result, State s, Combat c, int incomingDamage, int? maybeWorldGridX, bool piercing) {
+		if (!__instance.isPlayerShip) return;
+		
         foreach (Artifact item in s.EnumerateAllArtifacts())  {
             if (item is ArtofWar) {
                 if (__result.poppedShield) {
