@@ -38,7 +38,7 @@ public class Juggle : Card, IRegisterableCard
             moveEnemy = -2,
         }.ApplyOffset(s, upgrade == Upgrade.B ? 0 : 1),
         new AAttack {
-            damage = GetDmg(s, upgrade == Upgrade.A ? 4 : 3),
+            damage = GetDmg(s, upgrade == Upgrade.A ? 5 : 3),
             fast = true,
         }.ApplyOffset(s, upgrade == Upgrade.B ? -2 : -1)
     ];

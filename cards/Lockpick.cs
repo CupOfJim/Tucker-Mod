@@ -38,7 +38,7 @@ public class Lockpick : Card, IRegisterableCard
             targetPlayer = true
         },
         new AStatus {
-            status = upgrade == Upgrade.A ? Status.shield : Status.tempShield,
+            status = upgrade == Upgrade.B ? Status.shield : Status.tempShield,
             statusAmount = 1,
             targetPlayer = true
         }

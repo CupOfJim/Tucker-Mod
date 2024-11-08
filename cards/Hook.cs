@@ -29,6 +29,7 @@ public class Hook : Card, IRegisterableCard
     public override List<CardAction> GetActions(State s, Combat c) => [
         new AAttack {
             damage = GetDmg(s, 2),
+            piercing = true,
             moveEnemy = 2,
         }.ApplyOffset(s, upgrade == Upgrade.B ? -1 : -3)
     ];
