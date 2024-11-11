@@ -26,6 +26,16 @@
             },
             "left": "left",
             "right": "right"
+        },
+        "enemyMove": {
+            "name": {
+                "left": "Enemy move left",
+                "right": "Enemy move right"
+            },
+            "description": {
+                "left": "The enemy will instantly move {{Amount}} spaces to the <c=keyword>LEFT</c>.",
+                "right": "The enemy will instantly move {{Amount}} spaces to the <c=keyword>RIGHT</c>."
+            }
         }
     },
     "status": {
