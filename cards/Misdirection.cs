@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Nickel;
+using TuckerTheSaboteur.Actions;
 
 namespace TuckerTheSaboteur.cards;
 
@@ -28,7 +29,7 @@ public class Misdirection : Card, IRegisterableCard
 
     public override List<CardAction> GetActions(State s, Combat c) => upgrade switch {
         Upgrade.B => [
-            new AMove {
+            new AMoveImproved {
                 dir = -1,
                 targetPlayer = false
             },
@@ -38,7 +39,7 @@ public class Misdirection : Card, IRegisterableCard
             }
         ],
         _ => [
-            new AMove {
+            new AMoveImproved {
                 dir = upgrade == Upgrade.A ? -2 : -1,
                 targetPlayer = false
             },

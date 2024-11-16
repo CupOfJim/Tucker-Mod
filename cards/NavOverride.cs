@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Nickel;
+using TuckerTheSaboteur.Actions;
 
 namespace TuckerTheSaboteur.cards;
 
@@ -34,7 +35,7 @@ public class NavOverride : Card, IRegisterableCard
             }
         ],
         _ => [
-            new AMove {
+            new AMoveImproved {
                 dir = -1,
                 targetPlayer = false
             },
