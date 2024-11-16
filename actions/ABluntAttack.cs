@@ -76,16 +76,19 @@ public class ABluntAttack : AAttack
     {
         Ship ship = targetPlayer ? s.ship : c.otherShip;
         if (ship.Get(Status.shield) > 0 || ship.Get(Status.tempShield) > 0) {
-            damage = 0;
-            status = null;
-            stunEnemy = false;
-            moveEnemy = 0;
-            weaken = false;
-            brittle = false;
-            armorize = false;
+            blockEffects = true;
+            var lameAttack = new AAttack {
+                damage = 0,
+                targetPlayer = targetPlayer,
+                fast = fast
+            };
+            if (Main.Instance.Helper.ModData.TryGetModData(this, OffsetAttackController.key, out int offset)) {
+                lameAttack.ApplyOffset(s, offset);
+            }
+            lameAttack.Begin(g, s, c);
+        } else {
+            base.Begin(g, s, c);
         }
-        blockEffects = true;
-        base.Begin(g, s, c);
         blockEffects = false;
     }
 
