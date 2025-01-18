@@ -45,7 +45,7 @@
         },
         "Buffer": {
             "name": "Buffer",
-            "description": "Gain {0} <c=status>temp shield</c> each turn. <c=downside>Decreases by 1 afterwards.</c>"
+            "description": "Gain {0} <c=status>TEMP SHIELD</c> each turn. <c=downside>Decreases by 1 afterwards.</c>"
         }
     },
     "artifact": {

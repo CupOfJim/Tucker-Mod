@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using HarmonyLib;
 using Nickel;
 using TuckerTheSaboteur.cards;
@@ -42,4 +43,10 @@ public class ArtofWar : Artifact, IRegisterableArtifact
             }
         }
     }
+
+	public override List<Tooltip>? GetExtraTooltips() => [
+		new TTCard {
+			card = new Counterattack()
+		}
+	];
 }

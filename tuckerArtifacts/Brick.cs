@@ -35,4 +35,8 @@ public class Brick : Artifact, IRegisterableArtifact {
 			}
 		}
 	}
+
+	public override List<Tooltip>? GetExtraTooltips() => new ABluntAttack {
+		damage = 1
+	}.GetTooltips(DB.fakeState);
 }

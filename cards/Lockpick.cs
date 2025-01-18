@@ -46,7 +46,7 @@ public class Lockpick : Card, IRegisterableCard
 
     public override CardData GetData(State state) => new() {
         cost = 0,
-        retain = upgrade == Upgrade.B,
+        retain = upgrade == Upgrade.A,
         artTint = "ffffaa"
     };
 }

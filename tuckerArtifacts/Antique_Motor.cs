@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using Nickel;
 
 namespace TuckerTheSaboteur.Artifacts;
@@ -32,4 +33,6 @@ public class AntiqueMotor : Artifact, IRegisterableArtifact
     }
     public override void OnReceiveArtifact(State state) => ++state.ship.baseEnergy;
     public override void OnRemoveArtifact(State state) => --state.ship.baseEnergy;
+
+	public override List<Tooltip>? GetExtraTooltips() => StatusMeta.GetTooltips(Main.Instance.FuelLeakStatus.Status, 1);
 }

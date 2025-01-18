@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using Nickel;
 
 namespace TuckerTheSaboteur.Artifacts;
@@ -24,11 +25,13 @@ public class HoloWall : Artifact, IRegisterableArtifact
     public override string Description() => "Gain 3 <c=status>Buffer</c> on the first turn.";
     public override void OnCombatStart(State state, Combat combat)
     {
-        this.Pulse();
+        Pulse();
         combat.QueueImmediate(new AStatus {
             targetPlayer = true,
             status = Main.Instance.BufferStatus.Status,
             statusAmount = 3
         });
     }
+
+	public override List<Tooltip>? GetExtraTooltips() => StatusMeta.GetTooltips(Main.Instance.BufferStatus.Status, 3);
 }
