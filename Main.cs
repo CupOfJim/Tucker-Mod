@@ -126,45 +126,26 @@ public class Main : SimpleMod
 			Starters = new StarterDeck {
 				cards = [ new Sabotage(), new DirectHit() ]
 			},
-			NeutralAnimation = new()
-			{
-				CharacterType = TuckerDeck.Deck.Key(),
-				LoopTag = "neutral",
-				Frames = [
-					TuckerPortrait
-				]
-			},
-			MiniAnimation = new()
-			{
-				CharacterType = TuckerDeck.Deck.Key(),
-				LoopTag = "mini",
-				Frames = [
-					TuckerPortraitMini
-				]
-			}
+			NeutralAnimation = RegisterAnimation(helper, "Neutral").Configuration,
+			MiniAnimation = RegisterAnimation(helper, "Mini").Configuration,
 		});
         MoreDifficultiesApi?.RegisterAltStarters(TuckerDeck.Deck, new() { cards = [new QuantumCannon(), new MutualGain()] });
 
-		RegisterAnimation(helper, "Neutral");
 		RegisterAnimation(helper, "Squint");
 		RegisterAnimation(helper, "Gameover");
     }
 
-    private void RegisterAnimation(IModHelper helper, string name)
+    private ICharacterAnimationEntryV2 RegisterAnimation(IModHelper helper, string name)
     {
-        var files = Instance.Package.PackageRoot.GetRelative($"sprites/character").AsDirectory?.GetFilesRecursively().Where(f => f.Name.EndsWith(".png") && f.Name.Contains(name, StringComparison.CurrentCultureIgnoreCase));
-		List<Spr> sprites = [];
-		if (files != null) {
-			foreach (IFileInfo file in files) {
-				sprites.Add(Instance.Helper.Content.Sprites.RegisterSprite(file).Sprite);
-			}
-		}
-		
-		helper.Content.Characters.V2.RegisterCharacterAnimation(name, new()
+        return helper.Content.Characters.V2.RegisterCharacterAnimation(name, new()
 		{
 			CharacterType = TuckerDeck.Deck.Key(),
 			LoopTag = name.ToLower(),
-			Frames = sprites
+			Frames = Enumerable.Range(1, 100)
+				.Select(i => Instance.Package.PackageRoot.GetRelativeFile($"Sprites/character/tucker_{name.ToLower()}_{i}.png"))
+				.TakeWhile(f => f.Exists)
+				.Select(f => helper.Content.Sprites.RegisterSprite(f).Sprite)
+				.ToList()
 		});
     }
 }

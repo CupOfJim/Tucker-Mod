@@ -24,7 +24,7 @@ public class KnowThyEnemy : Card, IRegisterableCard
                 rarity = Rarity.rare,
                 upgradesTo = [Upgrade.A, Upgrade.B]
             },
-            Art = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/Know_Thy_Enemy.png")).Sprite,
+            Art = topSprite,
             Name = Main.Instance.AnyLocalizations.Bind(["card", "KnowThyEnemy", "name"]).Localize
         });
     }

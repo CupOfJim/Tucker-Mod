@@ -1,7 +1,7 @@
 {
     "UniqueName": "TuckerTheSaboteur",
     "DisplayName": "Tucker the Saboteur",
-    "Version": "2.0.0",
+    "Version": "2.0.1",
     "RequiredApiVersion": "0.1.0",
     "EntryPointAssembly": "TuckerMod.dll",
     "LoadPhase": "AfterDbInit",
