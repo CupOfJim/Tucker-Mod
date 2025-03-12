@@ -40,13 +40,13 @@ public class KnowThyEnemy : Card, IRegisterableCard
             disabled = flipped
         } : new AStatus {
             status = Status.shield,
-            statusAmount = -2,
+            statusAmount = upgrade == Upgrade.B ? -3 : -2,
             targetPlayer = false,
             disabled = flipped,
         },
         new ADummyAction(),
         new ABluntAttack {
-            damage = GetDmg(s, upgrade == Upgrade.B ? 6 : 5),
+            damage = GetDmg(s, upgrade == Upgrade.B ? 7 : 5),
             disabled = !flipped,
         }
     ];
