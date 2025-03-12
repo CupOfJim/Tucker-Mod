@@ -1,9 +1,11 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.Loader;
 
-namespace shockah;
+namespace TuckerTheSaboteur;
 
 // thanks Shockah
 public static class ReflectionExt

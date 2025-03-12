@@ -1,59 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using Nickel;
 
-namespace TuckerTheSaboteur.cards
+namespace TuckerTheSaboteur.cards;
+
+public class Counterattack : Card, IRegisterableCard
 {
-    [CardMeta(rarity = Rarity.common, dontOffer = true, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class Counterattack : Card
-    {
-        public override List<CardAction> GetActions(State s, Combat c)
+    public static void Register(IModHelper helper) {
+        helper.Content.Cards.RegisterCard("Counterattack", new()
         {
-            Upgrade upgrade = base.upgrade;
-            switch (upgrade)
+            CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+            Meta = new()
             {
-                case Upgrade.None:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack ()
-                        {
-                            damage = GetDmg(s, 2),
-                            piercing = true,
-                        }
-                    };
-                case Upgrade.A:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack ()
-                        {
-                            damage = GetDmg(s, 3),
-                            piercing = true,
-                        }
-                    };
-                case Upgrade.B:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack ()
-                        {
-                            damage = GetDmg(s, 2),
-                            piercing = true,
-                        }
-                    };
-            }
+                deck = Main.Instance.TuckerDeck.Deck,
+                rarity = Rarity.common,
+                upgradesTo = [Upgrade.A, Upgrade.B],
+                dontOffer = true
+            },
+            Art = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/Counter-attack.png")).Sprite,
+            Name = Main.Instance.AnyLocalizations.Bind(["card", "Counterattack", "name"]).Localize
+        });
+    }
+    
+    public override List<CardAction> GetActions(State s, Combat c) => [
+        new AAttack {
+            damage = GetDmg(s, upgrade == Upgrade.A ? 3 : 2),
+            piercing = true,
+        }
+    ];
 
-            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
-        }
-        public override CardData GetData(State state)
+    public override CardData GetData(State state)
+    {
+        return new()
         {
-            return new()
-            {
-                cost = 0,
-                temporary = true,
-                exhaust = (upgrade == Upgrade.B ? false : true),
-                artTint = "ffffaa"
-            };
-        }
+            cost = 0,
+            temporary = true,
+            exhaust = upgrade != Upgrade.B,
+            artTint = "ffffaa"
+        };
     }
 }

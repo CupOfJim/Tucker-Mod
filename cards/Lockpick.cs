@@ -2,97 +2,51 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Nickel;
 
-namespace TuckerTheSaboteur.cards
+namespace TuckerTheSaboteur.cards;
+
+public class Lockpick : Card, IRegisterableCard
 {
-    [CardMeta(rarity = Rarity.uncommon, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class Lockpick : Card
-    {
-        public override List<CardAction> GetActions(State s, Combat c)
+    public static void Register(IModHelper helper) {
+        helper.Content.Cards.RegisterCard("Lockpick", new()
         {
-            Upgrade upgrade = base.upgrade;
-            switch (upgrade)
+            CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+            Meta = new()
             {
-                case Upgrade.None:
-                    return new List<CardAction> ()
-                    {
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = -2,
-                            targetPlayer = true
-                        },
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("engineStall"),
-                            statusAmount = -2,
-                            targetPlayer = true
-                        },
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("tempShield"),
-                            statusAmount = 1,
-                            targetPlayer = true
-                        }
-                    };
-                case Upgrade.A:
-                    return new List<CardAction> ()
-                    {
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = -2,
-                            targetPlayer = true
-                        },
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("engineStall"),
-                            statusAmount = -2,
-                            targetPlayer = true
-                        },
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("tempShield"),
-                            statusAmount = 1,
-                            targetPlayer = true
-                        }
-                    };
-                case Upgrade.B:
-                    return new List<CardAction> ()
-                    {
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = -2,
-                            targetPlayer = true
-                        },
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("engineStall"),
-                            statusAmount = -2,
-                            targetPlayer = true
-                        },
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("shield"),
-                            statusAmount = 1,
-                            targetPlayer = true
-                        }
-                    };
-            }
-
-            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
-        }
-        public override CardData GetData(State state)
-        {
-            return new()
-            {
-                cost = 0,
-                retain = (upgrade == Upgrade.A ? true : false),
-                artTint = "ffffaa"
-            };
-        }
+                deck = Main.Instance.TuckerDeck.Deck,
+                rarity = Rarity.uncommon,
+                upgradesTo = [Upgrade.A, Upgrade.B]
+            },
+            Art = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/Lockpick.png")).Sprite,
+            Name = Main.Instance.AnyLocalizations.Bind(["card", "Lockpick", "name"]).Localize
+        });
     }
+
+    public override List<CardAction> GetActions(State s, Combat c) => [
+        new AStatus {
+            status = Status.lockdown,
+            statusAmount = -2,
+            targetPlayer = true
+        },
+        new AStatus {
+            status = Status.engineStall,
+            statusAmount = -2,
+            targetPlayer = true
+        },
+        new AStatus {
+            status = upgrade == Upgrade.B ? Status.shield : Status.tempShield,
+            statusAmount = 1,
+            targetPlayer = true
+        }
+    ];
+
+    public override CardData GetData(State state) => new() {
+        cost = 0,
+        retain = upgrade == Upgrade.A,
+        artTint = "ffffaa"
+    };
 }

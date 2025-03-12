@@ -1,100 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TuckerTheSaboteur.actions;
+using Nickel;
+using System.Reflection;
 
-namespace TuckerTheSaboteur.cards
+namespace TuckerTheSaboteur.cards;
+
+public class KnowThyEnemy : Card, IRegisterableCard
 {
-    [CardMeta(rarity = Rarity.rare, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class KnowThyEnemy : Card
-    {
-        public override List<CardAction> GetActions(State s, Combat c)
-        {
-            Upgrade upgrade = base.upgrade;
-            switch (upgrade)
-            {
-                case Upgrade.None:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack
-                        {
-                            damage = GetDmg(s, 2),
-                            piercing = true,
-                            disabled = flipped,
-                        },
-                        new AStatus()
-                        {
-                            status = Enum.Parse<Status>("shield"),
-                            statusAmount = -2,
-                            targetPlayer = false,
-                            disabled = flipped,
-                        },
-                        new ADummyAction(),
-                        new ABluntAttack ()
-                        {
-                            damage = GetDmg(s, 5),
-                            disabled = !flipped,
-                        }
-                    };
-                case Upgrade.A:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack
-                        {
-                            damage = GetDmg(s, 3),
-                            piercing = true,
-                            disabled = flipped,
-                        },
-                        new AShieldSteal()
-                        {
-                            amount = 2,
-                            disabled = flipped,
-                        },
-                        new ADummyAction(),
-                        new ABluntAttack ()
-                        {
-                            damage = GetDmg(s, 5),
-                            disabled = !flipped,
-                        }
-                    };
-                case Upgrade.B:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack
-                        {
-                            damage = GetDmg(s, 2),
-                            piercing = true,
-                            disabled = flipped,
-                        },
-                        new AStatus()
-                        {
-                            status = Enum.Parse<Status>("shield"),
-                            statusAmount = -3,
-                            targetPlayer = false,
-                            disabled = flipped,
-                        },
-                        new ADummyAction(),
-                        new ABluntAttack ()
-                        {
-                            damage = GetDmg(s, 6),
-                            disabled = !flipped,
-                        }
-                    };
-            }
+    static Spr topSprite;
+    static Spr bottomSprite;
+    
+    public static void Register(IModHelper helper) {
+        topSprite = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/MiningDrill_Top.png")).Sprite;
+        bottomSprite = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/MiningDrill_Bottom.png")).Sprite;
 
-            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
-        }
-        public override CardData GetData(State state)
+        helper.Content.Cards.RegisterCard("KnowThyEnemy", new()
         {
-            return new()
+            CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+            Meta = new()
             {
-                cost = 2,
-                floppable = true,
-                art = flipped ? (Spr)MainManifest.sprites["cards/MiningDrill_Bottom"].Id : (Spr)MainManifest.sprites["cards/MiningDrill_Top"].Id,
-                artTint = "ffffff"
-            };
-        }
+                deck = Main.Instance.TuckerDeck.Deck,
+                rarity = Rarity.rare,
+                upgradesTo = [Upgrade.A, Upgrade.B]
+            },
+            Art = topSprite,
+            Name = Main.Instance.AnyLocalizations.Bind(["card", "KnowThyEnemy", "name"]).Localize
+        });
     }
+
+    public override List<CardAction> GetActions(State s, Combat c) => [
+        new AAttack {
+            damage = GetDmg(s, upgrade == Upgrade.A ? 3 : 2),
+            piercing = true,
+            disabled = flipped,
+        },
+        upgrade == Upgrade.A ? new AShieldSteal {
+            amount = 2,
+            disabled = flipped
+        } : new AStatus {
+            status = Status.shield,
+            statusAmount = upgrade == Upgrade.B ? -3 : -2,
+            targetPlayer = false,
+            disabled = flipped,
+        },
+        new ADummyAction(),
+        new ABluntAttack {
+            damage = GetDmg(s, upgrade == Upgrade.B ? 7 : 5),
+            disabled = !flipped,
+        }
+    ];
+    
+    public override CardData GetData(State state) => new()
+    {
+        cost = 2,
+        floppable = true,
+        art = flipped ? bottomSprite : topSprite,
+        artTint = "ffffff"
+    };
 }

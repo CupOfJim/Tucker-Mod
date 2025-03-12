@@ -4,28 +4,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TuckerTheSaboteur.actions;
+using Nickel;
+using System.Reflection;
 
-namespace TuckerTheSaboteur.cards
+namespace TuckerTheSaboteur.cards;
+
+public class TractorBeam : Card, IRegisterableCard
 {
-    [CardMeta(rarity = Rarity.common, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class TractorBeam : Card
-    {
-        public override List<CardAction> GetActions(State s, Combat c)
+    public static void Register(IModHelper helper) {
+        helper.Content.Cards.RegisterCard("TractorBeam", new()
         {
-            return new()
+            CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+            Meta = new()
             {
-               new AShieldSteal() { amount = 2 }
-            };
-        }
-        public override CardData GetData(State state)
-        {
-            return new()
-            {
-                cost = 0,
-                exhaust = (upgrade == Upgrade.A ? false : true),
-                buoyant = (upgrade == Upgrade.B ? true : false),
-                artTint = "ffffaa"
-            };
-        }
+                deck = Main.Instance.TuckerDeck.Deck,
+                rarity = Rarity.common,
+                upgradesTo = [Upgrade.A, Upgrade.B]
+            },
+            Art = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/Tractor_Beam.png")).Sprite,
+            Name = Main.Instance.AnyLocalizations.Bind(["card", "TractorBeam", "name"]).Localize
+        });
     }
+
+    public override List<CardAction> GetActions(State s, Combat c) => [
+        new AShieldSteal {
+            amount = 2
+        }
+    ];
+    public override CardData GetData(State state) => new() {
+        cost = 0,
+        exhaust = upgrade != Upgrade.A,
+        buoyant = upgrade == Upgrade.B,
+        artTint = "ffffaa"
+    };
 }

@@ -4,69 +4,56 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TuckerTheSaboteur.actions;
+using Nickel;
+using System.Reflection;
 
-namespace TuckerTheSaboteur.cards
+namespace TuckerTheSaboteur.cards;
+
+public class Cripple : Card, IRegisterableCard
 {
-    [CardMeta(rarity = Rarity.rare, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class Cripple : Card
-    {
-        public override List<CardAction> GetActions(State s, Combat c)
+    public static void Register(IModHelper helper) {
+        helper.Content.Cards.RegisterCard("Cripple", new()
         {
-            Upgrade upgrade = base.upgrade;
-            switch (upgrade)
+            CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+            Meta = new()
             {
-                case Upgrade.None:
-                    return new List<CardAction> ()
-                    {
-                        new ABluntAttack ()
-                        {
-                            damage = GetDmg(s, 4),
-                            status = (Status)MainManifest.statuses["fuel_leak"].Id,
-                            statusAmount = 1,
-                        }
-                    };
-                case Upgrade.A:
-                    return new List<CardAction> ()
-                    {
-                        new ABluntAttack ()
-                        {
-                            damage = GetDmg(s, 4),
-                            status = (Status)MainManifest.statuses["fuel_leak"].Id,
-                            statusAmount = 1,
-                        }
-                    };
-                case Upgrade.B:
-                    return new List<CardAction> ()
-                    {
-                        new ABluntAttack ()
-                        {
-                            damage = GetDmg(s, 2),
-                            status = (Status)MainManifest.statuses["fuel_leak"].Id,
-                            statusAmount = 1,
-                        },
-                        new AAttack ()
-                        {
-                            damage = GetDmg(s, 2),
-                            status = (Status)MainManifest.statuses["fuel_leak"].Id,
-                            statusAmount = 1,
-                        }
-                    };
-            }
-
-            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
-        }
-        public override CardData GetData(State state)
-        {
-            return new()
-            {
-                cost = upgrade switch
-                {
-                    Upgrade.None => 3,
-                    Upgrade.A => 2,
-                    Upgrade.B => 4,
-                },
-                artTint = "ffffaa"
-            };
-        }
+                deck = Main.Instance.TuckerDeck.Deck,
+                rarity = Rarity.rare,
+                upgradesTo = [Upgrade.A, Upgrade.B]
+            },
+            Art = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/Cripple.png")).Sprite,
+            Name = Main.Instance.AnyLocalizations.Bind(["card", "Cripple", "name"]).Localize
+        });
     }
+
+    public override List<CardAction> GetActions(State s, Combat c) => upgrade switch {
+        Upgrade.B => [
+            new ABluntAttack {
+                damage = GetDmg(s, 2),
+                status = Main.Instance.FuelLeakStatus.Status,
+                statusAmount = 1,
+            },
+            new AAttack {
+                damage = GetDmg(s, 2),
+                status = Main.Instance.FuelLeakStatus.Status,
+                statusAmount = 1,
+            }
+        ],
+        _ => [
+            new ABluntAttack {
+                damage = GetDmg(s, 4),
+                status = Main.Instance.FuelLeakStatus.Status,
+                statusAmount = 1,
+            }
+        ]
+    };
+
+    public override CardData GetData(State state) => new() {
+        cost = upgrade switch {
+            Upgrade.A => 2,
+            Upgrade.B => 4,
+            _ => 3,
+        },
+        artTint = "ffffaa"
+    };
 }

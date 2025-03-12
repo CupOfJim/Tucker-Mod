@@ -4,59 +4,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TuckerTheSaboteur.actions;
+using Nickel;
+using System.Reflection;
 
-namespace TuckerTheSaboteur.cards
+namespace TuckerTheSaboteur.cards;
+
+public class Curveball : Card, IRegisterableCard
 {
-    [CardMeta(rarity = Rarity.common, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class Curveball : Card
-    {
-        public override List<CardAction> GetActions(State s, Combat c)
+    public static void Register(IModHelper helper) {
+        helper.Content.Cards.RegisterCard("Curveball", new()
         {
-            Upgrade upgrade = base.upgrade;
-
-            // handle attack offset
-            int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
-
-            int offset = upgrade == Upgrade.B ? -4 : -2;
-            int offsetAmount = Math.Abs(offset);
-
-            Spr offsetSprite = (Spr)MainManifest.sprites["icons/Offset_Shot_Left"].Id;
-
-            // handle attack damage
-            int damage = GetDmg(s, 2);
-
-            Icon attackIcon = ABluntAttack.DoWeHaveCannonsThough(s)
-                ? new Icon(Enum.Parse<Spr>("icons_attack"), damage, Colors.redd)
-                : new Icon(Enum.Parse<Spr>("icons_attackFail"), damage, Colors.attackFail);
-
-            // return final result
-            return new List<CardAction>()
+            CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+            Meta = new()
             {
-                new TuckerTheSaboteur.actions.AAttackNoIcon ()
-                {
-                    fromX = cannonX + offset,
-                    damage = damage,
-                },
-                new TuckerTheSaboteur.actions.ATooltipDummy()
-                {
-                    tooltips = new() { }, // eventually put the tooltip for offset attacks here
-                    icons = new()
-                    {
-                        new Icon(offsetSprite, offsetAmount, Colors.redd),
-                        attackIcon,
-                    }
-                },
-                new ADummyAction()
-            };
-        }
-        public override CardData GetData(State state)
-        {
-            return new()
-            {
-                cost = (upgrade == Upgrade.B ? 0 : 1),
-                flippable = (upgrade == Upgrade.A ? true : false),
-                artTint = "ffffaa"
-            };
-        }
+                deck = Main.Instance.TuckerDeck.Deck,
+                rarity = Rarity.common,
+                upgradesTo = [Upgrade.A, Upgrade.B]
+            },
+            Art = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/Curveball.png")).Sprite,
+            Name = Main.Instance.AnyLocalizations.Bind(["card", "Curveball", "name"]).Localize
+        });
     }
+
+    public override List<CardAction> GetActions(State s, Combat c) => [
+        new AAttack {
+            damage = GetDmg(s, 2)
+        }.ApplyOffset( upgrade == Upgrade.B ? -4 : -2)
+    ];
+
+    public override CardData GetData(State state) => new() {
+        cost = upgrade == Upgrade.B ? 0 : 1,
+        flippable = upgrade == Upgrade.A,
+        artTint = "ffffaa"
+    };
 }

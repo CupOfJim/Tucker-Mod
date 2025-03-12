@@ -4,56 +4,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TuckerTheSaboteur.actions;
+using Nickel;
+using System.Reflection;
 
-namespace TuckerTheSaboteur.cards
+namespace TuckerTheSaboteur.cards;
+
+public class PressureGun : Card, IRegisterableCard
 {
-    [CardMeta(rarity = Rarity.common, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class PressureGun : Card
-    {
-        public override List<CardAction> GetActions(State s, Combat c)
+    public static void Register(IModHelper helper) {
+        helper.Content.Cards.RegisterCard("PressureGun", new()
         {
-            Upgrade upgrade = base.upgrade;
-            switch (upgrade)
+            CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+            Meta = new()
             {
-                case Upgrade.None:
-                    return new List<CardAction> ()
-                    {
-                        new ABluntAttack ()
-                        {
-                            damage = GetDmg(s, 0),
-                            moveEnemy = -3,
-                        }
-                    };
-                case Upgrade.A:
-                    return new List<CardAction> ()
-                    {
-                        new ABluntAttack ()
-                        {
-                            damage = GetDmg(s, 0),
-                            moveEnemy = -3,
-                        }
-                    };
-                case Upgrade.B:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack ()
-                        {
-                            damage = GetDmg(s, 0),
-                            moveEnemy = -3,
-                        }
-                    };
-            }
-
-            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
-        }
-        public override CardData GetData(State state)
-        {
-            return new()
-            {
-                cost = 0,
-                flippable = (upgrade == Upgrade.A ? true : false),
-                artTint = "ffffaa"
-            };
-        }
+                deck = Main.Instance.TuckerDeck.Deck,
+                rarity = Rarity.common,
+                upgradesTo = [Upgrade.A, Upgrade.B]
+            },
+            Art = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/Pressure_Gun.png")).Sprite,
+            Name = Main.Instance.AnyLocalizations.Bind(["card", "PressureGun", "name"]).Localize
+        });
     }
+
+    public override List<CardAction> GetActions(State s, Combat c) => [
+        upgrade == Upgrade.B ? 
+            new AAttack {
+                damage = GetDmg(s, 0),
+                moveEnemy = -3,
+            } : new ABluntAttack {
+                damage = GetDmg(s, 0),
+                moveEnemy = -3,
+            }
+    ];
+
+    public override CardData GetData(State state) => new() {
+        cost = 0,
+        flippable = upgrade == Upgrade.A,
+        artTint = "ffffaa"
+    };
 }

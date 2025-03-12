@@ -1,16 +1,21 @@
 ﻿using HarmonyLib;
+using Microsoft.Extensions.Logging;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Shockah.Kokoro;
+namespace TuckerTheSaboteur;
 
-public sealed class CustomTTGlossary : TTGlossary
+[HarmonyPatch]
+internal sealed class CustomTTGlossary : TTGlossary
 {
 	public enum GlossaryType
 	{
 		midrow, status, cardtrait, action, parttrait, destination, actionMisc, part, env
 	}
+
+	private static Main Instance => Main.Instance;
 
 	private static readonly Stack<TTGlossary> ContextStack = new();
 
@@ -25,40 +30,26 @@ public sealed class CustomTTGlossary : TTGlossary
 
 	public CustomTTGlossary(GlossaryType type, Func<Spr?> icon, Func<string> title, Func<string> description, IEnumerable<Func<object>>? values = null, string? key = null) : base($"{Enum.GetName(type)}.customttglossary.{key ?? $"{NextID++}"}")
 	{
-		this.Type = type;
-		this.Icon = icon;
-		this.Title = title;
-		this.Description = description;
-		this.Values = values?.ToList() ?? (IReadOnlyList<Func<object>>)Array.Empty<Func<object>>();
+		Type = type;
+		Icon = icon;
+		Title = title;
+		Description = description;
+		Values = values?.ToList() ?? (IReadOnlyList<Func<object>>)Array.Empty<Func<object>>();
 	}
 
-	public static void ApplyPatches(Harmony harmony)
-	{
-		harmony.Patch(
-			original: AccessTools.DeclaredMethod(typeof(TTGlossary), nameof(BuildIconAndText)),
-			prefix: new HarmonyMethod(typeof(CustomTTGlossary), nameof(TTGlossary_BuildIconAndText_Prefix)),
-			finalizer: new HarmonyMethod(typeof(CustomTTGlossary), nameof(TTGlossary_BuildIconAndText_Finalizer))
-		);
-		harmony.Patch(
-			original: AccessTools.DeclaredMethod(typeof(TTGlossary), "TryGetIcon"),
-			prefix: new HarmonyMethod(typeof(CustomTTGlossary), nameof(TTGlossary_TryGetIcon_Prefix))
-		);
-		harmony.Patch(
-			original: AccessTools.DeclaredMethod(typeof(TTGlossary), nameof(MakeNameDescPair)),
-			prefix: new HarmonyMethod(typeof(CustomTTGlossary), nameof(TTGlossary_MakeNameDescPair_Prefix))
-		);
-		harmony.Patch(
-			original: AccessTools.DeclaredMethod(typeof(TTGlossary), nameof(BuildString)),
-			prefix: new HarmonyMethod(typeof(CustomTTGlossary), nameof(TTGlossary_BuildString_Prefix))
-		);
-	}
 
+	[HarmonyPrefix]
+	[HarmonyPatch(typeof(TTGlossary), nameof(BuildIconAndText))]
 	private static void TTGlossary_BuildIconAndText_Prefix(TTGlossary __instance)
 		=> ContextStack.Push(__instance);
 
+	[HarmonyFinalizer]
+	[HarmonyPatch(typeof(TTGlossary), nameof(BuildIconAndText))]
 	private static void TTGlossary_BuildIconAndText_Finalizer()
 		=> ContextStack.Pop();
 
+	[HarmonyPrefix]
+	[HarmonyPatch(typeof(TTGlossary), nameof(TryGetIcon))]
 	private static bool TTGlossary_TryGetIcon_Prefix(ref Spr? __result)
 	{
 		if (!ContextStack.TryPeek(out var glossary) || glossary is not CustomTTGlossary custom)
@@ -68,9 +59,13 @@ public sealed class CustomTTGlossary : TTGlossary
 		return false;
 	}
 
+	[HarmonyPrefix]
+	[HarmonyPatch(typeof(TTGlossary), nameof(MakeNameDescPair))]
 	private static bool TTGlossary_MakeNameDescPair_Prefix(string nameColor, ref string __result)
 	{
-		if (!ContextStack.TryPeek(out var glossary) || glossary is not CustomTTGlossary custom)
+		if (!ContextStack.TryPeek(out var glossary)) return true;
+
+		if (glossary is not CustomTTGlossary custom)
 			return true;
 
 		var title = custom.Title();
@@ -78,6 +73,8 @@ public sealed class CustomTTGlossary : TTGlossary
 		return false;
 	}
 
+	[HarmonyPrefix]
+	[HarmonyPatch(typeof(TTGlossary), nameof(BuildString))]
 	private static bool TTGlossary_BuildString_Prefix(ref string __result)
 	{
 		if (!ContextStack.TryPeek(out var glossary) || glossary is not CustomTTGlossary custom)

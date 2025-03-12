@@ -1,0 +1,151 @@
+{
+    "character": {
+        "name": "Tucker",
+        "description": [
+            "<c=e9bd5c>TUCKER</c>",
+            "A retired saboteur. His cards manipulate <c=keyword>the enemy's shield</c> and <c=keyword>positioning</c>."
+        ]
+    },
+    "action": {
+        "bluntAttack": {
+            "name": "Blunt attack",
+            "description": "Damage and effects are <c=downside>completely negated by shields.</c>"
+        },
+        "shieldSteal": {
+            "name": "Shield steal",
+            "description": "Steal up to <c=keyword>{{Amount}}</c> <c=status>SHIELD</c> from the enemy and apply it to yourself. If they have no shield, steal <c=status>TEMP SHIELD</c> instead."
+        },
+        "shotOffset": {
+            "name": {
+                "left": "Left Shot Offset",
+                "right": "Right Shot Offset"
+            },
+            "description": {
+                "single": "Attack <c=keyword>{{Amount}}</c> space to the {{Direction}} of your cannon.",
+                "many": "Attack <c=keyword>{{Amount}}</c> spaces to the {{Direction}} of your cannon."
+            },
+            "left": "left",
+            "right": "right"
+        },
+        "enemyMove": {
+            "name": {
+                "left": "Enemy move left",
+                "right": "Enemy move right"
+            },
+            "description": {
+                "left": "The enemy will instantly move {{Amount}} spaces to the <c=keyword>LEFT</c>.",
+                "right": "The enemy will instantly move {{Amount}} spaces to the <c=keyword>RIGHT</c>."
+            }
+        }
+    },
+    "status": {
+        "FuelLeak": {
+            "name": "Fuel Leak",
+            "description": "Take {0} damage for every space moved. <c=downside>Decreases by 1 at the end of each turn.</c>"
+        },
+        "Buffer": {
+            "name": "Buffer",
+            "description": "Gain {0} <c=status>TEMP SHIELD</c> each turn. <c=downside>Decreases by 1 afterwards.</c>"
+        }
+    },
+    "artifact": {
+        "AntiqueMotor": {
+            "name": "ANTIQUE MOTOR",
+            "description": "Gain 1 extra energy every turn. <c=downside>Gain 1 <c=status>FUEL LEAK</c> each turn."
+        },
+        "Brick": {
+            "name": "BRICK",
+            "description": "<c=action>BLUNT ATTACKS</c> deal +1 damage."
+        },
+        "HoloWall": {
+            "name": "HOLO-WALL",
+            "description": "Gain 3 <c=status>BUFFER</c> on the first turn."
+        },
+        "CommJammer": {
+            "name": "INTERCEPTOR",
+            "description": "Take 1 less damage from <c=drone>midrow objects</c>."
+        },
+        "ArtofWar": {
+            "name": "ART OF WAR",
+            "description": "When out of shields, gain a <c=card>Counter Attack</c>."
+        }
+    },
+    "card": {
+        "Counterattack": {
+            "name": "Counter Attack"
+        },
+        "CounterfeitSwap": {
+            "name": "Counterfeit Swap"
+        },
+        "Cripple": {
+            "name": "Cripple"
+        },
+        "Curveball": {
+            "name": "Curveball"
+        },
+        "DirectHit": {
+            "name": "Direct Hit"
+        },
+        "FortressMode": {
+            "name": "Fortress Mode!"
+        },
+        "Hook": {
+            "name": "Hook"
+        },
+        "Juggle": {
+            "name": "Juggle"
+        },
+        "KnowThyEnemy": {
+            "name": "Know Thy Enemy"
+        },
+        "LieLow": {
+            "name": "Lie Low"
+        },
+        "Lockon": {
+            "name": "Lock-On"
+        },
+        "Lockpick": {
+            "name": "Lockpick"
+        },
+        "Misdirection": {
+            "name": "Misdirection"
+        },
+        "MutualGain": {
+            "name": "Mutual Gain"
+        },
+        "NavOverride": {
+            "name": "Nav Override",
+            "description": {
+                "None": "Move the enemy 1 space to the {{Direction}}. Gain a <c=card>Redirect</c>.",
+                "A": "Move the enemy 2 spaces to the {{Direction}}. Gain a <c=card>Redirect</c>.",
+                "B": "Gain 2 <c=card>Redirects</c>."
+            },
+            "left": "left",
+            "right": "right"
+        },
+        "PressureGun": {
+            "name": "Pressure Gun"
+        },
+        "PsychOut": {
+            "name": "Psych Out"
+        },
+        "QuantumCannon": {
+            "name": "Quantum Cannon"
+        },
+        "RubberBullet": {
+            "name": "Rubber Bullet"
+        },
+        "Sabotage": {
+            "name": "Sabotage"
+        },
+        "SprayandPray": {
+            "name": "Spray and Pray"
+        },
+        "ThreadtheNeedle": {
+            "name": "Thread the Needle"
+        },
+        "TractorBeam": {
+            "name": "Tractor Beam"
+        }
+    }
+}

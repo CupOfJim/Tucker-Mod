@@ -1,75 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Nickel;
 
-namespace TuckerTheSaboteur.cards
+namespace TuckerTheSaboteur.cards;
+
+public class Lockon : Card, IRegisterableCard
 {
-    [CardMeta(rarity = Rarity.common, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class Lockon : Card
-    {
-        public override List<CardAction> GetActions(State s, Combat c)
+    public static void Register(IModHelper helper) {
+        helper.Content.Cards.RegisterCard("Lockon", new()
         {
-            Upgrade upgrade = base.upgrade;
-            switch (upgrade)
+            CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+            Meta = new()
             {
-                case Upgrade.None:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack ()
-                        {
-                            damage = GetDmg(s, 2),
-                            stunEnemy = true
-                        },
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 2,
-                            targetPlayer = true
-                        }
-                    };
-                case Upgrade.A:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack ()
-                        {
-                            damage = GetDmg(s, 3),
-                            stunEnemy = true
-                        },
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("lockdown"),
-                            statusAmount = 2,
-                            targetPlayer = true
-                        }
-                    };
-                case Upgrade.B:
-                    return new List<CardAction> ()
-                    {
-                        new AAttack ()
-                        {
-                            damage = GetDmg(s, 2),
-                            stunEnemy = true
-                        },
-                        new AStatus ()
-                        {
-                            status = Enum.Parse<Status>("engineStall"),
-                            statusAmount = 2,
-                            targetPlayer = true
-                        }
-                    };
-            }
-
-            throw new Exception(this.GetType().Name + " was upgraded to something that doesn't exist.");
-        }
-        public override CardData GetData(State state)
-        {
-            return new()
-            {
-                cost = 1,
-                artTint = "ffffaa"
-            };
-        }
+                deck = Main.Instance.TuckerDeck.Deck,
+                rarity = Rarity.common,
+                upgradesTo = [Upgrade.A, Upgrade.B]
+            },
+            Art = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/Lock-on.png")).Sprite,
+            Name = Main.Instance.AnyLocalizations.Bind(["card", "Lockon", "name"]).Localize
+        });
     }
+
+    public override List<CardAction> GetActions(State s, Combat c) => [
+        new AAttack {
+            damage = GetDmg(s, upgrade == Upgrade.A ? 3 : 2),
+            stunEnemy = true
+        },
+        new AStatus {
+            status = upgrade == Upgrade.B ? Status.engineStall : Status.lockdown,
+            statusAmount = 2,
+            targetPlayer = true
+        }
+    ];
+
+    public override CardData GetData(State state) => new()
+    {
+        cost = 1,
+        artTint = "ffffaa"
+    };
 }

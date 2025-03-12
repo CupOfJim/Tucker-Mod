@@ -3,39 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TuckerMod.actions;
 using TuckerTheSaboteur.actions;
+using Nickel;
+using System.Reflection;
 
-namespace TuckerTheSaboteur.cards
+namespace TuckerTheSaboteur.cards;
+
+public class Hook : Card, IRegisterableCard
 {
-    [CardMeta(rarity = Rarity.common, upgradesTo = new[] { Upgrade.A, Upgrade.B })]
-    public class Hook : Card
+    public static void Register(IModHelper helper) {
+        helper.Content.Cards.RegisterCard("Hook", new()
+        {
+            CardType = MethodBase.GetCurrentMethod()!.DeclaringType!,
+            Meta = new()
+            {
+                deck = Main.Instance.TuckerDeck.Deck,
+                rarity = Rarity.common,
+                upgradesTo = [Upgrade.A, Upgrade.B]
+            },
+            Art = helper.Content.Sprites.RegisterSprite(Main.Instance.Package.PackageRoot.GetRelativeFile("sprites/cards/Hook.png")).Sprite,
+            Name = Main.Instance.AnyLocalizations.Bind(["card", "Hook", "name"]).Localize
+        });
+    }
+    
+    public override List<CardAction> GetActions(State s, Combat c) => [
+        new AAttack {
+            damage = GetDmg(s, 2),
+            piercing = true,
+            moveEnemy = 2,
+        }.ApplyOffset( upgrade == Upgrade.B ? -1 : -3)
+    ];
+    public override CardData GetData(State state)
     {
-        public override List<CardAction> GetActions(State s, Combat c)
+        return new()
         {
-            int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
-            int offset = base.upgrade == Upgrade.B ? -1 : -3;
-
-            List<CardAction> actions = new()
-            {
-                new AAttack()
-                {
-                    fromX = cannonX + offset,
-                    damage = GetDmg(s, 2),
-                    moveEnemy = 2,
-                }
-            };
-
-            return ATooltipDummy.BuildStandinsAndWrapRealActions(actions, s);
-        }
-        public override CardData GetData(State state)
-        {
-            return new()
-            {
-                cost = 1,
-                flippable = upgrade == Upgrade.A ? true : false,
-                artTint = "ffffaa"
-            };
-        }
+            cost = 1,
+            flippable = upgrade == Upgrade.A ? true : false,
+            artTint = "ffffaa"
+        };
     }
 }
