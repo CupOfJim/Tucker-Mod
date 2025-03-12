@@ -41,7 +41,7 @@ public class PsychOut : Card, IRegisterableCard
             new AAttack {
                 damage = GetDmg(s, 1),
                 fast = true,
-            }.ApplyOffset(s, -2)
+            }.ApplyOffset( -2)
         ],
         _ => [
             new AStatus {

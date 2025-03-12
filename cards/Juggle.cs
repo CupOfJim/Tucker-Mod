@@ -31,16 +31,16 @@ public class Juggle : Card, IRegisterableCard
             damage = GetDmg(s, 0),
             fast = true,
             moveEnemy = upgrade == Upgrade.B ? -2 : 2,
-        }.ApplyOffset(s, upgrade == Upgrade.B ? 2 : -1),
+        }.ApplyOffset( upgrade == Upgrade.B ? 2 : -1),
         new AAttack {
             damage = GetDmg(s, 0),
             fast = true,
             moveEnemy = -2,
-        }.ApplyOffset(s, upgrade == Upgrade.B ? 0 : 1),
+        }.ApplyOffset( upgrade == Upgrade.B ? 0 : 1),
         new AAttack {
             damage = GetDmg(s, upgrade == Upgrade.A ? 5 : 3),
             fast = true,
-        }.ApplyOffset(s, upgrade == Upgrade.B ? -2 : -1)
+        }.ApplyOffset( upgrade == Upgrade.B ? -2 : -1)
     ];
 
     public override CardData GetData(State state) => new() {

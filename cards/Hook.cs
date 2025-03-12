@@ -31,7 +31,7 @@ public class Hook : Card, IRegisterableCard
             damage = GetDmg(s, 2),
             piercing = true,
             moveEnemy = 2,
-        }.ApplyOffset(s, upgrade == Upgrade.B ? -1 : -3)
+        }.ApplyOffset( upgrade == Upgrade.B ? -1 : -3)
     ];
     public override CardData GetData(State state)
     {

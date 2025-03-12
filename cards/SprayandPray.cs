@@ -33,11 +33,11 @@ public class SprayandPray : Card, IRegisterableCard
             new ABluntAttack {
                 damage = GetDmg(s, 1),
                 fast = true,
-            }.ApplyOffset(s, -2),
+            }.ApplyOffset( -2),
             new AAttack {
                 damage = GetDmg(s, 1),
                 fast = true
-            }.ApplyOffset(s, -1),
+            }.ApplyOffset( -1),
             new AAttack {
                 damage = GetDmg(s, 2),
                 fast = true
@@ -45,18 +45,18 @@ public class SprayandPray : Card, IRegisterableCard
             new AAttack {
                 damage = GetDmg(s, 1),
                 fast = true
-            }.ApplyOffset(s, 1),
+            }.ApplyOffset( 1),
             new ABluntAttack {
                 damage = GetDmg(s, 1),
                 fast = true,
-            }.ApplyOffset(s, 2),
+            }.ApplyOffset( 2),
         ],
         _ => [
             new AAttack {
                 damage = GetDmg(s, 1),
                 fast = true,
                 piercing = upgrade == Upgrade.B
-            }.ApplyOffset(s, -1),
+            }.ApplyOffset( -1),
             new AAttack {
                 damage = GetDmg(s, 2),
                 fast = true,
@@ -66,7 +66,7 @@ public class SprayandPray : Card, IRegisterableCard
                 damage = GetDmg(s, 1),
                 fast = true,
                 piercing = upgrade == Upgrade.B
-            }.ApplyOffset(s, 1),
+            }.ApplyOffset( 1),
         ]
     };
     

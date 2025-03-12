@@ -34,7 +34,7 @@ public class ThreadtheNeedle : Card, IRegisterableCard
                 status = Status.tempShield,
                 statusAmount = 3,
                 fast = true,
-            }.ApplyOffset(s, -1),
+            }.ApplyOffset( -1),
             new AAttack {
                 damage = GetDmg(s, 3),
                 fast = true,
@@ -46,13 +46,13 @@ public class ThreadtheNeedle : Card, IRegisterableCard
                 status = Status.tempShield,
                 statusAmount = 2,
                 fast = true,
-            }.ApplyOffset(s, -2),
+            }.ApplyOffset( -2),
             new AAttack {
                 damage = GetDmg(s, 0),
                 status = Status.tempShield,
                 statusAmount = 2,
                 fast = true,
-            }.ApplyOffset(s, 2),
+            }.ApplyOffset( 2),
             new AAttack {
                 damage = GetDmg(s, upgrade == Upgrade.A ? 4 : 3),
                 fast = true,

@@ -148,4 +148,7 @@ public class Main : SimpleMod
 				.ToList()
 		});
     }
+    
+	public override object? GetApi(IModManifest requestingMod)
+		=> new ApiImplementation();
 }

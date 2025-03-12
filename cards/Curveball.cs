@@ -29,7 +29,7 @@ public class Curveball : Card, IRegisterableCard
     public override List<CardAction> GetActions(State s, Combat c) => [
         new AAttack {
             damage = GetDmg(s, 2)
-        }.ApplyOffset(s, upgrade == Upgrade.B ? -4 : -2)
+        }.ApplyOffset( upgrade == Upgrade.B ? -4 : -2)
     ];
 
     public override CardData GetData(State state) => new() {
