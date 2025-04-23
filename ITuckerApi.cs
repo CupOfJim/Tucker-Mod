@@ -3,6 +3,7 @@ namespace TuckerTheSaboteur;
 public interface ITuckerApi
 {
 	AAttack MakeNewBluntAttack();
+	bool IsBluntAttack(AAttack attack);
 	AAttack ApplyOffset(AAttack attack, int offset);
 	int? GetOffset(AAttack attack);
 

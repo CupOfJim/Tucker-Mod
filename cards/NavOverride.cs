@@ -36,7 +36,7 @@ public class NavOverride : Card, IRegisterableCard
         ],
         _ => [
             new AMoveImproved {
-                dir = -1,
+                dir = upgrade == Upgrade.A ? -2 : -1,
                 targetPlayer = false
             },
             new AAddCard {

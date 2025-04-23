@@ -26,33 +26,16 @@ public class Sabotage : Card, IRegisterableCard
         });
     }
 
-    public override List<CardAction> GetActions(State s, Combat c) => upgrade switch {
-        Upgrade.A => [
-            new AShieldSteal {
-                amount = 2
-            },
-            new AStatus {
-                status = Status.shield,
-                statusAmount = -1,
-                targetPlayer = false
-            }
-        ],
-        Upgrade.B => [
-            new AShieldSteal {
-                amount = 2
-            },
-            new AStatus {
-                status = Status.shield,
-                statusAmount = 1,
-                targetPlayer = true
-            }
-        ],
-        _ => [
-            new AShieldSteal {
-                amount = 2
-            },
-        ]
-    };
+    public override List<CardAction> GetActions(State s, Combat c) => [
+        new AShieldSteal {
+            amount = upgrade == Upgrade.B ? 2 : 1
+        },
+        new AStatus {
+            status = Status.shield,
+            statusAmount = upgrade == Upgrade.A ? 2 : 1,
+            targetPlayer = true
+        }
+    ];
 
     public override CardData GetData(State state) => new() {
         cost = 1,

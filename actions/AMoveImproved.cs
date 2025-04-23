@@ -11,7 +11,7 @@ namespace TuckerTheSaboteur.Actions
 			if (!targetPlayer) {
 				return [
 					new CustomTTGlossary(
-						CustomTTGlossary.GlossaryType.cardtrait,
+						CustomTTGlossary.GlossaryType.action,
 						() => dir < 0 ? StableSpr.icons_moveLeftEnemy : StableSpr.icons_moveRightEnemy,
 						() => Main.Instance.Localizations.Localize(["action", "enemyMove", "name", dir < 0 ? "left" : "right"], new {Amount = Math.Abs(dir)}),
 						() => Main.Instance.Localizations.Localize(["action", "enemyMove", "description", dir < 0 ? "left" : "right"], new {Amount = Math.Abs(dir)}),

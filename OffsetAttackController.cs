@@ -303,18 +303,18 @@ public static class OffsetAttackController
                 () => Main.Instance.Localizations.Localize(["action", "shotOffset", "description", amount == 1 ? "single" : "many"], new { Direction = direction, Amount = amount }),
                 key: "action.shotOffset"
             ));
-        }
 
-        if (s.route is not Combat c) return;
-        //if (c.hoveringDeck != (Deck)MainManifest.deck.Id) return;
+            if (s.route is not Combat c) return;
+            //if (c.hoveringDeck != (Deck)MainManifest.deck.Id) return;
 
-        for (int i = 0; i < s.ship.parts.Count; i++) {
-            var part = s.ship.parts[i];
-            if (part.type == PType.cannon && part.active)
-            {
-                //columnToCannonPart[i + intentXOffset] = part;
-                if (!cannonFireLanes.ContainsKey(part)) cannonFireLanes[part] = [];
-                    cannonFireLanes[part].Add(i + offset);
+            for (int i = 0; i < s.ship.parts.Count; i++) {
+                var part = s.ship.parts[i];
+                if (part.type == PType.cannon && part.active)
+                {
+                    //columnToCannonPart[i + intentXOffset] = part;
+                    if (!cannonFireLanes.ContainsKey(part)) cannonFireLanes[part] = [];
+                        cannonFireLanes[part].Add(i + offset);
+                }
             }
         }
     }
@@ -339,6 +339,30 @@ public static class OffsetAttackController
     //{
     //    columnToCannonPart.Clear();
     //}
+
+    [HarmonyTranspiler]
+    [HarmonyPatch(typeof(AAttack), nameof(AAttack.GetTooltips))]
+    private static IEnumerable<CodeInstruction> HarmonyTranspiler_AAttack_Begin(IEnumerable<CodeInstruction> instructions, ILGenerator il, MethodBase originalMethod) {
+        return new SequenceBlockMatcher<CodeInstruction>(instructions)
+            .Find(
+                ILMatches.Ldarg(1),
+                ILMatches.Ldfld("ship"),
+                ILMatches.Ldfld("x"),
+                ILMatches.Stloc<int>(originalMethod)
+            )
+            .PointerMatcher(SequenceMatcherRelativeElement.Last)
+			.Insert(SequenceMatcherPastBoundsDirection.Before, SequenceMatcherInsertionResultingBounds.IncludingInsertion, [
+                new(OpCodes.Ldarg_0),
+                new(OpCodes.Call, AccessTools.DeclaredMethod(typeof(OffsetAttackController), nameof(GetOffset))),
+                new(OpCodes.Add)
+            ])
+            .AllElements();
+    }
+
+    private static int GetOffset(AAttack attack) {
+        return attack.GetOffset() ?? 0;
+        
+    }
 
     private static void RIPPED_DrawIntentLinesForPart(Dictionary<int, StuffBase> stuff, Ship shipSource, Ship shipTarget, int i, Part part, Vec v)
     {

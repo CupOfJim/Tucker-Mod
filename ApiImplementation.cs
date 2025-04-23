@@ -7,6 +7,9 @@ public class ApiImplementation : ITuckerApi
 	public AAttack MakeNewBluntAttack() {
 		return new ABluntAttack();
 	}
+	public bool IsBluntAttack(AAttack attack) {
+		return attack is ABluntAttack;
+	}
 	public AAttack ApplyOffset(AAttack attack, int offset) {
 		return attack.ApplyOffset(offset);
 	}

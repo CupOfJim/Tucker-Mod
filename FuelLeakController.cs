@@ -8,11 +8,10 @@ using TuckerTheSaboteur.actions;
 
 namespace TuckerTheSaboteur;
 
-[HarmonyPatch(typeof(AMove))]
 public static class FuelLeakController
 {
     [HarmonyPostfix]
-    [HarmonyPatch(nameof(AMove.Begin))]
+    [HarmonyPatch(typeof(AMove), nameof(AMove.Begin))]
     public static void HarmonyPostfix_AMove_Begin(AMove __instance, G g, State s, Combat c)
     {
         Ship ship = __instance.targetPlayer ? s.ship : c.otherShip;

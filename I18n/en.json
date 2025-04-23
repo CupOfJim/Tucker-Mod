@@ -51,7 +51,7 @@
     "artifact": {
         "AntiqueMotor": {
             "name": "ANTIQUE MOTOR",
-            "description": "Gain 1 extra energy every turn. <c=downside>Gain 1 <c=status>FUEL LEAK</c> each turn."
+            "description": "Gain 1 extra <c=energy>ENERGY</c> every turn. <c=downside>Gain 1 <c=status>FUEL LEAK</c> every turn."
         },
         "Brick": {
             "name": "BRICK",
@@ -87,7 +87,7 @@
             "name": "Direct Hit"
         },
         "FortressMode": {
-            "name": "Fortress Mode!"
+            "name": "Fortress Mode"
         },
         "Hook": {
             "name": "Hook"
@@ -108,7 +108,7 @@
             "name": "Lockpick"
         },
         "Misdirection": {
-            "name": "Misdirection"
+            "name": "Redirect"
         },
         "MutualGain": {
             "name": "Mutual Gain"

@@ -83,7 +83,7 @@ public class ABluntAttack : AAttack
                 fast = fast
             };
             if (Main.Instance.Helper.ModData.TryGetModData(this, OffsetAttackController.key, out int offset)) {
-                lameAttack.ApplyOffset( offset);
+                lameAttack.ApplyOffset(offset);
             }
             lameAttack.Begin(g, s, c);
         } else {
