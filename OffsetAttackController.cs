@@ -1,19 +1,12 @@
 ﻿using HarmonyLib;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection.Emit;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Nanoray.Shrike;
 using Nanoray.Shrike.Harmony;
 using Microsoft.Xna.Framework.Graphics;
-using static System.Collections.Specialized.BitVector32;
-using TuckerTheSaboteur.actions;
-using static TuckerTheSaboteur.CustomTTGlossary;
-using System.Collections.Concurrent;
+using Nickel;
 
 namespace TuckerTheSaboteur;
 
@@ -284,37 +277,45 @@ public static class OffsetAttackController
     // }
     // return true;
 
-    public static int intentXOffset = 0;
     //public static Dictionary<int, Part> columnToCannonPart = new();
     public static Dictionary<Part, HashSet<int>> cannonFireLanes = [];
+    public static Dictionary<Part, bool> cannonFireSkip = [];
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(AAttack), nameof(AAttack.GetTooltips))]
     public static void IntentLinesSetup(ref List<Tooltip> __result, AAttack __instance, State s)
     {
-        if (Main.Instance.Helper.ModData.TryGetModData(__instance, key, out int offset)) {
+        int offset = __instance.GetOffset() ?? 0;
+        if (offset != 0) {
             bool right = offset > 0;
             int amount = Math.Abs(offset);
             string direction = Main.Instance.Localizations.Localize(["action", "shotOffset", right ? "right" : "left"]);
-            __result.Add(new CustomTTGlossary(
-                GlossaryType.action,
-                () => right ? Main.Instance.OffsetShotRightSprite : Main.Instance.OffsetShotLeftSprite,
-                () => Main.Instance.Localizations.Localize(["action", "shotOffset", "name", right ? "right" : "left"]),
-                () => Main.Instance.Localizations.Localize(["action", "shotOffset", "description", amount == 1 ? "single" : "many"], new { Direction = direction, Amount = amount }),
-                key: "action.shotOffset"
-            ));
+            __result.Add(new GlossaryTooltip("action.shotOffset") {
+                TitleColor = Colors.action,
+                Icon = right ? Main.Instance.OffsetShotRightSprite : Main.Instance.OffsetShotLeftSprite,
+                Title = Main.Instance.Localizations.Localize(["action", "shotOffset", "name", right ? "right" : "left"]),
+                Description = Main.Instance.Localizations.Localize(["action", "shotOffset", "description", amount == 1 ? "single" : "many"], new { Direction = direction, Amount = amount }),
+            });
+        }
+        if (s.route is not Combat) return;
 
-            if (s.route is not Combat c) return;
-            //if (c.hoveringDeck != (Deck)MainManifest.deck.Id) return;
+        for (int i = 0; i < s.ship.parts.Count; i++) {
+            var part = s.ship.parts[i];
+            
+            if (offset != 0 && part.type == PType.cannon && part.active) {
+                if (!cannonFireLanes.ContainsKey(part)) cannonFireLanes[part] = [];
+                cannonFireLanes[part].Add(i + offset);
+            }
 
-            for (int i = 0; i < s.ship.parts.Count; i++) {
-                var part = s.ship.parts[i];
-                if (part.type == PType.cannon && part.active)
-                {
-                    //columnToCannonPart[i + intentXOffset] = part;
-                    if (!cannonFireLanes.ContainsKey(part)) cannonFireLanes[part] = [];
-                        cannonFireLanes[part].Add(i + offset);
-                }
+            switch (cannonFireSkip.GetOrNull(part)) {
+                case null:
+                    cannonFireSkip.Add(part, offset != 0);
+                    break;
+                case false:
+                    break;
+                case true:
+                    if (offset == 0) cannonFireSkip[part] = false;
+                    break;
             }
         }
     }
@@ -326,11 +327,14 @@ public static class OffsetAttackController
         if (!shipSource.isPlayerShip) return true;
 
         if (!cannonFireLanes.TryGetValue(part, out HashSet<int>? value)) return true;
-		foreach (int j in value)
+		foreach (int j in value) {
             RIPPED_DrawIntentLinesForPart(__instance.stuff, shipSource, shipTarget, j, part, v);
+        }
+        bool skip = cannonFireSkip.GetOrNull(part) == true;
+        cannonFireSkip.Remove(part);
 		value.Clear();
 
-        return false;
+        return !skip;
     }
 
     //[HarmonyPostfix]
@@ -433,7 +437,7 @@ public static class OffsetAttackController
     }
 
     private static bool HasAttackOffset(CardAction action) {
-        return Main.Instance.Helper.ModData.ContainsModData(action, key);
+        return Main.Instance.Helper.ModData.GetModDataOrDefault(action, key, 0) != 0;
     }
 
     [HarmonyPrefix]

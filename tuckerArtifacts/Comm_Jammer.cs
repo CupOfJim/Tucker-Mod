@@ -28,4 +28,11 @@ public class CommJammer : Artifact, IRegisterableArtifact
 
         return -1;
     }
+
+	public override int ModifySpaceMineDamage(State state, Combat? combat, bool targetPlayer)
+	{
+		if (!targetPlayer) return 0;
+
+		return -1;
+	}
 }

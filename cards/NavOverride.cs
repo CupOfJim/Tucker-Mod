@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Nickel;
-using TuckerTheSaboteur.Actions;
 
 namespace TuckerTheSaboteur.cards;
 
@@ -35,7 +30,7 @@ public class NavOverride : Card, IRegisterableCard
             }
         ],
         _ => [
-            new AMoveImproved {
+            new AMove {
                 dir = upgrade == Upgrade.A ? -2 : -1,
                 targetPlayer = false
             },

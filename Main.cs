@@ -12,12 +12,25 @@ using System.Linq;
 using System;
 using System.Globalization;
 using TuckerTheSaboteur.actions;
+using TheJazMaster.Bucket;
+using Nickel.Essentials;
+using TuckerTheSaboteur;
+using TuckerMod.tuckerArtifacts.Duos;
 
 namespace TuckerTheSaboteur;
 
 public class Main : SimpleMod
 {
-    public IMoreDifficultiesApi? MoreDifficultiesApi { get; private set; }
+    internal IMoreDifficultiesApi? MoreDifficultiesApi { get; private set; }
+    internal IDuoArtifactsApi? DuoArtifactsApi { get; private set; }
+    internal IKokoroApi? KokoroApi { get; private set; }
+    internal IEssentialsApi? EssentialsApi { get; private set; }
+    internal IMarielleApi? MarielleApi { get; private set; }
+	internal ITyAndSashaApi? TyAndSashaApi { get; }
+	internal IJohnsonApi? JohnsonApi { get; }
+    internal IDestinyApi? DestinyApi { get; }
+	internal IBucketApi? BucketApi { get; }
+	internal IDynaApi? DynaApi { get; }
 
     public static Main Instance { get; private set; } = null!;
 
@@ -30,8 +43,6 @@ public class Main : SimpleMod
     internal IPlayableCharacterEntryV2 TuckerCharacter { get; }
     internal IDeckEntry TuckerDeck { get; }
 
-    internal Spr TuckerPortrait;
-    internal Spr TuckerPortraitMini;
     internal Spr TuckerFrame;
     internal Spr TuckerCardBorder;
 
@@ -52,12 +63,25 @@ public class Main : SimpleMod
     ];
     internal List<Type> ArtifactTypes = [
         typeof(ArtofWar), typeof(Brick), typeof(CommJammer), typeof(HoloWall),
-        typeof(AntiqueMotor)
+        typeof(AntiqueMotor),
+
+        typeof(AlwaysBeCountering), typeof(Cryostasis), typeof(GrouchoStache), typeof(Hyperlink),
+        typeof(NavyTraining), typeof(PetBed), typeof(ProPain), typeof(RCRemote), typeof(ShieldBash),
+        typeof(ToolsOfTheTrade), typeof(WarTable), typeof(Whetstone), typeof(WireTap)
     ];
 
     public Main(IPluginPackage<IModManifest> package, IModHelper helper, ILogger logger) : base(package, helper, logger)
     {
         MoreDifficultiesApi = helper.ModRegistry.GetApi<IMoreDifficultiesApi>("TheJazMaster.MoreDifficulties");
+        DuoArtifactsApi = helper.ModRegistry.GetApi<IDuoArtifactsApi>("Shockah.DuoArtifacts");
+        EssentialsApi = helper.ModRegistry.GetApi<IEssentialsApi>("Nickel.Essentials");
+        KokoroApi = helper.ModRegistry.GetApi<IKokoroApi>("Shockah.Kokoro");
+        MarielleApi = helper.ModRegistry.GetApi<IMarielleApi>("rtf.Marielle");
+	    TyAndSashaApi = helper.ModRegistry.GetApi<ITyAndSashaApi>("TheJazMaster.TyAndSasha");
+	    JohnsonApi = helper.ModRegistry.GetApi<IJohnsonApi>("Shockah.Johnson");
+        DestinyApi = helper.ModRegistry.GetApi<IDestinyApi>("Shockah.Destiny");
+	    BucketApi = helper.ModRegistry.GetApi<IBucketApi>("TheJazMaster.Bucket");
+	    DynaApi = helper.ModRegistry.GetApi<IDynaApi>("Shockah.Dyna");
 
         Instance = this;
         Harmony = new(package.Manifest.UniqueName);
@@ -71,8 +95,6 @@ public class Main : SimpleMod
             new CurrentLocaleOrEnglishLocalizationProvider<IReadOnlyList<string>>(AnyLocalizations)
         );
 
-        TuckerPortrait = helper.Content.Sprites.RegisterSprite(package.PackageRoot.GetRelativeFile("Sprites/Character/tucker_neutral_1.png")).Sprite;
-        TuckerPortraitMini = helper.Content.Sprites.RegisterSprite(package.PackageRoot.GetRelativeFile("Sprites/character/mini_tucker.png")).Sprite;
 		TuckerFrame = helper.Content.Sprites.RegisterSprite(package.PackageRoot.GetRelativeFile("sprites/character/tucker_border.png")).Sprite;
         TuckerCardBorder = helper.Content.Sprites.RegisterSprite(package.PackageRoot.GetRelativeFile("sprites/cards/Card_Border.png")).Sprite;
 
@@ -133,6 +155,14 @@ public class Main : SimpleMod
 
 		RegisterAnimation(helper, "Squint");
 		RegisterAnimation(helper, "Gameover");
+
+        Helper.Events.OnModLoadPhaseFinished += OnModLoadPhaseFinished;
+    }
+
+    [EventPriority(Priority.Last)]
+    private static void OnModLoadPhaseFinished(object? arg, ModLoadPhase phase) {
+        if (phase != ModLoadPhase.AfterDbInit) return;
+        BirthdaySecretController.Init(Instance.Helper);
     }
 
     private ICharacterAnimationEntryV2 RegisterAnimation(IModHelper helper, string name)

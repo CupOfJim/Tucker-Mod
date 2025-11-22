@@ -27,19 +27,16 @@ public class PressureGun : Card, IRegisterableCard
     }
 
     public override List<CardAction> GetActions(State s, Combat c) => [
-        upgrade == Upgrade.B ? 
-            new AAttack {
-                damage = GetDmg(s, 0),
-                moveEnemy = -3,
-            } : new ABluntAttack {
-                damage = GetDmg(s, 0),
-                moveEnemy = -3,
-            }
+        new ABluntAttack {
+            damage = GetDmg(s, 0),
+            moveEnemy = -3,
+        }
     ];
 
     public override CardData GetData(State state) => new() {
         cost = 0,
         flippable = upgrade == Upgrade.A,
+        retain = upgrade == Upgrade.B,
         artTint = "ffffaa"
     };
 }

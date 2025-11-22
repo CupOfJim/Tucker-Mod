@@ -28,7 +28,7 @@ public class QuantumCannon : Card, IRegisterableCard
     public override List<CardAction> GetActions(State s, Combat c) => [
         new AAttack
         {
-            damage = GetDmg(s, upgrade == Upgrade.A ? 2 : 1),
+            damage = GetDmg(s, upgrade == Upgrade.A ? 2 : upgrade == Upgrade.B ? 3 : 1),
             piercing = true,
             status = upgrade == Upgrade.B ? Status.shield : null,
             statusAmount = 2

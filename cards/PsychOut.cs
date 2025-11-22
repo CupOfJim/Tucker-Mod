@@ -28,7 +28,7 @@ public class PsychOut : Card, IRegisterableCard
     }
 
     public override List<CardAction> GetActions(State s, Combat c) => upgrade switch {
-        Upgrade.B => [
+        Upgrade.A => [
             new AStatus {
                 status = Status.autododgeLeft,
                 statusAmount = 2,
@@ -56,8 +56,8 @@ public class PsychOut : Card, IRegisterableCard
     };
 
     public override CardData GetData(State state) => new() {
-        cost = upgrade == Upgrade.A ? 1 : 2,
-        exhaust = true,
+        cost = upgrade == Upgrade.B ? 3 : 2,
+        exhaust = upgrade != Upgrade.B,
         artTint = "ffffaa"
     };
 }

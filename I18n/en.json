@@ -68,6 +68,77 @@
         "ArtofWar": {
             "name": "ART OF WAR",
             "description": "When out of shields, gain a <c=card>Counter Attack</c>."
+        },
+        "duo": {
+            "AlwaysBeCountering": {
+                "name": "ALWAYS BE COUNTERING",
+                "description": "Whenever you play a <c=keyword>B</c> upgraded card immediately after playing an <c=keyword>A</c> upgraded card, gain a <c=card>Counter Attack</c>."
+            },
+            "Cryostasis": {
+                "name": "CRYOSTASIS",
+                "description": "While you have <c=status>ENGINE LOCK</c> or <c=status>ENGINE STALL</c>, gain 1 less <c=status>HEAT</c> from all cards."
+            },
+            "GrouchoStache": {
+                "name": "GROUCHO 'STACHE",
+                "description": "At the start of every turn, if you have any <c=status>ENGINE LOCK</c>, gain 1 <c=status>TEMP SHIELD</c> for each <c=status>EVADE</c> you have."
+            },
+            "Hyperlink": {
+                "name": "HYPERLINK",
+                "description": "Gain a <c=card>Redirect</c> when playing an <c=card>EXE</c> card."
+            },
+            "NavyTraining": {
+                "name": "NAVY TRAINING",
+                "description": "At the start of combat, add an <c=card>Anchor</c> into your deck. Whenever you draw an Anchor, gain 2 <c=status>TEMP SHIELD</c> and 1 <c=status>BUFFER</c>."
+            },
+            "PetBed": {
+                "name": "PET BED",
+                "description": "While you have <c=status>ENGINE LOCK</c> or <c=status>ENGINE STALL</c>, increase the value of X on all cards by 2."
+            },
+            "ProPain": {
+                "name": "PRO-PAIN",
+                "description": "Piercing attacks inflict 1 <c=status>HEAT</c>. Blunt attacks inflict 2 <c=status>HEAT</c>."
+            },
+            "RCRemote": {
+                "name": "RC REMOTE",
+                "description": "Whenever you gain <c=status>ENGINE LOCK</c> or <c=status>ENGINE STALL</c>, apply 1 <c=status>AUTOPILOT</c> to the enemy."
+            },
+            "ShieldBash": {
+                "name": "SHIELD BASH",
+                "description": "<c=action>Blunt attacks</c> deal +1 damage for every 3 <c=status>TEMP SHIELD</c> you have, +1 damage for every 2 <c=status>SHIELD</c>, +1 damage for every <c=status>PRISTINE SHIELD</c>, and +2 damage for every <c=status>PERFECT SHIELD</c>."
+            },
+            "ToolsOfTheTrade": {
+                "name": "TOOLS OF THE TRADE",
+                "description": "Whenever you <c=action>shield steal</c>, gain 1 more of whatever shield type you stole."
+            },
+            "WarTable": {
+                "name": "WAR TABLE",
+                "description": "After playing 8 <c=e9bd5c>Tucker</c> cards in a combat, gain 1 <c=status>TABLE FLIP</c>."
+            },
+            "Whetstone": {
+                "name": "WHETSTONE",
+                "description": "Whenever a <c=action>blunt attack</c> hits shield, spend 1 <c=status>SHARD</c> to convert it into a regular attack."
+            },
+            "WireTap": {
+                "name": "WIRE TAP",
+                "description": "When you end your turn with <c=status>ENGINE LOCK</c> or <c=status>ENGINE STALL</c>, gain 1 <c=status>DRONESHIFT</c>."
+            }
+        },
+
+        "Idea": {
+            "name": "URANIUM IDEA",
+            "description": "On pickup, add a <c=card>Uranium Round A</c> to your deck."
+        },
+        "Honor": {
+            "name": "URANIUM HONOR",
+            "description": "On pickup, add a <c=card>Uranium Round A</c> to your deck. Whenever you play a <c=card>Uranium Round</c>, draw 1."
+        },
+        "Table": {
+            "name": "URANIUM TABLE",
+            "description": "On pickup, add 3 <c=card>Uranium Rounds A</c> to your deck. <c=parttrait>None shall stand in your path.</c>"
+        },
+        "RoundTable": {
+            "name": "URANIUM ROUND TABLE",
+            "description": "Draw <c=keyword>1 card</c> whenever you play a <c=c9f000>Philip</c> card. <c=keyword>+1</c> <c=energy>ENERGY</c> and <c=card>card</c> per turn. <c=keyword>+20</c> <c=hull>max hull</c> and <c=healing>heal 20</c> on pickup. All non-<c=c9f000>Philip</c> cards <c=cardtrait>exhaust</c>."
         }
     },
     "card": {
@@ -147,5 +218,24 @@
         "TractorBeam": {
             "name": "Tractor Beam"
         }
+    },
+
+    "choiceFns": {
+        "doYouUnderstand": {
+            "yes": "Yes.",
+            "no": "Not at all."
+        },
+        "attackCleo": "Chaaaaarge!!",
+        "birthdayVictoryChoice1": {
+            "1": "Wow! It's the Widerunner!",
+            "2": "Cleo was the Big Bad this whole time?",
+            "3": "Uranium Round shenanigans really were the answer in the end, huh?"
+        },
+        "birthdayVictoryChoice2": {
+            "1": "So, why are you three here?",
+            "2": "What's this 'Uranium Round Table' business about?",
+            "3": "What's going to happen with the Cobalt now?"
+        },
+        "endBirthdayRun": "See ya later!"
     }
 }

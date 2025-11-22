@@ -1,27 +1,32 @@
 ﻿using HarmonyLib;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TuckerTheSaboteur.actions;
 
 namespace TuckerTheSaboteur;
 
+[HarmonyPatch]
 public static class FuelLeakController
 {
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(AMove), nameof(AMove.Begin))]
+    public static void HarmonyPrefix_AMove_Begin(AMove __instance, G g, State s, Combat c, ref int __state)
+    {
+        Ship ship = __instance.targetPlayer ? s.ship : c.otherShip;
+        __state = ship.x;
+    }
     [HarmonyPostfix]
     [HarmonyPatch(typeof(AMove), nameof(AMove.Begin))]
-    public static void HarmonyPostfix_AMove_Begin(AMove __instance, G g, State s, Combat c)
+    public static void HarmonyPostfix_AMove_Begin(AMove __instance, G g, State s, Combat c, ref int __state)
     {
         Ship ship = __instance.targetPlayer ? s.ship : c.otherShip;
         int leak = ship.Get(Main.Instance.FuelLeakStatus.Status);
-        if (__instance.dir != 0 && leak > 0)
+        int diff = Math.Abs(ship.x - __state);
+        if (leak > 0 && diff > 0)
         {
             c.QueueImmediate(new AFuelLeakDamage
             {
                 targetPlayer = __instance.targetPlayer,
-                amount = Math.Abs(__instance.dir) * leak
+                amount = diff * leak
             });
         }
     }

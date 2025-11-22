@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
@@ -8,15 +8,15 @@
 
 		<EnableDllExtract>true</EnableDllExtract>		
 		<GameExePath>/home/thejazmaster/.steam/steam/steamapps/common/Cobalt Core/CobaltCore.exe</GameExePath>
-		<GameDllPath>$(ModLoaderPath)/Extract/CobaltCore.dll</GameDllPath>
-
-		<IncludedModProjectPaths>sprites;I18n</IncludedModProjectPaths>
   </PropertyGroup>
 
+<ItemGroup>
+	<ModFiles Include="I18n/**" />
+	<ModFiles Include="sprites/**" />
+</ItemGroup>
+
   <ItemGroup>
-		<PackageReference Include="Nickel.ModBuildConfig" Version="1.2.3"/>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" PrivateAssets="All" ExcludeAssets="All" />
-		<PackageReference Include="EnumByNameSourceGenerator" Version="1.1.1" PrivateAssets="All" ExcludeAssets="All" />
-		<PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303" PrivateAssets="All" ExcludeAssets="All" />
+		<PackageReference Include="Nickel.ModBuildConfig" Version="2.0.2" />
+		<PackageReference Include="EnumByNameSourceGenerator" Version="1.1.2" PrivateAssets="All" ExcludeAssets="All" />
   </ItemGroup>
 </Project>

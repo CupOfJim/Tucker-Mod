@@ -1,9 +1,12 @@
 ﻿using HarmonyLib;
 using Nanoray.Shrike;
 using Nanoray.Shrike.Harmony;
+using Nickel;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using TuckerMod.tuckerArtifacts.Duos;
 
 namespace TuckerTheSaboteur.actions;
 
@@ -72,10 +75,22 @@ public class ABluntAttack : AAttack
         return null;
     }
 
+    public static bool WhetstoneBlocks(State s, bool removeShard) {
+        if (s.ship.Get(Status.shard) > 0) {
+            var artifact = s.EnumerateAllArtifacts().OfType<Whetstone>().FirstOrDefault();
+            if (artifact != null) {
+                if (removeShard) s.ship.Add(Status.shard, -1);
+                artifact.Pulse();
+                return true;
+            }
+        }
+        return false;
+    }
+
     public override void Begin(G g, State s, Combat c)
     {
         Ship ship = targetPlayer ? s.ship : c.otherShip;
-        if (ship.Get(Status.shield) > 0 || ship.Get(Status.tempShield) > 0) {
+        if ((ship.Get(Status.shield) > 0 || ship.Get(Status.tempShield) > 0) && !WhetstoneBlocks(s, true)) {
             blockEffects = true;
             var lameAttack = new AAttack {
                 damage = 0,
@@ -99,12 +114,11 @@ public class ABluntAttack : AAttack
 
     public override List<Tooltip> GetTooltips(State s) => [
         .. base.GetTooltips(s),
-        new CustomTTGlossary(
-            CustomTTGlossary.GlossaryType.action,
-            () => GetSpr(),
-            () => Main.Instance.Localizations.Localize(["action", "bluntAttack", "name"]),
-            () => Main.Instance.Localizations.Localize(["action", "bluntAttack", "description"]),
-            key: "action.bluntAttack"
-        )
+        new GlossaryTooltip("action.bluntAttack") {
+            TitleColor =Colors.action,
+            Icon = GetSpr(),
+            Title = Main.Instance.Localizations.Localize(["action", "bluntAttack", "name"]),
+            Description = Main.Instance.Localizations.Localize(["action", "bluntAttack", "description"]),
+        }
     ];
 }

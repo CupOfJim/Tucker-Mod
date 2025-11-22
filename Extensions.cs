@@ -9,11 +9,6 @@ namespace TuckerTheSaboteur;
 public static class Extensions {
     public static AAttack ApplyOffset(this AAttack attack, int offset) {
 		if (offset == 0) return attack;
-        // handle attack offset
-        // int cannonX = s.ship.parts.FindIndex((Part p) => p.type == PType.cannon && p.active);
-
-        // // return final result
-        // attack.fromX = cannonX + offset;
         Main.Instance.Helper.ModData.SetModData(attack, OffsetAttackController.key, offset);
         return attack;
     }
